@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `payment` (
+CREATE TABLE IF NOT EXISTS `payments` (
     `id`                BIGINT UNSIGNED NOT NULL,
     `tax_included`      BOOLEAN         NOT NULL,
     `paid_on`           DATETIME        NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   DEFAULT CHARSET = utf8
   COLLATE utf8_bin;
 
-CREATE TABLE IF NOT EXISTS `product` (
+CREATE TABLE IF NOT EXISTS `products` (
     `id`         BIGINT UNSIGNED NOT NULL,
     `name`       VARCHAR(256)    NOT NULL,
     `created_at` DATETIME        NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   DEFAULT CHARSET = utf8
   COLLATE utf8_bin;
 
-CREATE TABLE IF NOT EXISTS `category` (
+CREATE TABLE IF NOT EXISTS `categories` (
     `id`         BIGINT UNSIGNED NOT NULL,
     `name`       VARCHAR(256)    NOT NULL,
     `enable`     BOOLEAN         NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   DEFAULT CHARSET = utf8
   COLLATE utf8_bin;
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE IF NOT EXISTS `users` (
     `id`         BIGINT UNSIGNED NOT NULL,
     `name`       VARCHAR(256)    NOT NULL,
     `enable`     BOOLEAN         NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   DEFAULT CHARSET = utf8
   COLLATE utf8_bin;
 
-CREATE TABLE IF NOT EXISTS `income_history` (
+CREATE TABLE IF NOT EXISTS `income_histories` (
     `id`         BIGINT UNSIGNED NOT NULL,
     `income`     INT UNSIGNED    NOT NULL,
     `user_id`    BIGINT UNSIGNED NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `income_history` (
   DEFAULT CHARSET = utf8
   COLLATE utf8_bin;
 
-CREATE TABLE IF NOT EXISTS `expense_history` (
+CREATE TABLE IF NOT EXISTS `expense_histories` (
     `id`         BIGINT UNSIGNED NOT NULL,
     `expense`    INT UNSIGNED    NOT NULL,
     `user_id`    BIGINT UNSIGNED NOT NULL,
