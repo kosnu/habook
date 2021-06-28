@@ -1,0 +1,104 @@
+type Payment {
+  id: ID!
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  product: Product!
+  category: Category!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  craetedAt: String!
+  updatedAt: String!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  enable: Boolean!
+  user: User!
+  craetedAt: String!
+  updatedAt: String!
+}
+
+type User {
+  id: ID!
+  name: String!
+  enable: Boolean!
+  craetedAt: String!
+  updatedAt: String!
+}
+
+type ExpenseHistory {
+  id: ID!
+  expense: Int!
+  user: User!
+  craetedAt: String!
+  updatedAt: String!
+}
+
+type IncomeHistory {
+  id: ID!
+  income: Int!
+  user: User!
+  craetedAt: String!
+  updatedAt: String!
+}
+
+type Query {
+  payment(id: ID!): Payment
+  payments: [Payment!]!
+
+  product(id: ID!): Product
+  products: [Product!]!
+
+  category(id: ID!): Category
+  categories: [Category!]!
+
+  user(id: ID!): User
+  users: [User!]!
+
+  expenseHistory(id: ID!): ExpenseHistory
+  expenseHistories: [ExpenseHistory!]!
+
+  incomeHistory(id: ID!): IncomeHistory
+  incomeHistories: [IncomeHistory!]!
+}
+
+input NewPayment {
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  productName: String!
+  categoryId: Int!
+}
+
+input NewCategory {
+  name: String!
+}
+
+input NewUser {
+  name: String!
+}
+
+input NewExpenseHistory {
+  expense: Int!
+}
+
+input NewIncomeHistory {
+  income: Int!
+}
+
+type Mutation {
+  createPayment(input: NewPayment!): ID!
+  createCategory(input: NewPayment!): ID!
+  createUser(input: NewPayment!): ID!
+  createExpenseHistory(input: NewPayment!): ID!
+  createIncomeHistory(input: NewPayment!): ID!
+}
