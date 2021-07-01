@@ -11,11 +11,71 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewPayment) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewPayment) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model.NewPayment) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewPayment) (string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Payments(ctx context.Context) ([]*model.Payment, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Category(ctx context.Context, id string) (*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
