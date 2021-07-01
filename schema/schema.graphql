@@ -97,8 +97,8 @@ input NewIncomeHistory {
 
 type Mutation {
   createPayment(input: NewPayment!): ID!
-  createCategory(input: NewPayment!): ID!
-  createUser(input: NewPayment!): ID!
-  createExpenseHistory(input: NewPayment!): ID!
-  createIncomeHistory(input: NewPayment!): ID!
+  createCategory(input: NewCategory!): ID!
+  createUser(input: NewUser!): ID!
+  createExpenseHistory(input: NewExpenseHistory!): ID!
+  createIncomeHistory(input: NewIncomeHistory!): ID!
 }

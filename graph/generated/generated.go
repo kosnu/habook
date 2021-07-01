@@ -69,11 +69,11 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateCategory       func(childComplexity int, input model.NewPayment) int
-		CreateExpenseHistory func(childComplexity int, input model.NewPayment) int
-		CreateIncomeHistory  func(childComplexity int, input model.NewPayment) int
+		CreateCategory       func(childComplexity int, input model.NewCategory) int
+		CreateExpenseHistory func(childComplexity int, input model.NewExpenseHistory) int
+		CreateIncomeHistory  func(childComplexity int, input model.NewIncomeHistory) int
 		CreatePayment        func(childComplexity int, input model.NewPayment) int
-		CreateUser           func(childComplexity int, input model.NewPayment) int
+		CreateUser           func(childComplexity int, input model.NewUser) int
 	}
 
 	Payment struct {
@@ -121,10 +121,10 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreatePayment(ctx context.Context, input model.NewPayment) (string, error)
-	CreateCategory(ctx context.Context, input model.NewPayment) (string, error)
-	CreateUser(ctx context.Context, input model.NewPayment) (string, error)
-	CreateExpenseHistory(ctx context.Context, input model.NewPayment) (string, error)
-	CreateIncomeHistory(ctx context.Context, input model.NewPayment) (string, error)
+	CreateCategory(ctx context.Context, input model.NewCategory) (string, error)
+	CreateUser(ctx context.Context, input model.NewUser) (string, error)
+	CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (string, error)
+	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (string, error)
 }
 type QueryResolver interface {
 	Payment(ctx context.Context, id string) (*model.Payment, error)
@@ -278,7 +278,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateCategory(childComplexity, args["input"].(model.NewPayment)), true
+		return e.complexity.Mutation.CreateCategory(childComplexity, args["input"].(model.NewCategory)), true
 
 	case "Mutation.createExpenseHistory":
 		if e.complexity.Mutation.CreateExpenseHistory == nil {
@@ -290,7 +290,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateExpenseHistory(childComplexity, args["input"].(model.NewPayment)), true
+		return e.complexity.Mutation.CreateExpenseHistory(childComplexity, args["input"].(model.NewExpenseHistory)), true
 
 	case "Mutation.createIncomeHistory":
 		if e.complexity.Mutation.CreateIncomeHistory == nil {
@@ -302,7 +302,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateIncomeHistory(childComplexity, args["input"].(model.NewPayment)), true
+		return e.complexity.Mutation.CreateIncomeHistory(childComplexity, args["input"].(model.NewIncomeHistory)), true
 
 	case "Mutation.createPayment":
 		if e.complexity.Mutation.CreatePayment == nil {
@@ -326,7 +326,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewPayment)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewUser)), true
 
 	case "Payment.amount":
 		if e.complexity.Payment.Amount == nil {
@@ -731,10 +731,10 @@ input NewIncomeHistory {
 
 type Mutation {
   createPayment(input: NewPayment!): ID!
-  createCategory(input: NewPayment!): ID!
-  createUser(input: NewPayment!): ID!
-  createExpenseHistory(input: NewPayment!): ID!
-  createIncomeHistory(input: NewPayment!): ID!
+  createCategory(input: NewCategory!): ID!
+  createUser(input: NewUser!): ID!
+  createExpenseHistory(input: NewExpenseHistory!): ID!
+  createIncomeHistory(input: NewIncomeHistory!): ID!
 }
 `, BuiltIn: false},
 }
@@ -747,10 +747,10 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_createCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewPayment
+	var arg0 model.NewCategory
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewPayment(ctx, tmp)
+		arg0, err = ec.unmarshalNNewCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewCategory(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -762,10 +762,10 @@ func (ec *executionContext) field_Mutation_createCategory_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createExpenseHistory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewPayment
+	var arg0 model.NewExpenseHistory
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewPayment(ctx, tmp)
+		arg0, err = ec.unmarshalNNewExpenseHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewExpenseHistory(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -777,10 +777,10 @@ func (ec *executionContext) field_Mutation_createExpenseHistory_args(ctx context
 func (ec *executionContext) field_Mutation_createIncomeHistory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewPayment
+	var arg0 model.NewIncomeHistory
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewPayment(ctx, tmp)
+		arg0, err = ec.unmarshalNNewIncomeHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewIncomeHistory(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -807,10 +807,10 @@ func (ec *executionContext) field_Mutation_createPayment_args(ctx context.Contex
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewPayment
+	var arg0 model.NewUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewPayment(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1589,7 +1589,7 @@ func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field 
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateCategory(rctx, args["input"].(model.NewPayment))
+		return ec.resolvers.Mutation().CreateCategory(rctx, args["input"].(model.NewCategory))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1631,7 +1631,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUser(rctx, args["input"].(model.NewPayment))
+		return ec.resolvers.Mutation().CreateUser(rctx, args["input"].(model.NewUser))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1673,7 +1673,7 @@ func (ec *executionContext) _Mutation_createExpenseHistory(ctx context.Context, 
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateExpenseHistory(rctx, args["input"].(model.NewPayment))
+		return ec.resolvers.Mutation().CreateExpenseHistory(rctx, args["input"].(model.NewExpenseHistory))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1715,7 +1715,7 @@ func (ec *executionContext) _Mutation_createIncomeHistory(ctx context.Context, f
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateIncomeHistory(rctx, args["input"].(model.NewPayment))
+		return ec.resolvers.Mutation().CreateIncomeHistory(rctx, args["input"].(model.NewIncomeHistory))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5076,8 +5076,28 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
+func (ec *executionContext) unmarshalNNewCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewCategory(ctx context.Context, v interface{}) (model.NewCategory, error) {
+	res, err := ec.unmarshalInputNewCategory(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewExpenseHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewExpenseHistory(ctx context.Context, v interface{}) (model.NewExpenseHistory, error) {
+	res, err := ec.unmarshalInputNewExpenseHistory(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewIncomeHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewIncomeHistory(ctx context.Context, v interface{}) (model.NewIncomeHistory, error) {
+	res, err := ec.unmarshalInputNewIncomeHistory(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewPayment(ctx context.Context, v interface{}) (model.NewPayment, error) {
 	res, err := ec.unmarshalInputNewPayment(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
+	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

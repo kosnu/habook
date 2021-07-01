@@ -15,19 +15,19 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewPayment) (string, error) {
+func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewPayment) (string, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model.NewPayment) (string, error) {
+func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewPayment) (string, error) {
+func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
