@@ -2,19 +2,79 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Category struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Enable    bool   `json:"enable"`
+	User      *User  `json:"user"`
+	CraetedAt string `json:"craetedAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type ExpenseHistory struct {
+	ID        string `json:"id"`
+	Expense   int    `json:"expense"`
+	User      *User  `json:"user"`
+	CraetedAt string `json:"craetedAt"`
+	UpdatedAt string `json:"updatedAt"`
+}
+
+type IncomeHistory struct {
+	ID        string `json:"id"`
+	Income    int    `json:"income"`
+	User      *User  `json:"user"`
+	CraetedAt string `json:"craetedAt"`
+	UpdatedAt string `json:"updatedAt"`
+}
+
+type NewCategory struct {
+	Name string `json:"name"`
+}
+
+type NewExpenseHistory struct {
+	Expense int `json:"expense"`
+}
+
+type NewIncomeHistory struct {
+	Income int `json:"income"`
+}
+
+type NewPayment struct {
+	TaxIncluded     bool   `json:"taxIncluded"`
+	PaidOn          string `json:"paidOn"`
+	NumberOfProduct int    `json:"numberOfProduct"`
+	Amount          int    `json:"amount"`
+	ProductName     string `json:"productName"`
+	CategoryID      int    `json:"categoryId"`
+}
+
+type NewUser struct {
+	Name string `json:"name"`
+}
+
+type Payment struct {
+	ID              string    `json:"id"`
+	TaxIncluded     bool      `json:"taxIncluded"`
+	PaidOn          string    `json:"paidOn"`
+	NumberOfProduct int       `json:"numberOfProduct"`
+	Amount          int       `json:"amount"`
+	Product         *Product  `json:"product"`
+	Category        *Category `json:"category"`
+	CreatedAt       string    `json:"createdAt"`
+	UpdatedAt       string    `json:"updatedAt"`
+}
+
+type Product struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	CraetedAt string `json:"craetedAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Enable    bool   `json:"enable"`
+	CraetedAt string `json:"craetedAt"`
+	UpdatedAt string `json:"updatedAt"`
 }

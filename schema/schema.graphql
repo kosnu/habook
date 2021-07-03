@@ -77,10 +77,12 @@ input NewPayment {
   amount: Int!
   productName: String!
   categoryId: Int!
+  userId: String!
 }
 
 input NewCategory {
   name: String!
+  userId: String!
 }
 
 input NewUser {
@@ -89,16 +91,18 @@ input NewUser {
 
 input NewExpenseHistory {
   expense: Int!
+  userId: String!
 }
 
 input NewIncomeHistory {
   income: Int!
+  userId: String!
 }
 
 type Mutation {
-  createPayment(input: NewPayment!): ID!
-  createCategory(input: NewPayment!): ID!
-  createUser(input: NewPayment!): ID!
-  createExpenseHistory(input: NewPayment!): ID!
-  createIncomeHistory(input: NewPayment!): ID!
+  createPayment(input: NewPayment!): Payment!
+  createCategory(input: NewCategory!): Category!
+  createUser(input: NewUser!): User!
+  createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
+  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }
