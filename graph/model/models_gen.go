@@ -28,15 +28,18 @@ type IncomeHistory struct {
 }
 
 type NewCategory struct {
-	Name string `json:"name"`
+	Name   string `json:"name"`
+	UserID string `json:"userId"`
 }
 
 type NewExpenseHistory struct {
-	Expense int `json:"expense"`
+	Expense int    `json:"expense"`
+	UserID  string `json:"userId"`
 }
 
 type NewIncomeHistory struct {
-	Income int `json:"income"`
+	Income int    `json:"income"`
+	UserID string `json:"userId"`
 }
 
 type NewPayment struct {
@@ -46,6 +49,7 @@ type NewPayment struct {
 	Amount          int    `json:"amount"`
 	ProductName     string `json:"productName"`
 	CategoryID      int    `json:"categoryId"`
+	UserID          string `json:"userId"`
 }
 
 type NewUser struct {

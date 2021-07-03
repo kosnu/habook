@@ -120,11 +120,11 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreatePayment(ctx context.Context, input model.NewPayment) (string, error)
-	CreateCategory(ctx context.Context, input model.NewCategory) (string, error)
-	CreateUser(ctx context.Context, input model.NewUser) (string, error)
-	CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (string, error)
-	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (string, error)
+	CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error)
+	CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error)
+	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
+	CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error)
+	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error)
 }
 type QueryResolver interface {
 	Payment(ctx context.Context, id string) (*model.Payment, error)
@@ -711,10 +711,12 @@ input NewPayment {
   amount: Int!
   productName: String!
   categoryId: Int!
+  userId: String!
 }
 
 input NewCategory {
   name: String!
+  userId: String!
 }
 
 input NewUser {
@@ -723,18 +725,20 @@ input NewUser {
 
 input NewExpenseHistory {
   expense: Int!
+  userId: String!
 }
 
 input NewIncomeHistory {
   income: Int!
+  userId: String!
 }
 
 type Mutation {
-  createPayment(input: NewPayment!): ID!
-  createCategory(input: NewCategory!): ID!
-  createUser(input: NewUser!): ID!
-  createExpenseHistory(input: NewExpenseHistory!): ID!
-  createIncomeHistory(input: NewIncomeHistory!): ID!
+  createPayment(input: NewPayment!): Payment!
+  createCategory(input: NewCategory!): Category!
+  createUser(input: NewUser!): User!
+  createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
+  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }
 `, BuiltIn: false},
 }
@@ -1559,9 +1563,9 @@ func (ec *executionContext) _Mutation_createPayment(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.Payment)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1601,9 +1605,9 @@ func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.Category)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1643,9 +1647,9 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createExpenseHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1685,9 +1689,9 @@ func (ec *executionContext) _Mutation_createExpenseHistory(ctx context.Context, 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.ExpenseHistory)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNExpenseHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createIncomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1727,9 +1731,9 @@ func (ec *executionContext) _Mutation_createIncomeHistory(ctx context.Context, f
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.IncomeHistory)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Payment_id(ctx context.Context, field graphql.CollectedField, obj *model.Payment) (ret graphql.Marshaler) {
@@ -3978,6 +3982,14 @@ func (ec *executionContext) unmarshalInputNewCategory(ctx context.Context, obj i
 			if err != nil {
 				return it, err
 			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -3998,6 +4010,14 @@ func (ec *executionContext) unmarshalInputNewExpenseHistory(ctx context.Context,
 			if err != nil {
 				return it, err
 			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -4015,6 +4035,14 @@ func (ec *executionContext) unmarshalInputNewIncomeHistory(ctx context.Context, 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("income"))
 			it.Income, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4075,6 +4103,14 @@ func (ec *executionContext) unmarshalInputNewPayment(ctx context.Context, obj in
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
 			it.CategoryID, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4905,6 +4941,10 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
+	return ec._Category(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Category) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -4950,6 +4990,10 @@ func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 		return graphql.Null
 	}
 	return ec._Category(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNExpenseHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx context.Context, sel ast.SelectionSet, v model.ExpenseHistory) graphql.Marshaler {
+	return ec._ExpenseHistory(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNExpenseHistory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ExpenseHistory) graphql.Marshaler {
@@ -5012,6 +5056,10 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNIncomeHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx context.Context, sel ast.SelectionSet, v model.IncomeHistory) graphql.Marshaler {
+	return ec._IncomeHistory(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIncomeHistory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.IncomeHistory) graphql.Marshaler {
@@ -5099,6 +5147,10 @@ func (ec *executionContext) unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabook�
 func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx context.Context, sel ast.SelectionSet, v model.Payment) graphql.Marshaler {
+	return ec._Payment(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPayment2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Payment) graphql.Marshaler {
@@ -5208,6 +5260,10 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+	return ec._User(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
