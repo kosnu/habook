@@ -77,7 +77,11 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	var record entity.User
+	if err := r.DB.Debug().Find(&record, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+	return model.UserFromEntity(&record), nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
