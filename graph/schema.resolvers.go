@@ -15,12 +15,39 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
+func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*model.User, error) {
+	// TODO: N+1問題の解決
+	var record entity.User
+	if err := r.DB.Debug().Find(&record, "id = ?", obj.UserId).Error; err != nil {
+		return nil, err
+	}
+
+	return model.UserFromEntity(&record), nil
+}
+
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	uuidV4 := uuid.New()
+	id := strings.Replace(uuidV4.String(), "-", "", -1)
+	now := time.Now()
+
+	record := entity.Category{
+		Id:        id,
+		Name:      input.Name,
+		Enable:    true,
+		UserId:    input.UserID,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	if err := r.DB.Create(&record).Error; err != nil {
+		return nil, err
+	}
+
+	return model.CategoryFromEntity(&record), nil
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
@@ -69,11 +96,29 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 }
 
 func (r *queryResolver) Category(ctx context.Context, id string) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	var record entity.Category
+	// TODO: 検索項目を増やす
+	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return model.CategoryFromEntity(&record), nil
 }
 
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	var records []entity.Category
+	// TODO: Sortを引数に入れる
+	// TODO: 検索項目を増やす
+	if err := r.DB.Order("created_at asc").Find(&records).Error; err != nil {
+		return []*model.Category{}, err
+	}
+
+	var categories []*model.Category
+	for _, record := range records {
+		categories = append(categories, model.CategoryFromEntity(&record))
+	}
+
+	return categories, nil
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
@@ -112,11 +157,15 @@ func (r *queryResolver) IncomeHistories(ctx context.Context) ([]*model.IncomeHis
 	panic(fmt.Errorf("not implemented"))
 }
 
+// Category returns generated.CategoryResolver implementation.
+func (r *Resolver) Category() generated.CategoryResolver { return &categoryResolver{r} }
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+type categoryResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
