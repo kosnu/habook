@@ -1,0 +1,23 @@
+type Category {
+  id: ID!
+  name: String!
+  enable: Boolean!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+
+input NewCategory {
+  name: String!
+  userId: String!
+}
+
+extend type Query {
+  category(id: ID!): Category
+  categories: [Category!]!
+}
+
+extend type Mutation {
+  createCategory(input: NewCategory!): Category!
+}
