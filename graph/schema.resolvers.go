@@ -6,38 +6,13 @@ package graph
 import (
 	"context"
 	"fmt"
-	"strings"
-	"time"
 
-	"github.com/google/uuid"
-	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
 	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	uuidV4 := uuid.New()
-	id := strings.Replace(uuidV4.String(), "-", "", -1)
-	now := time.Now()
-
-	record := entity.User{
-		Id:        id,
-		Enable:    true,
-		Name:      input.Name,
-		CreatedAt: now,
-		UpdatedAt: now,
-	}
-	if err := r.DB.Create(&record).Error; err != nil {
-		return nil, err
-	}
-
-	res := model.UserFromEntity(&record)
-
-	return res, nil
 }
 
 func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error) {
@@ -62,26 +37,6 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
 	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	var record entity.User
-	if err := r.DB.Debug().Find(&record, "id = ?", id).Error; err != nil {
-		return nil, err
-	}
-	return model.UserFromEntity(&record), nil
-}
-
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	var records []entity.User
-	if err := r.DB.Find(&records).Error; err != nil {
-		return nil, err
-	}
-	users := []*model.User{}
-	for _, record := range records {
-		users = append(users, model.UserFromEntity(&record))
-	}
-	return users, nil
 }
 
 func (r *queryResolver) ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error) {

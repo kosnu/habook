@@ -17,14 +17,6 @@ type Product {
   updatedAt: String!
 }
 
-type User {
-  id: ID!
-  name: String!
-  enable: Boolean!
-  craetedAt: String!
-  updatedAt: String!
-}
-
 type ExpenseHistory {
   id: ID!
   expense: Int!
@@ -48,9 +40,6 @@ type Query {
   product(id: ID!): Product
   products: [Product!]!
 
-  user(id: ID!): User
-  users: [User!]!
-
   expenseHistory(id: ID!): ExpenseHistory
   expenseHistories: [ExpenseHistory!]!
 
@@ -68,10 +57,6 @@ input NewPayment {
   userId: String!
 }
 
-input NewUser {
-  name: String!
-}
-
 input NewExpenseHistory {
   expense: Int!
   userId: String!
@@ -84,7 +69,6 @@ input NewIncomeHistory {
 
 type Mutation {
   createPayment(input: NewPayment!): Payment!
-  createUser(input: NewUser!): User!
   createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
   createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }
