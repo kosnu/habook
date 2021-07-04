@@ -22,7 +22,7 @@ type Category {
   name: String!
   enable: Boolean!
   user: User!
-  craetedAt: String!
+  createdAt: String!
   updatedAt: String!
 }
 

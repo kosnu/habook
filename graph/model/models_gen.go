@@ -7,7 +7,7 @@ type Category struct {
 	Name      string `json:"name"`
 	Enable    bool   `json:"enable"`
 	User      *User  `json:"user"`
-	CraetedAt string `json:"craetedAt"`
+	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
 

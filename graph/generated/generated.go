@@ -44,7 +44,7 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Category struct {
-		CraetedAt func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
 		Enable    func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
@@ -156,12 +156,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Category.craetedAt":
-		if e.complexity.Category.CraetedAt == nil {
+	case "Category.createdAt":
+		if e.complexity.Category.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.Category.CraetedAt(childComplexity), true
+		return e.complexity.Category.CreatedAt(childComplexity), true
 
 	case "Category.enable":
 		if e.complexity.Category.Enable == nil {
@@ -656,7 +656,7 @@ type Category {
   name: String!
   enable: Boolean!
   user: User!
-  craetedAt: String!
+  createdAt: String!
   updatedAt: String!
 }
 
@@ -1106,7 +1106,7 @@ func (ec *executionContext) _Category_user(ctx context.Context, field graphql.Co
 	return ec.marshalNUser2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Category_craetedAt(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+func (ec *executionContext) _Category_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1124,7 +1124,7 @@ func (ec *executionContext) _Category_craetedAt(ctx context.Context, field graph
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.CraetedAt, nil
+		return obj.CreatedAt, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4179,8 +4179,8 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "craetedAt":
-			out.Values[i] = ec._Category_craetedAt(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Category_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
