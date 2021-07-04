@@ -2,15 +2,6 @@
 
 package model
 
-type Category struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Enable    bool   `json:"enable"`
-	User      *User  `json:"user"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-}
-
 type ExpenseHistory struct {
 	ID        string `json:"id"`
 	Expense   int    `json:"expense"`

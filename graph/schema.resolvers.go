@@ -19,10 +19,6 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	uuidV4 := uuid.New()
 	id := strings.Replace(uuidV4.String(), "-", "", -1)
@@ -68,16 +64,12 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Category(ctx context.Context, id string) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	var record entity.User
+	if err := r.DB.Debug().Find(&record, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+	return model.UserFromEntity(&record), nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
