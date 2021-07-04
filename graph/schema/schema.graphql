@@ -1,15 +1,3 @@
-type Payment {
-  id: ID!
-  taxIncluded: Boolean!
-  paidOn: String!
-  numberOfProduct: Int!
-  amount: Int!
-  product: Product!
-  category: Category!
-  createdAt: String!
-  updatedAt: String!
-}
-
 type ExpenseHistory {
   id: ID!
   expense: Int!
@@ -27,24 +15,11 @@ type IncomeHistory {
 }
 
 type Query {
-  payment(id: ID!): Payment
-  payments: [Payment!]!
-
   expenseHistory(id: ID!): ExpenseHistory
   expenseHistories: [ExpenseHistory!]!
 
   incomeHistory(id: ID!): IncomeHistory
   incomeHistories: [IncomeHistory!]!
-}
-
-input NewPayment {
-  taxIncluded: Boolean!
-  paidOn: String!
-  numberOfProduct: Int!
-  amount: Int!
-  productName: String!
-  categoryId: Int!
-  userId: String!
 }
 
 input NewExpenseHistory {
@@ -58,7 +33,6 @@ input NewIncomeHistory {
 }
 
 type Mutation {
-  createPayment(input: NewPayment!): Payment!
   createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
   createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }

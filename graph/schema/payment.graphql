@@ -1,0 +1,31 @@
+type Payment {
+  id: ID!
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  product: Product!
+  category: Category!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input NewPayment {
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  productName: String!
+  categoryId: Int!
+  userId: String!
+}
+
+extend type Query {
+  payment(id: ID!): Payment
+  payments(userId: ID!, categoryId: ID): [Payment!]!
+}
+
+extend type Mutation {
+  createPayment(input: NewPayment!): Payment!
+}

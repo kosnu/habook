@@ -11,23 +11,11 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
-func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) Payments(ctx context.Context) ([]*model.Payment, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
