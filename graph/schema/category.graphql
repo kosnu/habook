@@ -7,7 +7,6 @@ type Category {
   updatedAt: String!
 }
 
-
 input NewCategory {
   name: String!
   userId: String!
