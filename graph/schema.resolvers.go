@@ -31,14 +31,6 @@ func (r *queryResolver) Payments(ctx context.Context) ([]*model.Payment, error) 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *queryResolver) ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }

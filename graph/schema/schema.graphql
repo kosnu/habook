@@ -10,13 +10,6 @@ type Payment {
   updatedAt: String!
 }
 
-type Product {
-  id: ID!
-  name: String!
-  craetedAt: String!
-  updatedAt: String!
-}
-
 type ExpenseHistory {
   id: ID!
   expense: Int!
@@ -36,9 +29,6 @@ type IncomeHistory {
 type Query {
   payment(id: ID!): Payment
   payments: [Payment!]!
-
-  product(id: ID!): Product
-  products: [Product!]!
 
   expenseHistory(id: ID!): ExpenseHistory
   expenseHistories: [ExpenseHistory!]!
