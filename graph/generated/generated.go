@@ -99,7 +99,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Categories       func(childComplexity int) int
+		Categories       func(childComplexity int, input *model.SearchCategories) int
 		Category         func(childComplexity int, id string) int
 		ExpenseHistories func(childComplexity int) int
 		ExpenseHistory   func(childComplexity int, id string) int
@@ -143,7 +143,7 @@ type QueryResolver interface {
 	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
 	IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error)
 	Category(ctx context.Context, id string) (*model.Category, error)
-	Categories(ctx context.Context) ([]*model.Category, error)
+	Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
 	Payments(ctx context.Context, userID string, categoryID *string) ([]*model.Payment, error)
 	Product(ctx context.Context, id string) (*model.Product, error)
@@ -442,7 +442,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Categories(childComplexity), true
+		args, err := ec.field_Query_categories_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Categories(childComplexity, args["input"].(*model.SearchCategories)), true
 
 	case "Query.category":
 		if e.complexity.Query.Category == nil {
@@ -664,15 +669,20 @@ var sources = []*ast.Source{
   updatedAt: String!
 }
 
-
 input NewCategory {
   name: String!
   userId: String!
 }
 
+input SearchCategories {
+  name: String
+  enable: Boolean
+  userId: ID!
+}
+
 extend type Query {
   category(id: ID!): Category
-  categories: [Category!]!
+  categories(input: SearchCategories): [Category!]!
 }
 
 extend type Mutation {
@@ -877,6 +887,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_categories_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.SearchCategories
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalOSearchCategories2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchCategories(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -2495,9 +2520,16 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_categories_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Categories(rctx)
+		return ec.resolvers.Query().Categories(rctx, args["input"].(*model.SearchCategories))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4248,6 +4280,42 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSearchCategories(ctx context.Context, obj interface{}) (model.SearchCategories, error) {
+	var it model.SearchCategories
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			it.Name, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "enable":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enable"))
+			it.Enable, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -5767,6 +5835,14 @@ func (ec *executionContext) marshalOProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑb
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOSearchCategories2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchCategories(ctx context.Context, v interface{}) (*model.SearchCategories, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSearchCategories(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
