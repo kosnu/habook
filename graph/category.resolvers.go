@@ -55,11 +55,21 @@ func (r *queryResolver) Category(ctx context.Context, id string) (*model.Categor
 	return model.CategoryFromEntity(&record), nil
 }
 
-func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
+func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error) {
 	var records []entity.Category
 	// TODO: Sortを引数に入れる
-	// TODO: 検索項目を増やす
-	if err := r.DB.Order("created_at asc").Find(&records).Error; err != nil {
+	query := r.DB.Debug().Order("created_at asc")
+	if input != nil {
+		query = query.Where(&model.Category{UserId: input.UserID})
+		if input.Name != nil {
+			query = query.Where(&model.Category{Name: *input.Name})
+		}
+		if input.Enable != nil {
+			query = query.Where("enable = ?", *input.Enable)
+		}
+	}
+
+	if err := query.Find(&records).Error; err != nil {
 		return []*model.Category{}, err
 	}
 

@@ -11,6 +11,12 @@ type Category struct {
 	UpdatedAt string `json:"updatedAt"`
 }
 
+type SearchCategories struct {
+	Name   *string `json:"name"`
+	Enable *bool   `json:"enable"`
+	UserID string  `json:"userId"`
+}
+
 func CategoryFromEntity(entity *entity.Category) *Category {
 
 	return &Category{

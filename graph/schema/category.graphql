@@ -7,15 +7,20 @@ type Category {
   updatedAt: String!
 }
 
-
 input NewCategory {
   name: String!
   userId: String!
 }
 
+input SearchCategories {
+  name: String
+  enable: Boolean
+  userId: ID!
+}
+
 extend type Query {
   category(id: ID!): Category
-  categories: [Category!]!
+  categories(input: SearchCategories): [Category!]!
 }
 
 extend type Mutation {
