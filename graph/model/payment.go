@@ -19,6 +19,12 @@ type NewPayment struct {
 	NumberOfProduct int    `json:"numberOfProduct"`
 	Amount          int    `json:"amount"`
 	ProductName     string `json:"productName"`
-	CategoryID      int    `json:"categoryId"`
+	CategoryID      string `json:"categoryId"`
 	UserID          string `json:"userId"`
+}
+
+type SearchPayments struct {
+	UserID      string  `json:"userId"`
+	ProductName *string `json:"productName"`
+	CategoryID  *string `json:"categoryId"`
 }

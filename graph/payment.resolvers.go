@@ -31,7 +31,7 @@ func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment,
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Payments(ctx context.Context, userID string, categoryID *string) ([]*model.Payment, error) {
+func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
