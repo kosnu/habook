@@ -38,6 +38,7 @@ type ResolverRoot interface {
 	Category() CategoryResolver
 	Mutation() MutationResolver
 	Payment() PaymentResolver
+	Product() ProductResolver
 	Query() QueryResolver
 }
 
@@ -136,6 +137,9 @@ type PaymentResolver interface {
 	Product(ctx context.Context, obj *model.Payment) (*model.Product, error)
 	Category(ctx context.Context, obj *model.Payment) (*model.Category, error)
 	User(ctx context.Context, obj *model.Payment) (*model.User, error)
+}
+type ProductResolver interface {
+	CraetedAt(ctx context.Context, obj *model.Product) (string, error)
 }
 type QueryResolver interface {
 	ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error)
@@ -2255,14 +2259,14 @@ func (ec *executionContext) _Product_craetedAt(ctx context.Context, field graphq
 		Object:     "Product",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.CraetedAt, nil
+		return ec.resolvers.Product().CraetedAt(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4676,22 +4680,31 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 		case "id":
 			out.Values[i] = ec._Product_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "name":
 			out.Values[i] = ec._Product_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "craetedAt":
-			out.Values[i] = ec._Product_craetedAt(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Product_craetedAt(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "updatedAt":
 			out.Values[i] = ec._Product_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

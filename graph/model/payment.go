@@ -1,5 +1,7 @@
 package model
 
+import "github.com/kosnu/habook-backend/entity"
+
 type Payment struct {
 	Id              string `json:"id"`
 	TaxIncluded     bool   `json:"taxIncluded"`
@@ -27,4 +29,19 @@ type SearchPayments struct {
 	UserID      string  `json:"userId"`
 	ProductName *string `json:"productName"`
 	CategoryID  *string `json:"categoryId"`
+}
+
+func PaymentFromEntity(entity *entity.Payment) *Payment {
+	return &Payment{
+		Id:              entity.Id,
+		TaxIncluded:     entity.TaxIncluded,
+		PaidOn:          entity.PaidOn,
+		NumberOfProduct: entity.NumberOfProduct,
+		Amount:          entity.Amount,
+		UserId:          entity.UserId,
+		CategoryId:      entity.CategoryId,
+		ProductId:       entity.ProductId,
+		CreatedAt:       entity.CreatedAt.String(),
+		UpdatedAt:       entity.UpdatedAt.String(),
+	}
 }

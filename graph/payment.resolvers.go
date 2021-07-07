@@ -6,25 +6,94 @@ package graph
 import (
 	"context"
 	"fmt"
+	"strings"
+	"time"
 
+	"github.com/google/uuid"
+	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
+	"gorm.io/gorm"
 )
 
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+	uuidV4 := uuid.New()
+	paymentId := strings.Replace(uuidV4.String(), "-", "", -1)
+	now := time.Now()
+
+	var record entity.Payment
+	// TODO: paymentsに紐づくproductsを検索
+	err := r.DB.Transaction(func(tx *gorm.DB) error {
+		var product *entity.Product
+		// TODO: record not foundのログが出るのでなんとかする
+		err := r.DB.Where(&model.Product{Name: input.ProductName}).First(&product).Error
+		if err != nil {
+			productId := strings.Replace(uuidV4.String(), "-", "", -1)
+			product = &entity.Product{
+				Id:        productId,
+				Name:      input.ProductName,
+				CreatedAt: now,
+				UpdatedAt: now,
+			}
+			if err = r.DB.Create(&product).Error; err != nil {
+				return err
+			}
+		}
+
+		record = entity.Payment{
+			Id:              paymentId,
+			TaxIncluded:     input.TaxIncluded,
+			PaidOn:          input.PaidOn,
+			NumberOfProduct: input.NumberOfProduct,
+			Amount:          input.Amount,
+			UserId:          input.UserID,
+			CategoryId:      input.CategoryID,
+			ProductId:       product.Id,
+			CreatedAt:       now,
+			UpdatedAt:       now,
+		}
+
+		if err := r.DB.Create(&record).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return model.PaymentFromEntity(&record), nil
 }
 
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented"))
+	// TODO: N+1問題の解決
+	var record entity.Product
+	if err := r.DB.Find(&record, "id = ?", obj.ProductId).Error; err != nil {
+		return nil, err
+	}
+
+	return model.ProductFromEntity(&record), nil
 }
 
 func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented"))
+	// TODO: N+1問題の解決
+	var record entity.Category
+	if err := r.DB.Find(&record, "id = ?", obj.CategoryId).Error; err != nil {
+		return nil, err
+	}
+
+	return model.CategoryFromEntity(&record), nil
 }
 
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	// TODO: N+1問題の解決
+	var record entity.User
+	if err := r.DB.Find(&record, "id = ?", obj.UserId).Error; err != nil {
+		return nil, err
+	}
+
+	return model.UserFromEntity(&record), nil
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
