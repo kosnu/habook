@@ -38,6 +38,7 @@ type ResolverRoot interface {
 	Category() CategoryResolver
 	Mutation() MutationResolver
 	Payment() PaymentResolver
+	Product() ProductResolver
 	Query() QueryResolver
 }
 
@@ -106,7 +107,7 @@ type ComplexityRoot struct {
 		IncomeHistories  func(childComplexity int) int
 		IncomeHistory    func(childComplexity int, id string) int
 		Payment          func(childComplexity int, id string) int
-		Payments         func(childComplexity int, userID string, categoryID *string) int
+		Payments         func(childComplexity int, input *model.SearchPayments) int
 		Product          func(childComplexity int, id string) int
 		Products         func(childComplexity int) int
 		User             func(childComplexity int, id string) int
@@ -137,6 +138,9 @@ type PaymentResolver interface {
 	Category(ctx context.Context, obj *model.Payment) (*model.Category, error)
 	User(ctx context.Context, obj *model.Payment) (*model.User, error)
 }
+type ProductResolver interface {
+	CraetedAt(ctx context.Context, obj *model.Product) (string, error)
+}
 type QueryResolver interface {
 	ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error)
 	ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error)
@@ -145,7 +149,7 @@ type QueryResolver interface {
 	Category(ctx context.Context, id string) (*model.Category, error)
 	Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
-	Payments(ctx context.Context, userID string, categoryID *string) ([]*model.Payment, error)
+	Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error)
 	Product(ctx context.Context, id string) (*model.Product, error)
 	Products(ctx context.Context) ([]*model.Product, error)
 	User(ctx context.Context, id string) (*model.User, error)
@@ -521,7 +525,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Payments(childComplexity, args["userId"].(string), args["categoryId"].(*string)), true
+		return e.complexity.Query.Payments(childComplexity, args["input"].(*model.SearchPayments)), true
 
 	case "Query.product":
 		if e.complexity.Query.Product == nil {
@@ -708,13 +712,19 @@ input NewPayment {
   numberOfProduct: Int!
   amount: Int!
   productName: String!
-  categoryId: Int!
+  categoryId: String!
   userId: String!
+}
+
+input SearchPayments {
+  userId: String!
+  productName: String
+  categoryId: String
 }
 
 extend type Query {
   payment(id: ID!): Payment
-  payments(userId: ID!, categoryId: ID): [Payment!]!
+  payments(input: SearchPayments): [Payment!]!
 }
 
 extend type Mutation {
@@ -968,24 +978,15 @@ func (ec *executionContext) field_Query_payment_args(ctx context.Context, rawArg
 func (ec *executionContext) field_Query_payments_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["userId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+	var arg0 *model.SearchPayments
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalOSearchPayments2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchPayments(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userId"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["categoryId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
-		arg1, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["categoryId"] = arg1
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -2258,14 +2259,14 @@ func (ec *executionContext) _Product_craetedAt(ctx context.Context, field graphq
 		Object:     "Product",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.CraetedAt, nil
+		return ec.resolvers.Product().CraetedAt(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2610,7 +2611,7 @@ func (ec *executionContext) _Query_payments(ctx context.Context, field graphql.C
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Payments(rctx, args["userId"].(string), args["categoryId"].(*string))
+		return ec.resolvers.Query().Payments(rctx, args["input"].(*model.SearchPayments))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4242,7 +4243,7 @@ func (ec *executionContext) unmarshalInputNewPayment(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
-			it.CategoryID, err = ec.unmarshalNInt2int(ctx, v)
+			it.CategoryID, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4307,6 +4308,42 @@ func (ec *executionContext) unmarshalInputSearchCategories(ctx context.Context, 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputSearchPayments(ctx context.Context, obj interface{}) (model.SearchPayments, error) {
+	var it model.SearchPayments
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "productName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productName"))
+			it.ProductName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "categoryId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
+			it.CategoryID, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4643,22 +4680,31 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 		case "id":
 			out.Values[i] = ec._Product_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "name":
 			out.Values[i] = ec._Product_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "craetedAt":
-			out.Values[i] = ec._Product_craetedAt(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Product_craetedAt(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "updatedAt":
 			out.Values[i] = ec._Product_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -5801,21 +5847,6 @@ func (ec *executionContext) marshalOExpenseHistory2ᚖgithubᚗcomᚋkosnuᚋhab
 	return ec._ExpenseHistory(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalID(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return graphql.MarshalID(*v)
-}
-
 func (ec *executionContext) marshalOIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx context.Context, sel ast.SelectionSet, v *model.IncomeHistory) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -5842,6 +5873,14 @@ func (ec *executionContext) unmarshalOSearchCategories2ᚖgithubᚗcomᚋkosnu�
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputSearchCategories(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOSearchPayments2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchPayments(ctx context.Context, v interface{}) (*model.SearchPayments, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSearchPayments(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

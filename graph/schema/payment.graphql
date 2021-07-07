@@ -17,13 +17,19 @@ input NewPayment {
   numberOfProduct: Int!
   amount: Int!
   productName: String!
-  categoryId: Int!
+  categoryId: String!
   userId: String!
+}
+
+input SearchPayments {
+  userId: String!
+  productName: String
+  categoryId: String
 }
 
 extend type Query {
   payment(id: ID!): Payment
-  payments(userId: ID!, categoryId: ID): [Payment!]!
+  payments(input: SearchPayments): [Payment!]!
 }
 
 extend type Mutation {

@@ -37,13 +37,6 @@ type NewUser struct {
 	Name string `json:"name"`
 }
 
-type Product struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	CraetedAt string `json:"craetedAt"`
-	UpdatedAt string `json:"updatedAt"`
-}
-
 type User struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
