@@ -19,25 +19,16 @@ import (
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
 	uuidV4 := uuid.New()
 	paymentId := strings.Replace(uuidV4.String(), "-", "", -1)
+	productId := strings.Replace(uuidV4.String(), "-", "", -1)
 	now := time.Now()
 
 	var record entity.Payment
 	// TODO: paymentsに紐づくproductsを検索
 	err := r.DB.Transaction(func(tx *gorm.DB) error {
 		var product *entity.Product
-		// TODO: record not foundのログが出るのでなんとかする
-		err := r.DB.Where(&model.Product{Name: input.ProductName}).First(&product).Error
+		err := r.DB.Where(&entity.Product{Name: input.ProductName}).Attrs(&entity.Product{Id: productId, CreatedAt: now, UpdatedAt: now}).FirstOrCreate(&product).Error
 		if err != nil {
-			productId := strings.Replace(uuidV4.String(), "-", "", -1)
-			product = &entity.Product{
-				Id:        productId,
-				Name:      input.ProductName,
-				CreatedAt: now,
-				UpdatedAt: now,
-			}
-			if err = r.DB.Create(&product).Error; err != nil {
-				return err
-			}
+			return err
 		}
 
 		record = entity.Payment{
