@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
@@ -88,7 +87,12 @@ func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+	var record entity.Payment
+	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return model.PaymentFromEntity(&record), nil
 }
 
 func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error) {
