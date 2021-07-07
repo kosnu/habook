@@ -101,7 +101,29 @@ func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment,
 }
 
 func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+	var records []entity.Payment
+	// TODO: Sortを引数に入れる
+	query := r.DB.Debug().Order("created_at asc")
+	if input != nil {
+		query = query.Where(&model.Payment{UserId: input.UserID})
+		if input.CategoryID != nil {
+			query = query.Joins("left join categories on categories.id = payments.category_id").Where("categories.id = ?", input.CategoryID)
+		}
+		if input.ProductName != nil {
+			query = query.Joins("left join products on products.id = payments.product_id").Where("products.name = ?", input.ProductName)
+		}
+	}
+
+	if err := query.Find(&records).Error; err != nil {
+		return []*model.Payment{}, err
+	}
+
+	var payments []*model.Payment
+	for _, record := range records {
+		payments = append(payments, model.PaymentFromEntity(&record))
+	}
+
+	return payments, nil
 }
 
 // Payment returns generated.PaymentResolver implementation.
