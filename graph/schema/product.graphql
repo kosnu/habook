@@ -1,7 +1,7 @@
 type Product {
   id: ID!
   name: String!
-  craetedAt: String!
+  createdAt: String!
   updatedAt: String!
 }
 

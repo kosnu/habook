@@ -7,7 +7,7 @@ func UserFromEntity(entity *entity.User) *User {
 		ID:        entity.Id,
 		Name:      entity.Name,
 		Enable:    entity.Enable,
-		CraetedAt: entity.CreatedAt.String(),
+		CreatedAt: entity.CreatedAt.String(),
 		UpdatedAt: entity.UpdatedAt.String(),
 	}
 }

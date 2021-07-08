@@ -7,13 +7,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
 )
-
-func (r *productResolver) CraetedAt(ctx context.Context, obj *model.Product) (string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
 
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
 	panic(fmt.Errorf("not implemented"))
@@ -22,8 +17,3 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
 	panic(fmt.Errorf("not implemented"))
 }
-
-// Product returns generated.ProductResolver implementation.
-func (r *Resolver) Product() generated.ProductResolver { return &productResolver{r} }
-
-type productResolver struct{ *Resolver }

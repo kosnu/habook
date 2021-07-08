@@ -2,7 +2,7 @@ type User {
   id: ID!
   name: String!
   enable: Boolean!
-  craetedAt: String!
+  createdAt: String!
   updatedAt: String!
 }
 

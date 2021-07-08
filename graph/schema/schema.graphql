@@ -2,7 +2,7 @@ type ExpenseHistory {
   id: ID!
   expense: Int!
   user: User!
-  craetedAt: String!
+  createdAt: String!
   updatedAt: String!
 }
 
@@ -10,7 +10,7 @@ type IncomeHistory {
   id: ID!
   income: Int!
   user: User!
-  craetedAt: String!
+  createdAt: String!
   updatedAt: String!
 }
 

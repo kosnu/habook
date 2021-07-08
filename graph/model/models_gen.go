@@ -6,7 +6,7 @@ type ExpenseHistory struct {
 	ID        string `json:"id"`
 	Expense   int    `json:"expense"`
 	User      *User  `json:"user"`
-	CraetedAt string `json:"craetedAt"`
+	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
 
@@ -14,7 +14,7 @@ type IncomeHistory struct {
 	ID        string `json:"id"`
 	Income    int    `json:"income"`
 	User      *User  `json:"user"`
-	CraetedAt string `json:"craetedAt"`
+	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
 
@@ -41,6 +41,6 @@ type User struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Enable    bool   `json:"enable"`
-	CraetedAt string `json:"craetedAt"`
+	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
