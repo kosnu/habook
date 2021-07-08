@@ -82,7 +82,7 @@ type ComplexityRoot struct {
 		Amount          func(childComplexity int) int
 		Category        func(childComplexity int) int
 		CreatedAt       func(childComplexity int) int
-		Id              func(childComplexity int) int
+		ID              func(childComplexity int) int
 		NumberOfProduct func(childComplexity int) int
 		PaidOn          func(childComplexity int) int
 		Product         func(childComplexity int) int
@@ -361,11 +361,11 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		return e.complexity.Payment.CreatedAt(childComplexity), true
 
 	case "Payment.id":
-		if e.complexity.Payment.Id == nil {
+		if e.complexity.Payment.ID == nil {
 			break
 		}
 
-		return e.complexity.Payment.Id(childComplexity), true
+		return e.complexity.Payment.ID(childComplexity), true
 
 	case "Payment.numberOfProduct":
 		if e.complexity.Payment.NumberOfProduct == nil {
@@ -1842,7 +1842,7 @@ func (ec *executionContext) _Payment_id(ctx context.Context, field graphql.Colle
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Id, nil
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)

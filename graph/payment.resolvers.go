@@ -59,7 +59,7 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
 	// TODO: N+1問題の解決
 	var record entity.Product
-	if err := r.DB.Find(&record, "id = ?", obj.ProductId).Error; err != nil {
+	if err := r.DB.Find(&record, "id = ?", obj.ProductID).Error; err != nil {
 		return nil, err
 	}
 
@@ -69,7 +69,7 @@ func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*mod
 func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*model.Category, error) {
 	// TODO: N+1問題の解決
 	var record entity.Category
-	if err := r.DB.Find(&record, "id = ?", obj.CategoryId).Error; err != nil {
+	if err := r.DB.Find(&record, "id = ?", obj.CategoryID).Error; err != nil {
 		return nil, err
 	}
 
@@ -79,7 +79,7 @@ func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*mo
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
 	// TODO: N+1問題の解決
 	var record entity.User
-	if err := r.DB.Find(&record, "id = ?", obj.UserId).Error; err != nil {
+	if err := r.DB.Find(&record, "id = ?", obj.UserID).Error; err != nil {
 		return nil, err
 	}
 
@@ -100,7 +100,7 @@ func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayment
 	// TODO: Sortを引数に入れる
 	query := r.DB.Debug().Order("created_at asc")
 	if input != nil {
-		query = query.Where(&model.Payment{UserId: input.UserID})
+		query = query.Where(&model.Payment{UserID: input.UserID})
 		if input.CategoryID != nil {
 			query = query.Joins("left join categories on categories.id = payments.category_id").Where("categories.id = ?", input.CategoryID)
 		}

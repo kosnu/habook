@@ -17,7 +17,7 @@ import (
 func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*model.User, error) {
 	// TODO: N+1問題の解決
 	var record entity.User
-	if err := r.DB.Find(&record, "id = ?", obj.UserId).Error; err != nil {
+	if err := r.DB.Find(&record, "id = ?", obj.UserID).Error; err != nil {
 		return nil, err
 	}
 
@@ -60,7 +60,7 @@ func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCateg
 	// TODO: Sortを引数に入れる
 	query := r.DB.Debug().Order("created_at asc")
 	if input != nil {
-		query = query.Where(&model.Category{UserId: input.UserID})
+		query = query.Where(&model.Category{UserID: input.UserID})
 		if input.Name != nil {
 			query = query.Where(&model.Category{Name: *input.Name})
 		}
