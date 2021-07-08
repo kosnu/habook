@@ -60,9 +60,9 @@ func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCateg
 	// TODO: Sortを引数に入れる
 	query := r.DB.Debug().Order("created_at asc")
 	if input != nil {
-		query = query.Where(&model.Category{UserID: input.UserID})
+		query = query.Where(&entity.Category{UserId: input.UserID})
 		if input.Name != nil {
-			query = query.Where(&model.Category{Name: *input.Name})
+			query = query.Where(&entity.Category{Name: *input.Name})
 		}
 		if input.Enable != nil {
 			query = query.Where("enable = ?", *input.Enable)

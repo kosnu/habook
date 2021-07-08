@@ -100,7 +100,7 @@ func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayment
 	// TODO: Sortを引数に入れる
 	query := r.DB.Debug().Order("created_at asc")
 	if input != nil {
-		query = query.Where(&model.Payment{UserID: input.UserID})
+		query = query.Where(&entity.Payment{UserId: input.UserID})
 		if input.CategoryID != nil {
 			query = query.Joins("left join categories on categories.id = payments.category_id").Where("categories.id = ?", input.CategoryID)
 		}
