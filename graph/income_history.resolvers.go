@@ -6,17 +6,43 @@ package graph
 import (
 	"context"
 	"fmt"
+	"strings"
+	"time"
 
+	"github.com/google/uuid"
+	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
 func (r *incomeHistoryResolver) User(ctx context.Context, obj *model.IncomeHistory) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	// TODO: N+1問題の解決
+	var record entity.User
+	if err := r.DB.Find(&record, "id = ?", obj.UserID).Error; err != nil {
+		return nil, err
+	}
+
+	return model.UserFromEntity(&record), nil
 }
 
 func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error) {
-	panic(fmt.Errorf("not implemented"))
+	uuidV4 := uuid.New()
+	id := strings.Replace(uuidV4.String(), "-", "", -1)
+	now := time.Now()
+
+	record := entity.IncomeHistory{
+		Id:        id,
+		Income:    input.Income,
+		UserId:    input.UserID,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	if err := r.DB.Create(&record).Error; err != nil {
+		return nil, err
+	}
+
+	return model.IncomeHistoryFromEntity(&record), nil
 }
 
 func (r *queryResolver) IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error) {
