@@ -10,14 +10,6 @@ type ExpenseHistory struct {
 	UpdatedAt string `json:"updatedAt"`
 }
 
-type IncomeHistory struct {
-	ID        string `json:"id"`
-	Income    int    `json:"income"`
-	User      *User  `json:"user"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-}
-
 type NewCategory struct {
 	Name   string `json:"name"`
 	UserID string `json:"userId"`
@@ -26,11 +18,6 @@ type NewCategory struct {
 type NewExpenseHistory struct {
 	Expense int    `json:"expense"`
 	UserID  string `json:"userId"`
-}
-
-type NewIncomeHistory struct {
-	Income int    `json:"income"`
-	UserID string `json:"userId"`
 }
 
 type NewUser struct {

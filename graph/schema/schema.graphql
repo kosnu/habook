@@ -6,20 +6,9 @@ type ExpenseHistory {
   updatedAt: String!
 }
 
-type IncomeHistory {
-  id: ID!
-  income: Int!
-  user: User!
-  createdAt: String!
-  updatedAt: String!
-}
-
 type Query {
   expenseHistory(id: ID!): ExpenseHistory
   expenseHistories: [ExpenseHistory!]!
-
-  incomeHistory(id: ID!): IncomeHistory
-  incomeHistories: [IncomeHistory!]!
 }
 
 input NewExpenseHistory {
@@ -27,12 +16,6 @@ input NewExpenseHistory {
   userId: String!
 }
 
-input NewIncomeHistory {
-  income: Int!
-  userId: String!
-}
-
 type Mutation {
   createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
-  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }

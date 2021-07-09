@@ -1,0 +1,21 @@
+type IncomeHistory {
+  id: ID!
+  income: Int!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input NewIncomeHistory {
+  income: Int!
+  userId: String!
+}
+
+extend type Query {
+  incomeHistory(id: ID!): IncomeHistory
+  incomeHistories: [IncomeHistory!]!
+}
+
+extend type Mutation {
+  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
+}

@@ -36,6 +36,7 @@ type Config struct {
 
 type ResolverRoot interface {
 	Category() CategoryResolver
+	IncomeHistory() IncomeHistoryResolver
 	Mutation() MutationResolver
 	Payment() PaymentResolver
 	Query() QueryResolver
@@ -125,10 +126,13 @@ type ComplexityRoot struct {
 type CategoryResolver interface {
 	User(ctx context.Context, obj *model.Category) (*model.User, error)
 }
+type IncomeHistoryResolver interface {
+	User(ctx context.Context, obj *model.IncomeHistory) (*model.User, error)
+}
 type MutationResolver interface {
 	CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error)
-	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error)
 	CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error)
+	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error)
 	CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error)
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
 }
@@ -140,10 +144,10 @@ type PaymentResolver interface {
 type QueryResolver interface {
 	ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error)
 	ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error)
-	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
-	IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error)
 	Category(ctx context.Context, id string) (*model.Category, error)
 	Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error)
+	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
+	IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
 	Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error)
 	Product(ctx context.Context, id string) (*model.Product, error)
@@ -689,6 +693,28 @@ extend type Mutation {
   createCategory(input: NewCategory!): Category!
 }
 `, BuiltIn: false},
+	{Name: "graph/schema/income_history.graphql", Input: `type IncomeHistory {
+  id: ID!
+  income: Int!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input NewIncomeHistory {
+  income: Int!
+  userId: String!
+}
+
+extend type Query {
+  incomeHistory(id: ID!): IncomeHistory
+  incomeHistories: [IncomeHistory!]!
+}
+
+extend type Mutation {
+  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
+}
+`, BuiltIn: false},
 	{Name: "graph/schema/payment.graphql", Input: `type Payment {
   id: ID!
   taxIncluded: Boolean!
@@ -747,20 +773,9 @@ extend type Query {
   updatedAt: String!
 }
 
-type IncomeHistory {
-  id: ID!
-  income: Int!
-  user: User!
-  createdAt: String!
-  updatedAt: String!
-}
-
 type Query {
   expenseHistory(id: ID!): ExpenseHistory
   expenseHistories: [ExpenseHistory!]!
-
-  incomeHistory(id: ID!): IncomeHistory
-  incomeHistories: [IncomeHistory!]!
 }
 
 input NewExpenseHistory {
@@ -768,14 +783,8 @@ input NewExpenseHistory {
   userId: String!
 }
 
-input NewIncomeHistory {
-  income: Int!
-  userId: String!
-}
-
 type Mutation {
   createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
-  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/user.graphql", Input: `type User {
@@ -1520,14 +1529,14 @@ func (ec *executionContext) _IncomeHistory_user(ctx context.Context, field graph
 		Object:     "IncomeHistory",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.User, nil
+		return ec.resolvers.IncomeHistory().User(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1656,48 +1665,6 @@ func (ec *executionContext) _Mutation_createExpenseHistory(ctx context.Context, 
 	return ec.marshalNExpenseHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_createIncomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createIncomeHistory_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateIncomeHistory(rctx, args["input"].(model.NewIncomeHistory))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.IncomeHistory)
-	fc.Result = res
-	return ec.marshalNIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1738,6 +1705,48 @@ func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field 
 	res := resTmp.(*model.Category)
 	fc.Result = res
 	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_createIncomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_createIncomeHistory_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateIncomeHistory(rctx, args["input"].(model.NewIncomeHistory))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.IncomeHistory)
+	fc.Result = res
+	return ec.marshalNIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createPayment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2388,80 +2397,6 @@ func (ec *executionContext) _Query_expenseHistories(ctx context.Context, field g
 	return ec.marshalNExpenseHistory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistoryᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_incomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_incomeHistory_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().IncomeHistory(rctx, args["id"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.IncomeHistory)
-	fc.Result = res
-	return ec.marshalOIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_incomeHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().IncomeHistories(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*model.IncomeHistory)
-	fc.Result = res
-	return ec.marshalNIncomeHistory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistoryᚄ(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query_category(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -2541,6 +2476,80 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 	res := resTmp.([]*model.Category)
 	fc.Result = res
 	return ec.marshalNCategory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_incomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_incomeHistory_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().IncomeHistory(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.IncomeHistory)
+	fc.Result = res
+	return ec.marshalOIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_incomeHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().IncomeHistories(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.IncomeHistory)
+	fc.Result = res
+	return ec.marshalNIncomeHistory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistoryᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_payment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4479,27 +4488,36 @@ func (ec *executionContext) _IncomeHistory(ctx context.Context, sel ast.Selectio
 		case "id":
 			out.Values[i] = ec._IncomeHistory_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "income":
 			out.Values[i] = ec._IncomeHistory_income(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "user":
-			out.Values[i] = ec._IncomeHistory_user(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._IncomeHistory_user(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "createdAt":
 			out.Values[i] = ec._IncomeHistory_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "updatedAt":
 			out.Values[i] = ec._IncomeHistory_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -4532,13 +4550,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "createIncomeHistory":
-			out.Values[i] = ec._Mutation_createIncomeHistory(ctx, field)
+		case "createCategory":
+			out.Values[i] = ec._Mutation_createCategory(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "createCategory":
-			out.Values[i] = ec._Mutation_createCategory(ctx, field)
+		case "createIncomeHistory":
+			out.Values[i] = ec._Mutation_createIncomeHistory(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -4744,31 +4762,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
-		case "incomeHistory":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_incomeHistory(ctx, field)
-				return res
-			})
-		case "incomeHistories":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_incomeHistories(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			})
 		case "category":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -4789,6 +4782,31 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_categories(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "incomeHistory":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_incomeHistory(ctx, field)
+				return res
+			})
+		case "incomeHistories":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_incomeHistories(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}

@@ -15,23 +15,11 @@ func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *queryResolver) ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
