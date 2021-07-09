@@ -24,6 +24,12 @@ type NewUser struct {
 	Name string `json:"name"`
 }
 
+type SearchIncomeHistory struct {
+	UserID            string  `json:"userId"`
+	BeginningOfPeriod *string `json:"beginningOfPeriod"`
+	EndOfPeriod       *string `json:"endOfPeriod"`
+}
+
 type User struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`

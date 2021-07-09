@@ -11,9 +11,15 @@ input NewIncomeHistory {
   userId: String!
 }
 
+input SearchIncomeHistory {
+  userId: String!
+  beginningOfPeriod: String
+  endOfPeriod: String
+}
+
 extend type Query {
   incomeHistory(id: ID!): IncomeHistory
-  incomeHistories: [IncomeHistory!]!
+  incomeHistories(input: SearchIncomeHistory): [IncomeHistory!]!
 }
 
 extend type Mutation {

@@ -104,7 +104,7 @@ type ComplexityRoot struct {
 		Category         func(childComplexity int, id string) int
 		ExpenseHistories func(childComplexity int) int
 		ExpenseHistory   func(childComplexity int, id string) int
-		IncomeHistories  func(childComplexity int) int
+		IncomeHistories  func(childComplexity int, input *model.SearchIncomeHistory) int
 		IncomeHistory    func(childComplexity int, id string) int
 		Payment          func(childComplexity int, id string) int
 		Payments         func(childComplexity int, input *model.SearchPayments) int
@@ -147,7 +147,7 @@ type QueryResolver interface {
 	Category(ctx context.Context, id string) (*model.Category, error)
 	Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error)
 	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
-	IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error)
+	IncomeHistories(ctx context.Context, input *model.SearchIncomeHistory) ([]*model.IncomeHistory, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
 	Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error)
 	Product(ctx context.Context, id string) (*model.Product, error)
@@ -489,7 +489,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.IncomeHistories(childComplexity), true
+		args, err := ec.field_Query_incomeHistories_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.IncomeHistories(childComplexity, args["input"].(*model.SearchIncomeHistory)), true
 
 	case "Query.incomeHistory":
 		if e.complexity.Query.IncomeHistory == nil {
@@ -706,9 +711,15 @@ input NewIncomeHistory {
   userId: String!
 }
 
+input SearchIncomeHistory {
+  userId: String!
+  beginningOfPeriod: String
+  endOfPeriod: String
+}
+
 extend type Query {
   incomeHistory(id: ID!): IncomeHistory
-  incomeHistories: [IncomeHistory!]!
+  incomeHistories(input: SearchIncomeHistory): [IncomeHistory!]!
 }
 
 extend type Mutation {
@@ -947,6 +958,21 @@ func (ec *executionContext) field_Query_expenseHistory_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_incomeHistories_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.SearchIncomeHistory
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalOSearchIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchIncomeHistory(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -2533,9 +2559,16 @@ func (ec *executionContext) _Query_incomeHistories(ctx context.Context, field gr
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_incomeHistories_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().IncomeHistories(rctx)
+		return ec.resolvers.Query().IncomeHistories(rctx, args["input"].(*model.SearchIncomeHistory))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4322,6 +4355,42 @@ func (ec *executionContext) unmarshalInputSearchCategories(ctx context.Context, 
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSearchIncomeHistory(ctx context.Context, obj interface{}) (model.SearchIncomeHistory, error) {
+	var it model.SearchIncomeHistory
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "beginningOfPeriod":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginningOfPeriod"))
+			it.BeginningOfPeriod, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "endOfPeriod":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endOfPeriod"))
+			it.EndOfPeriod, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputSearchPayments(ctx context.Context, obj interface{}) (model.SearchPayments, error) {
 	var it model.SearchPayments
 	var asMap = obj.(map[string]interface{})
@@ -5878,6 +5947,14 @@ func (ec *executionContext) unmarshalOSearchCategories2ᚖgithubᚗcomᚋkosnu�
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputSearchCategories(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOSearchIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchIncomeHistory(ctx context.Context, v interface{}) (*model.SearchIncomeHistory, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSearchIncomeHistory(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

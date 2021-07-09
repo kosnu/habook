@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
@@ -46,11 +45,45 @@ func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.
 }
 
 func (r *queryResolver) IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error) {
-	panic(fmt.Errorf("not implemented"))
+	var record entity.IncomeHistory
+	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return model.IncomeHistoryFromEntity(&record), nil
 }
 
-func (r *queryResolver) IncomeHistories(ctx context.Context) ([]*model.IncomeHistory, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) IncomeHistories(ctx context.Context, input *model.SearchIncomeHistory) ([]*model.IncomeHistory, error) {
+	var records []entity.IncomeHistory
+	// TODO: Sortを引数に入れる
+	query := r.DB.Debug().Order("created_at asc")
+	if input != nil {
+		query = query.Where(&entity.IncomeHistory{UserId: input.UserID})
+
+		// input.BeginningOfPeriod以降の収入履歴
+		if input.BeginningOfPeriod != nil && input.EndOfPeriod == nil {
+			query = query.Where("created_at > ?", input.BeginningOfPeriod)
+		}
+		// input.EndOfPeriodまでの収入履歴
+		if input.BeginningOfPeriod == nil && input.EndOfPeriod != nil {
+			query = query.Where("created_at < ?", input.EndOfPeriod)
+		}
+		// input.BeginningOfPeriodからinput.EndOfPeriodまでの収入履歴
+		if input.BeginningOfPeriod != nil && input.EndOfPeriod != nil {
+			query = query.Where("created_at BETWEEN ? AND ?", input.BeginningOfPeriod, input.EndOfPeriod)
+		}
+	}
+
+	if err := query.Find(&records).Error; err != nil {
+		return []*model.IncomeHistory{}, err
+	}
+
+	var incomeHistories []*model.IncomeHistory
+	for _, record := range records {
+		incomeHistories = append(incomeHistories, model.IncomeHistoryFromEntity(&record))
+	}
+
+	return incomeHistories, nil
 }
 
 // IncomeHistory returns generated.IncomeHistoryResolver implementation.
