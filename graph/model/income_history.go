@@ -15,6 +15,12 @@ type NewIncomeHistory struct {
 	UserID string `json:"userId"`
 }
 
+type SearchIncomeHistory struct {
+	UserID            string  `json:"userId"`
+	BeginningOfPeriod *string `json:"beginningOfPeriod"`
+	EndOfPeriod       *string `json:"endOfPeriod"`
+}
+
 func IncomeHistoryFromEntity(entity *entity.IncomeHistory) *IncomeHistory {
 	return &IncomeHistory{
 		ID:        entity.Id,

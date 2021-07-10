@@ -10,30 +10,7 @@ type ExpenseHistory struct {
 	UpdatedAt string `json:"updatedAt"`
 }
 
-type NewCategory struct {
-	Name   string `json:"name"`
-	UserID string `json:"userId"`
-}
-
 type NewExpenseHistory struct {
 	Expense int    `json:"expense"`
 	UserID  string `json:"userId"`
-}
-
-type NewUser struct {
-	Name string `json:"name"`
-}
-
-type SearchIncomeHistory struct {
-	UserID            string  `json:"userId"`
-	BeginningOfPeriod *string `json:"beginningOfPeriod"`
-	EndOfPeriod       *string `json:"endOfPeriod"`
-}
-
-type User struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Enable    bool   `json:"enable"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
 }
