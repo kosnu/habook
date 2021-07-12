@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/kosnu/habook-backend/dataloader"
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
@@ -77,13 +78,11 @@ func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*mo
 }
 
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
-	// TODO: N+1問題の解決
-	var record entity.User
-	if err := r.DB.Find(&record, "id = ?", obj.UserID).Error; err != nil {
+	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.UserFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
