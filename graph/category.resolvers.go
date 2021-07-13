@@ -9,19 +9,18 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/kosnu/habook-backend/dataloader"
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
 func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*model.User, error) {
-	// TODO: N+1問題の解決
-	var record entity.User
-	if err := r.DB.Find(&record, "id = ?", obj.UserID).Error; err != nil {
+	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.UserFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/kosnu/habook-backend/dataloader"
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
@@ -57,33 +58,27 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 }
 
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
-	// TODO: N+1問題の解決
-	var record entity.Product
-	if err := r.DB.Find(&record, "id = ?", obj.ProductID).Error; err != nil {
+	record, err := dataloader.For(ctx).ProductById.Load(obj.ProductID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.ProductFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*model.Category, error) {
-	// TODO: N+1問題の解決
-	var record entity.Category
-	if err := r.DB.Find(&record, "id = ?", obj.CategoryID).Error; err != nil {
+	record, err := dataloader.For(ctx).CategoryById.Load(obj.CategoryID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.CategoryFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
-	// TODO: N+1問題の解決
-	var record entity.User
-	if err := r.DB.Find(&record, "id = ?", obj.UserID).Error; err != nil {
+	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.UserFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
