@@ -13,7 +13,8 @@ import (
 const loadersKey = "dataloaders"
 
 type Loaders struct {
-	UserById UserLoader
+	UserById     UserLoader
+	CategoryById CategoryLoader
 }
 
 func Middleware(db *gorm.DB, next http.Handler) http.Handler {
@@ -40,6 +41,29 @@ func Middleware(db *gorm.DB, next http.Handler) http.Handler {
 					}
 
 					return users, nil
+				},
+			},
+			CategoryById: CategoryLoader{
+				maxBatch: 100,
+				wait:     1 * time.Millisecond,
+				fetch: func(ids []string) ([]*model.Category, []error) {
+					var records []entity.Category
+					if err := db.Find(&records, ids).Error; err != nil {
+						return nil, []error{err}
+					}
+
+					categoryByID := map[string]*model.Category{}
+					for _, record := range records {
+						category := model.CategoryFromEntity(&record)
+						categoryByID[category.ID] = category
+					}
+
+					categories := make([]*model.Category, len(ids))
+					for i, key := range ids {
+						categories[i] = categoryByID[key]
+					}
+
+					return categories, nil
 				},
 			},
 		})

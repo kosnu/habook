@@ -68,13 +68,11 @@ func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*mod
 }
 
 func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*model.Category, error) {
-	// TODO: N+1問題の解決
-	var record entity.Category
-	if err := r.DB.Find(&record, "id = ?", obj.CategoryID).Error; err != nil {
+	record, err := dataloader.For(ctx).CategoryById.Load(obj.CategoryID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.CategoryFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
