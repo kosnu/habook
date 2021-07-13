@@ -58,13 +58,11 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 }
 
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
-	// TODO: N+1問題の解決
-	var record entity.Product
-	if err := r.DB.Find(&record, "id = ?", obj.ProductID).Error; err != nil {
+	record, err := dataloader.For(ctx).ProductById.Load(obj.ProductID)
+	if err != nil {
 		return nil, err
 	}
-
-	return model.ProductFromEntity(&record), nil
+	return record, nil
 }
 
 func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*model.Category, error) {

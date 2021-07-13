@@ -15,6 +15,7 @@ const loadersKey = "dataloaders"
 type Loaders struct {
 	UserById     UserLoader
 	CategoryById CategoryLoader
+	ProductById  ProductLoader
 }
 
 func Middleware(db *gorm.DB, next http.Handler) http.Handler {
@@ -64,6 +65,29 @@ func Middleware(db *gorm.DB, next http.Handler) http.Handler {
 					}
 
 					return categories, nil
+				},
+			},
+			ProductById: ProductLoader{
+				maxBatch: 100,
+				wait:     1 * time.Millisecond,
+				fetch: func(ids []string) ([]*model.Product, []error) {
+					var records []entity.Product
+					if err := db.Find(&records, ids).Error; err != nil {
+						return nil, []error{err}
+					}
+
+					productByID := map[string]*model.Product{}
+					for _, record := range records {
+						product := model.ProductFromEntity(&record)
+						productByID[product.ID] = product
+					}
+
+					products := make([]*model.Product, len(ids))
+					for i, key := range ids {
+						products[i] = productByID[key]
+					}
+
+					return products, nil
 				},
 			},
 		})
