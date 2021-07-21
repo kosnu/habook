@@ -17,14 +17,14 @@ input NewPayment {
   numberOfProduct: Int!
   amount: Int!
   productName: String!
-  categoryId: String!
-  userId: String!
+  categoryId: ID!
+  userId: ID!
 }
 
 input SearchPayments {
-  userId: String!
+  userId: ID!
   productName: String
-  categoryId: String
+  categoryId: ID
 }
 
 extend type Query {

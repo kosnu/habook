@@ -680,7 +680,7 @@ var sources = []*ast.Source{
 
 input NewCategory {
   name: String!
-  userId: String!
+  userId: ID!
 }
 
 input SearchCategories {
@@ -708,11 +708,11 @@ extend type Mutation {
 
 input NewIncomeHistory {
   income: Int!
-  userId: String!
+  userId: ID!
 }
 
 input SearchIncomeHistory {
-  userId: String!
+  userId: ID!
   beginningOfPeriod: String
   endOfPeriod: String
 }
@@ -745,14 +745,14 @@ input NewPayment {
   numberOfProduct: Int!
   amount: Int!
   productName: String!
-  categoryId: String!
-  userId: String!
+  categoryId: ID!
+  userId: ID!
 }
 
 input SearchPayments {
-  userId: String!
+  userId: ID!
   productName: String
-  categoryId: String
+  categoryId: ID
 }
 
 extend type Query {
@@ -791,7 +791,7 @@ type Query {
 
 input NewExpenseHistory {
   expense: Int!
-  userId: String!
+  userId: ID!
 }
 
 type Mutation {
@@ -4165,7 +4165,7 @@ func (ec *executionContext) unmarshalInputNewCategory(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4193,7 +4193,7 @@ func (ec *executionContext) unmarshalInputNewExpenseHistory(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4221,7 +4221,7 @@ func (ec *executionContext) unmarshalInputNewIncomeHistory(ctx context.Context, 
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4281,7 +4281,7 @@ func (ec *executionContext) unmarshalInputNewPayment(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
-			it.CategoryID, err = ec.unmarshalNString2string(ctx, v)
+			it.CategoryID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4289,7 +4289,7 @@ func (ec *executionContext) unmarshalInputNewPayment(ctx context.Context, obj in
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4365,7 +4365,7 @@ func (ec *executionContext) unmarshalInputSearchIncomeHistory(ctx context.Contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4401,7 +4401,7 @@ func (ec *executionContext) unmarshalInputSearchPayments(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNString2string(ctx, v)
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4417,7 +4417,7 @@ func (ec *executionContext) unmarshalInputSearchPayments(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
-			it.CategoryID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.CategoryID, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5919,6 +5919,21 @@ func (ec *executionContext) marshalOExpenseHistory2ᚖgithubᚗcomᚋkosnuᚋhab
 		return graphql.Null
 	}
 	return ec._ExpenseHistory(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalID(*v)
 }
 
 func (ec *executionContext) marshalOIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐIncomeHistory(ctx context.Context, sel ast.SelectionSet, v *model.IncomeHistory) graphql.Marshaler {

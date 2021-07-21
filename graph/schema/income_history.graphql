@@ -8,11 +8,11 @@ type IncomeHistory {
 
 input NewIncomeHistory {
   income: Int!
-  userId: String!
+  userId: ID!
 }
 
 input SearchIncomeHistory {
-  userId: String!
+  userId: ID!
   beginningOfPeriod: String
   endOfPeriod: String
 }
