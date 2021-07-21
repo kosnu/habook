@@ -100,7 +100,8 @@ func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayment
 			query = query.Joins("left join categories on categories.id = payments.category_id").Where("categories.id = ?", input.CategoryID)
 		}
 		if input.ProductName != nil {
-			query = query.Joins("left join products on products.id = payments.product_id").Where("products.name = ?", input.ProductName)
+			queryArgs := "%" + *input.ProductName
+			query = query.Joins("left join products on products.id = payments.product_id").Where("products.name like ?", queryArgs)
 		}
 	}
 
