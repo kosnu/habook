@@ -20,6 +20,10 @@ type Loaders struct {
 
 func Middleware(db *gorm.DB, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// TODO: CORSガバガバなので修正する
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		ctx := context.WithValue(r.Context(), loadersKey, &Loaders{
 			UserById: UserLoader{
 				maxBatch: 100,
