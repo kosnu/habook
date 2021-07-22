@@ -93,18 +93,19 @@ func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment,
 func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error) {
 	var records []entity.Payment
 	// TODO: Sortを引数に入れる
-	query := r.DB.Debug().Order("created_at asc")
+	query := r.DB.Debug()
 	if input != nil {
 		query = query.Where(&entity.Payment{UserId: input.UserID})
 		if input.CategoryID != nil {
 			query = query.Joins("left join categories on categories.id = payments.category_id").Where("categories.id = ?", input.CategoryID)
 		}
 		if input.ProductName != nil {
-			query = query.Joins("left join products on products.id = payments.product_id").Where("products.name = ?", input.ProductName)
+			queryArgs := "%" + *input.ProductName
+			query = query.Joins("left join products on products.id = payments.product_id").Where("products.name like ?", queryArgs)
 		}
 	}
 
-	if err := query.Find(&records).Error; err != nil {
+	if err := query.Order("payments.created_at asc").Find(&records).Error; err != nil {
 		return []*model.Payment{}, err
 	}
 
