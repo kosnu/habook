@@ -5,7 +5,12 @@ type Product {
   updatedAt: String!
 }
 
+input SearchProduct {
+  userId: ID!
+  productName: String
+}
+
 extend type Query {
   product(id: ID!): Product
-  products: [Product!]!
+  products(input: SearchProduct): [Product!]!
 }

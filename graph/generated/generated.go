@@ -109,7 +109,7 @@ type ComplexityRoot struct {
 		Payment          func(childComplexity int, id string) int
 		Payments         func(childComplexity int, input *model.SearchPayments) int
 		Product          func(childComplexity int, id string) int
-		Products         func(childComplexity int) int
+		Products         func(childComplexity int, input *model.SearchProduct) int
 		User             func(childComplexity int, id string) int
 		Users            func(childComplexity int) int
 	}
@@ -151,7 +151,7 @@ type QueryResolver interface {
 	Payment(ctx context.Context, id string) (*model.Payment, error)
 	Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error)
 	Product(ctx context.Context, id string) (*model.Product, error)
-	Products(ctx context.Context) ([]*model.Product, error)
+	Products(ctx context.Context, input *model.SearchProduct) ([]*model.Product, error)
 	User(ctx context.Context, id string) (*model.User, error)
 	Users(ctx context.Context) ([]*model.User, error)
 }
@@ -549,7 +549,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Products(childComplexity), true
+		args, err := ec.field_Query_products_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Products(childComplexity, args["input"].(*model.SearchProduct)), true
 
 	case "Query.user":
 		if e.complexity.Query.User == nil {
@@ -771,9 +776,14 @@ extend type Mutation {
   updatedAt: String!
 }
 
+input SearchProduct {
+  userId: ID!
+  productName: String
+}
+
 extend type Query {
   product(id: ID!): Product
-  products: [Product!]!
+  products(input: SearchProduct): [Product!]!
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/schema.graphql", Input: `type ExpenseHistory {
@@ -1033,6 +1043,21 @@ func (ec *executionContext) field_Query_product_args(ctx context.Context, rawArg
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_products_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.SearchProduct
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalOSearchProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchProduct(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -2721,9 +2746,16 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_products_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Products(rctx)
+		return ec.resolvers.Query().Products(rctx, args["input"].(*model.SearchProduct))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4427,6 +4459,34 @@ func (ec *executionContext) unmarshalInputSearchPayments(ctx context.Context, ob
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSearchProduct(ctx context.Context, obj interface{}) (model.SearchProduct, error) {
+	var it model.SearchProduct
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "productName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productName"))
+			it.ProductName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -5978,6 +6038,14 @@ func (ec *executionContext) unmarshalOSearchPayments2ᚖgithubᚗcomᚋkosnuᚋh
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputSearchPayments(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOSearchProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐSearchProduct(ctx context.Context, v interface{}) (*model.SearchProduct, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSearchProduct(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

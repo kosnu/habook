@@ -14,3 +14,8 @@ type NewExpenseHistory struct {
 	Expense int    `json:"expense"`
 	UserID  string `json:"userId"`
 }
+
+type SearchProduct struct {
+	UserID      string  `json:"userId"`
+	ProductName *string `json:"productName"`
+}
