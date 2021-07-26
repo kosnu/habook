@@ -3,12 +3,23 @@ package model
 import "github.com/kosnu/habook-backend/entity"
 
 type Category struct {
+	Node
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Enable    bool   `json:"enable"`
 	UserID    string `json:"user"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
+}
+
+type CategoryConnection struct {
+	Edges    []*CategoryEdge `json:"edges"`
+	PageInfo *PageInfo       `json:"pageInfo"`
+}
+
+type CategoryEdge struct {
+	Cursor string    `json:"cursor"`
+	Node   *Category `json:"node"`
 }
 
 type NewCategory struct {

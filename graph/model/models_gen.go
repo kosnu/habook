@@ -2,6 +2,10 @@
 
 package model
 
+type Node interface {
+	IsNode()
+}
+
 type ExpenseHistory struct {
 	ID        string `json:"id"`
 	Expense   int    `json:"expense"`
@@ -13,6 +17,12 @@ type ExpenseHistory struct {
 type NewExpenseHistory struct {
 	Expense int    `json:"expense"`
 	UserID  string `json:"userId"`
+}
+
+type PageInfo struct {
+	HasNextPage bool    `json:"hasNextPage"`
+	StartCursor *string `json:"startCursor"`
+	EndCursor   *string `json:"endCursor"`
 }
 
 type SearchProduct struct {

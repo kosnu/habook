@@ -54,7 +54,7 @@ func (r *queryResolver) Category(ctx context.Context, id string) (*model.Categor
 	return model.CategoryFromEntity(&record), nil
 }
 
-func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error) {
+func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories) (*model.CategoryConnection, error) {
 	var records []entity.Category
 	// TODO: Sortを引数に入れる
 	query := r.DB.Debug().Order("created_at asc")
