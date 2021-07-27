@@ -1,4 +1,4 @@
-type Category implements Node{
+type Category implements Node {
   id: ID!
   name: String!
   enable: Boolean!
@@ -7,13 +7,13 @@ type Category implements Node{
   updatedAt: String!
 }
 
-type CategoryEdge {
+type CategoryEdge implements Edge {
   cursor: String!
   node: Category!
 }
 
-type CategoryConnection {
-  edges: [CategoryEdge]
+type CategoryConnection implements Connection {
+  edges: [CategoryEdge]!
   pageInfo: PageInfo!
 }
 

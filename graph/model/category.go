@@ -17,10 +17,14 @@ type CategoryConnection struct {
 	PageInfo *PageInfo       `json:"pageInfo"`
 }
 
+func (CategoryConnection) IsConnection() {}
+
 type CategoryEdge struct {
 	Cursor string    `json:"cursor"`
 	Node   *Category `json:"node"`
 }
+
+func (CategoryEdge) IsEdge() {}
 
 type NewCategory struct {
 	Name   string `json:"name"`

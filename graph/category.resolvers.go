@@ -69,7 +69,7 @@ func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCateg
 	}
 
 	if err := query.Find(&records).Error; err != nil {
-		return []*model.Category{}, err
+		return nil, err
 	}
 
 	var categories []*model.Category
@@ -77,7 +77,8 @@ func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCateg
 		categories = append(categories, model.CategoryFromEntity(&record))
 	}
 
-	return categories, nil
+	// TODO: connection型のCategoryを返却する
+	return nil, nil
 }
 
 // Category returns generated.CategoryResolver implementation.
