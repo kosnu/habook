@@ -12,7 +12,7 @@ type CursorResource struct {
 	ID   string
 }
 
-func createCursor(first CursorResource, second *CursorResource) string {
+func CreateCursor(first CursorResource, second *CursorResource) string {
 	var cursor []byte
 	if second != nil {
 		cursor = []byte(fmt.Sprintf("%s:%s:%s:%s", first.Name, first.ID, second.Name, second.ID))

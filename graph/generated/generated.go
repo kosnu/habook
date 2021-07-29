@@ -116,7 +116,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Categories       func(childComplexity int, input *model.SearchCategories) int
+		Categories       func(childComplexity int, input *model.SearchCategories, page model.PaginationInput) int
 		Category         func(childComplexity int, id string) int
 		ExpenseHistories func(childComplexity int) int
 		ExpenseHistory   func(childComplexity int, id string) int
@@ -161,7 +161,7 @@ type QueryResolver interface {
 	ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error)
 	ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error)
 	Category(ctx context.Context, id string) (*model.Category, error)
-	Categories(ctx context.Context, input *model.SearchCategories) (*model.CategoryConnection, error)
+	Categories(ctx context.Context, input *model.SearchCategories, page model.PaginationInput) (*model.CategoryConnection, error)
 	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
 	IncomeHistories(ctx context.Context, input *model.SearchIncomeHistory) ([]*model.IncomeHistory, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
@@ -509,7 +509,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Categories(childComplexity, args["input"].(*model.SearchCategories)), true
+		return e.complexity.Query.Categories(childComplexity, args["input"].(*model.SearchCategories), args["page"].(model.PaginationInput)), true
 
 	case "Query.category":
 		if e.complexity.Query.Category == nil {
@@ -764,7 +764,7 @@ input SearchCategories {
 
 extend type Query {
   category(id: ID!): Category
-  categories(input: SearchCategories): CategoryConnection
+  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection
 }
 
 extend type Mutation {
@@ -1030,6 +1030,15 @@ func (ec *executionContext) field_Query_categories_args(ctx context.Context, raw
 		}
 	}
 	args["input"] = arg0
+	var arg1 model.PaginationInput
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg1, err = ec.unmarshalNPaginationInput2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaginationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg1
 	return args, nil
 }
 
@@ -2814,7 +2823,7 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Categories(rctx, args["input"].(*model.SearchCategories))
+		return ec.resolvers.Query().Categories(rctx, args["input"].(*model.SearchCategories), args["page"].(model.PaginationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6022,6 +6031,11 @@ func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 		return graphql.Null
 	}
 	return ec._PageInfo(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPaginationInput2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaginationInput(ctx context.Context, v interface{}) (model.PaginationInput, error) {
+	res, err := ec.unmarshalInputPaginationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNPayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx context.Context, sel ast.SelectionSet, v model.Payment) graphql.Marshaler {
