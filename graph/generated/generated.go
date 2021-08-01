@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -55,6 +56,16 @@ type ComplexityRoot struct {
 		User      func(childComplexity int) int
 	}
 
+	CategoryConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	CategoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	ExpenseHistory struct {
 		CreatedAt func(childComplexity int) int
 		Expense   func(childComplexity int) int
@@ -79,6 +90,11 @@ type ComplexityRoot struct {
 		CreateUser           func(childComplexity int, input model.NewUser) int
 	}
 
+	PageInfo struct {
+		EndCursor   func(childComplexity int) int
+		HasNextPage func(childComplexity int) int
+	}
+
 	Payment struct {
 		Amount          func(childComplexity int) int
 		Category        func(childComplexity int) int
@@ -100,7 +116,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Categories       func(childComplexity int, input *model.SearchCategories) int
+		Categories       func(childComplexity int, input *model.SearchCategories, page model.PaginationInput) int
 		Category         func(childComplexity int, id string) int
 		ExpenseHistories func(childComplexity int) int
 		ExpenseHistory   func(childComplexity int, id string) int
@@ -145,7 +161,7 @@ type QueryResolver interface {
 	ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error)
 	ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error)
 	Category(ctx context.Context, id string) (*model.Category, error)
-	Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error)
+	Categories(ctx context.Context, input *model.SearchCategories, page model.PaginationInput) (*model.CategoryConnection, error)
 	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
 	IncomeHistories(ctx context.Context, input *model.SearchIncomeHistory) ([]*model.IncomeHistory, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
@@ -212,6 +228,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Category.User(childComplexity), true
+
+	case "CategoryConnection.edges":
+		if e.complexity.CategoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CategoryConnection.Edges(childComplexity), true
+
+	case "CategoryConnection.pageInfo":
+		if e.complexity.CategoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CategoryConnection.PageInfo(childComplexity), true
+
+	case "CategoryEdge.cursor":
+		if e.complexity.CategoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CategoryEdge.Cursor(childComplexity), true
+
+	case "CategoryEdge.node":
+		if e.complexity.CategoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CategoryEdge.Node(childComplexity), true
 
 	case "ExpenseHistory.createdAt":
 		if e.complexity.ExpenseHistory.CreatedAt == nil {
@@ -343,6 +387,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewUser)), true
 
+	case "PageInfo.endCursor":
+		if e.complexity.PageInfo.EndCursor == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.EndCursor(childComplexity), true
+
+	case "PageInfo.hasNextPage":
+		if e.complexity.PageInfo.HasNextPage == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.HasNextPage(childComplexity), true
+
 	case "Payment.amount":
 		if e.complexity.Payment.Amount == nil {
 			break
@@ -451,7 +509,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Categories(childComplexity, args["input"].(*model.SearchCategories)), true
+		return e.complexity.Query.Categories(childComplexity, args["input"].(*model.SearchCategories), args["page"].(model.PaginationInput)), true
 
 	case "Query.category":
 		if e.complexity.Query.Category == nil {
@@ -674,13 +732,23 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/category.graphql", Input: `type Category {
+	{Name: "graph/schema/category.graphql", Input: `type Category implements Node {
   id: ID!
   name: String!
   enable: Boolean!
   user: User!
   createdAt: String!
   updatedAt: String!
+}
+
+type CategoryEdge implements Edge {
+  cursor: String!
+  node: Category!
+}
+
+type CategoryConnection implements Connection {
+  edges: [CategoryEdge]!
+  pageInfo: PageInfo!
 }
 
 input NewCategory {
@@ -696,7 +764,7 @@ input SearchCategories {
 
 extend type Query {
   category(id: ID!): Category
-  categories(input: SearchCategories): [Category!]!
+  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection
 }
 
 extend type Mutation {
@@ -729,6 +797,30 @@ extend type Query {
 
 extend type Mutation {
   createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
+}
+`, BuiltIn: false},
+	{Name: "graph/schema/pagination.graphql", Input: `type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+}
+
+interface Connection {
+  pageInfo: PageInfo!
+  edges: [Edge]!
+}
+
+interface Edge {
+  cursor: String!
+  node: Node!
+}
+
+interface Node {
+  id: ID!
+}
+
+input PaginationInput {
+  first: Int
+  after: String
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/payment.graphql", Input: `type Payment {
@@ -938,6 +1030,15 @@ func (ec *executionContext) field_Query_categories_args(ctx context.Context, raw
 		}
 	}
 	args["input"] = arg0
+	var arg1 model.PaginationInput
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg1, err = ec.unmarshalNPaginationInput2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaginationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg1
 	return args, nil
 }
 
@@ -1322,6 +1423,146 @@ func (ec *executionContext) _Category_updatedAt(ctx context.Context, field graph
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _CategoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.CategoryConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "CategoryConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.CategoryEdge)
+	fc.Result = res
+	return ec.marshalNCategoryEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _CategoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.CategoryConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "CategoryConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _CategoryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.CategoryEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "CategoryEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _CategoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.CategoryEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "CategoryEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Category)
+	fc.Result = res
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ExpenseHistory_id(ctx context.Context, field graphql.CollectedField, obj *model.ExpenseHistory) (ret graphql.Marshaler) {
@@ -1882,6 +2123,76 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	res := resTmp.(*model.User)
 	fc.Result = res
 	return ec.marshalNUser2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *model.PageInfo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndCursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *model.PageInfo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HasNextPage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Payment_id(ctx context.Context, field graphql.CollectedField, obj *model.Payment) (ret graphql.Marshaler) {
@@ -2512,21 +2823,18 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Categories(rctx, args["input"].(*model.SearchCategories))
+		return ec.resolvers.Query().Categories(rctx, args["input"].(*model.SearchCategories), args["page"].(model.PaginationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Category)
+	res := resTmp.(*model.CategoryConnection)
 	fc.Result = res
-	return ec.marshalNCategory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryᚄ(ctx, field.Selections, res)
+	return ec.marshalOCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_incomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4351,6 +4659,34 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputPaginationInput(ctx context.Context, obj interface{}) (model.PaginationInput, error) {
+	var it model.PaginationInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "first":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+			it.First, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "after":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+			it.After, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputSearchCategories(ctx context.Context, obj interface{}) (model.SearchCategories, error) {
 	var it model.SearchCategories
 	var asMap = obj.(map[string]interface{})
@@ -4491,11 +4827,59 @@ func (ec *executionContext) unmarshalInputSearchProduct(ctx context.Context, obj
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _Connection(ctx context.Context, sel ast.SelectionSet, obj model.Connection) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.CategoryConnection:
+		return ec._CategoryConnection(ctx, sel, &obj)
+	case *model.CategoryConnection:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._CategoryConnection(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
+func (ec *executionContext) _Edge(ctx context.Context, sel ast.SelectionSet, obj model.Edge) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.CategoryEdge:
+		return ec._CategoryEdge(ctx, sel, &obj)
+	case *model.CategoryEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._CategoryEdge(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
+func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj model.Node) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.Category:
+		return ec._Category(ctx, sel, &obj)
+	case *model.Category:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Category(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
 
-var categoryImplementors = []string{"Category"}
+var categoryImplementors = []string{"Category", "Node"}
 
 func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet, obj *model.Category) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, categoryImplementors)
@@ -4544,6 +4928,70 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Category_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var categoryConnectionImplementors = []string{"CategoryConnection", "Connection"}
+
+func (ec *executionContext) _CategoryConnection(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, categoryConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CategoryConnection")
+		case "edges":
+			out.Values[i] = ec._CategoryConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._CategoryConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var categoryEdgeImplementors = []string{"CategoryEdge", "Edge"}
+
+func (ec *executionContext) _CategoryEdge(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, categoryEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CategoryEdge")
+		case "cursor":
+			out.Values[i] = ec._CategoryEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "node":
+			out.Values[i] = ec._CategoryEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -4696,6 +5144,38 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "createUser":
 			out.Values[i] = ec._Mutation_createUser(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var pageInfoImplementors = []string{"PageInfo"}
+
+func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *model.PageInfo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pageInfoImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PageInfo")
+		case "endCursor":
+			out.Values[i] = ec._PageInfo_endCursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "hasNextPage":
+			out.Values[i] = ec._PageInfo_hasNextPage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -4911,9 +5391,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_categories(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			})
 		case "incomeHistory":
@@ -5342,7 +5819,17 @@ func (ec *executionContext) marshalNCategory2githubᚗcomᚋkosnuᚋhabookᚑbac
 	return ec._Category(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Category(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCategoryEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx context.Context, sel ast.SelectionSet, v []*model.CategoryEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -5366,7 +5853,7 @@ func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋkosnuᚋhabook
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, sel, v[i])
+			ret[i] = ec.marshalOCategoryEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -5377,16 +5864,6 @@ func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋkosnuᚋhabook
 	}
 	wg.Wait()
 	return ret
-}
-
-func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Category(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNExpenseHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx context.Context, sel ast.SelectionSet, v model.ExpenseHistory) graphql.Marshaler {
@@ -5543,6 +6020,21 @@ func (ec *executionContext) unmarshalNNewPayment2githubᚗcomᚋkosnuᚋhabook�
 
 func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._PageInfo(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPaginationInput2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaginationInput(ctx context.Context, v interface{}) (model.PaginationInput, error) {
+	res, err := ec.unmarshalInputPaginationInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -5974,6 +6466,20 @@ func (ec *executionContext) marshalOCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 	return ec._Category(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.CategoryConnection) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CategoryConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOCategoryEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CategoryEdge(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOExpenseHistory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx context.Context, sel ast.SelectionSet, v *model.ExpenseHistory) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -6001,6 +6507,21 @@ func (ec *executionContext) marshalOIncomeHistory2ᚖgithubᚗcomᚋkosnuᚋhabo
 		return graphql.Null
 	}
 	return ec._IncomeHistory(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalInt(*v)
 }
 
 func (ec *executionContext) marshalOPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx context.Context, sel ast.SelectionSet, v *model.Payment) graphql.Marshaler {

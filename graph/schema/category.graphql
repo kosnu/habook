@@ -1,10 +1,20 @@
-type Category {
+type Category implements Node {
   id: ID!
   name: String!
   enable: Boolean!
   user: User!
   createdAt: String!
   updatedAt: String!
+}
+
+type CategoryEdge implements Edge {
+  cursor: String!
+  node: Category!
+}
+
+type CategoryConnection implements Connection {
+  edges: [CategoryEdge]!
+  pageInfo: PageInfo!
 }
 
 input NewCategory {
@@ -20,7 +30,7 @@ input SearchCategories {
 
 extend type Query {
   category(id: ID!): Category
-  categories(input: SearchCategories): [Category!]!
+  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection
 }
 
 extend type Mutation {

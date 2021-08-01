@@ -54,10 +54,13 @@ func (r *queryResolver) Category(ctx context.Context, id string) (*model.Categor
 	return model.CategoryFromEntity(&record), nil
 }
 
-func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories) ([]*model.Category, error) {
+func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories, page model.PaginationInput) (*model.CategoryConnection, error) {
 	var records []entity.Category
 	// TODO: Sortを引数に入れる
-	query := r.DB.Debug().Order("created_at asc")
+	query, err := model.PageDB(r.DB.Debug(), "created_at", "asc", page)
+	if err != nil {
+		return &model.CategoryConnection{}, err
+	}
 	if input != nil {
 		query = query.Where(&entity.Category{UserId: input.UserID})
 		if input.Name != nil {
@@ -69,7 +72,7 @@ func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCateg
 	}
 
 	if err := query.Find(&records).Error; err != nil {
-		return []*model.Category{}, err
+		return &model.CategoryConnection{}, err
 	}
 
 	var categories []*model.Category
@@ -77,7 +80,7 @@ func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCateg
 		categories = append(categories, model.CategoryFromEntity(&record))
 	}
 
-	return categories, nil
+	return model.CategoryToConnection(categories, page), nil
 }
 
 // Category returns generated.CategoryResolver implementation.
