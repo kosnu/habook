@@ -16,7 +16,7 @@ gqlgen:
 	go run github.com/99designs/gqlgen generate
 
 dataloaden:
-	go run github.com/vektah/dataloaden UserLoader string *github.com/kosnu/graph/mode.User
+	go run github.com/vektah/dataloaden ${MODEL_NAME}Loader string *github.com/kosnu/graph/mode.${MODEL_NAME}
 
 create-migration:
 	migrate create -ext sql -dir database/migrations ${NAME}
