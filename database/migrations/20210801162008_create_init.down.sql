@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS expense_histories;
+DROP TABLE IF EXISTS income_histories;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;

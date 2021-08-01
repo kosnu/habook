@@ -7,8 +7,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/kosnu/habook-backend/database"
 	"github.com/kosnu/habook-backend/dataloader"
-	"github.com/kosnu/habook-backend/external"
 	"github.com/kosnu/habook-backend/graph"
 	"github.com/kosnu/habook-backend/graph/generated"
 )
@@ -16,7 +16,7 @@ import (
 const defaultPort = "8080"
 
 func main() {
-	db, err := external.ConnectDatabase()
+	db, err := database.ConnectDatabase()
 	if err != nil {
 		panic(err)
 	}
