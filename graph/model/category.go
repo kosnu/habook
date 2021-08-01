@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/kosnu/habook-backend/entity"
-	"github.com/kosnu/habook-backend/graph/relay"
 )
 
 type Category struct {
@@ -67,10 +66,11 @@ func CategoryToConnection(categories []*Category, page PaginationInput) *Categor
 	categoriesEdges := make([]*CategoryEdge, len(categories))
 
 	for index, category := range categories {
-		cursor := relay.CreateCursor(
-			relay.CursorResource{
-				Name: "Category",
-				ID:   category.ID,
+		cursor := createCursor(
+			CursorResource{
+				Name:      "Category",
+				ID:        category.ID,
+				CreatedAt: category.CreatedAt,
 			},
 			nil,
 		)
