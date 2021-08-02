@@ -1,4 +1,5 @@
 type IncomeHistory {
+  pk: Int!
   id: ID!
   income: Int!
   user: User!

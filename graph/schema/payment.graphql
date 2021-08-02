@@ -1,4 +1,5 @@
 type Payment {
+  pk: Int!
   id: ID!
   taxIncluded: Boolean!
   paidOn: String!

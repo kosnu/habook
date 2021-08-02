@@ -1,4 +1,5 @@
 type Category implements Node {
+  pk: Int!
   id: ID!
   name: String!
   enable: Boolean!
