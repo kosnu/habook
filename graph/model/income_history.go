@@ -24,6 +24,7 @@ type SearchIncomeHistory struct {
 
 func IncomeHistoryFromEntity(entity *entity.IncomeHistory) *IncomeHistory {
 	return &IncomeHistory{
+		Pk:        int(entity.Pk),
 		ID:        entity.Id,
 		Income:    entity.Income,
 		UserID:    entity.UserId,

@@ -17,6 +17,7 @@ type SearchProduct struct {
 
 func ProductFromEntity(entity *entity.Product) *Product {
 	return &Product{
+		Pk:        int(entity.Pk),
 		ID:        entity.Id,
 		Name:      entity.Name,
 		CreatedAt: entity.CreatedAt.String(),

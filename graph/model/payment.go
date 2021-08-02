@@ -34,6 +34,7 @@ type SearchPayments struct {
 
 func PaymentFromEntity(entity *entity.Payment) *Payment {
 	return &Payment{
+		Pk:              int(entity.Pk),
 		ID:              entity.Id,
 		TaxIncluded:     entity.TaxIncluded,
 		PaidOn:          entity.PaidOn,

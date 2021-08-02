@@ -17,6 +17,7 @@ type NewUser struct {
 
 func UserFromEntity(entity *entity.User) *User {
 	return &User{
+		Pk:        int(entity.Pk),
 		ID:        entity.Id,
 		Name:      entity.Name,
 		Enable:    entity.Enable,
