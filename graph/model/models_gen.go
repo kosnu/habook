@@ -3,6 +3,7 @@
 package model
 
 type ExpenseHistory struct {
+	Pk        int    `json:"pk"`
 	ID        string `json:"id"`
 	Expense   int    `json:"expense"`
 	User      *User  `json:"user"`
@@ -13,9 +14,4 @@ type ExpenseHistory struct {
 type NewExpenseHistory struct {
 	Expense int    `json:"expense"`
 	UserID  string `json:"userId"`
-}
-
-type SearchProduct struct {
-	UserID      string  `json:"userId"`
-	ProductName *string `json:"productName"`
 }

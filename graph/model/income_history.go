@@ -3,6 +3,7 @@ package model
 import "github.com/kosnu/habook-backend/entity"
 
 type IncomeHistory struct {
+	Pk        int    `json:"pk"`
 	ID        string `json:"id"`
 	Income    int    `json:"income"`
 	UserID    string `json:"user"`
@@ -23,6 +24,7 @@ type SearchIncomeHistory struct {
 
 func IncomeHistoryFromEntity(entity *entity.IncomeHistory) *IncomeHistory {
 	return &IncomeHistory{
+		Pk:        int(entity.Pk),
 		ID:        entity.Id,
 		Income:    entity.Income,
 		UserID:    entity.UserId,

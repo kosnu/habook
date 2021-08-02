@@ -3,6 +3,7 @@ package entity
 import "time"
 
 type Payment struct {
+	Pk              uint `gorm:"primaryKey"`
 	Id              string
 	TaxIncluded     bool
 	PaidOn          string

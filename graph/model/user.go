@@ -3,6 +3,7 @@ package model
 import "github.com/kosnu/habook-backend/entity"
 
 type User struct {
+	Pk        int    `json:"pk"`
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Enable    bool   `json:"enable"`
@@ -16,6 +17,7 @@ type NewUser struct {
 
 func UserFromEntity(entity *entity.User) *User {
 	return &User{
+		Pk:        int(entity.Pk),
 		ID:        entity.Id,
 		Name:      entity.Name,
 		Enable:    entity.Enable,

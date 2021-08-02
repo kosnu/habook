@@ -1,4 +1,5 @@
 type Product {
+  pk: Int!
   id: ID!
   name: String!
   createdAt: String!

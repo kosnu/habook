@@ -1,4 +1,5 @@
 type ExpenseHistory {
+  pk: Int!
   id: ID!
   expense: Int!
   user: User!
