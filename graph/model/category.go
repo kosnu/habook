@@ -5,7 +5,7 @@ import (
 )
 
 type Category struct {
-	Node
+	Pk        int    `json:"pk"`
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Enable    bool   `json:"enable"`
@@ -13,6 +13,8 @@ type Category struct {
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
+
+func (Category) IsNode() {}
 
 type CategoryConnection struct {
 	Edges    []*CategoryEdge `json:"edges"`

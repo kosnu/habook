@@ -52,6 +52,7 @@ type ComplexityRoot struct {
 		Enable    func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
+		Pk        func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 		User      func(childComplexity int) int
 	}
@@ -70,6 +71,7 @@ type ComplexityRoot struct {
 		CreatedAt func(childComplexity int) int
 		Expense   func(childComplexity int) int
 		ID        func(childComplexity int) int
+		Pk        func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 		User      func(childComplexity int) int
 	}
@@ -78,6 +80,7 @@ type ComplexityRoot struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Income    func(childComplexity int) int
+		Pk        func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 		User      func(childComplexity int) int
 	}
@@ -102,6 +105,7 @@ type ComplexityRoot struct {
 		ID              func(childComplexity int) int
 		NumberOfProduct func(childComplexity int) int
 		PaidOn          func(childComplexity int) int
+		Pk              func(childComplexity int) int
 		Product         func(childComplexity int) int
 		TaxIncluded     func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
@@ -112,6 +116,7 @@ type ComplexityRoot struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
+		Pk        func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 	}
 
@@ -135,6 +140,7 @@ type ComplexityRoot struct {
 		Enable    func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
+		Pk        func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 	}
 }
@@ -215,6 +221,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Category.Name(childComplexity), true
 
+	case "Category.pk":
+		if e.complexity.Category.Pk == nil {
+			break
+		}
+
+		return e.complexity.Category.Pk(childComplexity), true
+
 	case "Category.updatedAt":
 		if e.complexity.Category.UpdatedAt == nil {
 			break
@@ -278,6 +291,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ExpenseHistory.ID(childComplexity), true
 
+	case "ExpenseHistory.pk":
+		if e.complexity.ExpenseHistory.Pk == nil {
+			break
+		}
+
+		return e.complexity.ExpenseHistory.Pk(childComplexity), true
+
 	case "ExpenseHistory.updatedAt":
 		if e.complexity.ExpenseHistory.UpdatedAt == nil {
 			break
@@ -312,6 +332,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.IncomeHistory.Income(childComplexity), true
+
+	case "IncomeHistory.pk":
+		if e.complexity.IncomeHistory.Pk == nil {
+			break
+		}
+
+		return e.complexity.IncomeHistory.Pk(childComplexity), true
 
 	case "IncomeHistory.updatedAt":
 		if e.complexity.IncomeHistory.UpdatedAt == nil {
@@ -443,6 +470,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Payment.PaidOn(childComplexity), true
 
+	case "Payment.pk":
+		if e.complexity.Payment.Pk == nil {
+			break
+		}
+
+		return e.complexity.Payment.Pk(childComplexity), true
+
 	case "Payment.product":
 		if e.complexity.Payment.Product == nil {
 			break
@@ -491,6 +525,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Product.Name(childComplexity), true
+
+	case "Product.pk":
+		if e.complexity.Product.Pk == nil {
+			break
+		}
+
+		return e.complexity.Product.Pk(childComplexity), true
 
 	case "Product.updatedAt":
 		if e.complexity.Product.UpdatedAt == nil {
@@ -661,6 +702,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Name(childComplexity), true
 
+	case "User.pk":
+		if e.complexity.User.Pk == nil {
+			break
+		}
+
+		return e.complexity.User.Pk(childComplexity), true
+
 	case "User.updatedAt":
 		if e.complexity.User.UpdatedAt == nil {
 			break
@@ -733,6 +781,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "graph/schema/category.graphql", Input: `type Category implements Node {
+  pk: Int!
   id: ID!
   name: String!
   enable: Boolean!
@@ -772,6 +821,7 @@ extend type Mutation {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/income_history.graphql", Input: `type IncomeHistory {
+  pk: Int!
   id: ID!
   income: Int!
   user: User!
@@ -824,6 +874,7 @@ input PaginationInput {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/payment.graphql", Input: `type Payment {
+  pk: Int!
   id: ID!
   taxIncluded: Boolean!
   paidOn: String!
@@ -862,6 +913,7 @@ extend type Mutation {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/product.graphql", Input: `type Product {
+  pk: Int!
   id: ID!
   name: String!
   createdAt: String!
@@ -879,6 +931,7 @@ extend type Query {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/schema.graphql", Input: `type ExpenseHistory {
+  pk: Int!
   id: ID!
   expense: Int!
   user: User!
@@ -901,6 +954,7 @@ type Mutation {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/user.graphql", Input: `type User {
+  pk: Int!
   id: ID!
   name: String!
   enable: Boolean!
@@ -1214,6 +1268,41 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _Category_pk(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pk, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
 
 func (ec *executionContext) _Category_id(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
 	defer func() {
@@ -1565,6 +1654,41 @@ func (ec *executionContext) _CategoryEdge_node(ctx context.Context, field graphq
 	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _ExpenseHistory_pk(ctx context.Context, field graphql.CollectedField, obj *model.ExpenseHistory) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "ExpenseHistory",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pk, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _ExpenseHistory_id(ctx context.Context, field graphql.CollectedField, obj *model.ExpenseHistory) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1738,6 +1862,41 @@ func (ec *executionContext) _ExpenseHistory_updatedAt(ctx context.Context, field
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _IncomeHistory_pk(ctx context.Context, field graphql.CollectedField, obj *model.IncomeHistory) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "IncomeHistory",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pk, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _IncomeHistory_id(ctx context.Context, field graphql.CollectedField, obj *model.IncomeHistory) (ret graphql.Marshaler) {
@@ -2195,6 +2354,41 @@ func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field gra
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Payment_pk(ctx context.Context, field graphql.CollectedField, obj *model.Payment) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Payment",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pk, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Payment_id(ctx context.Context, field graphql.CollectedField, obj *model.Payment) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -2543,6 +2737,41 @@ func (ec *executionContext) _Payment_updatedAt(ctx context.Context, field graphq
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Product_pk(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pk, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Product_id(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
@@ -3223,6 +3452,41 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	res := resTmp.(*introspection.Schema)
 	fc.Result = res
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_pk(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pk, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -4890,6 +5154,11 @@ func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Category")
+		case "pk":
+			out.Values[i] = ec._Category_pk(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "id":
 			out.Values[i] = ec._Category_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5015,6 +5284,11 @@ func (ec *executionContext) _ExpenseHistory(ctx context.Context, sel ast.Selecti
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("ExpenseHistory")
+		case "pk":
+			out.Values[i] = ec._ExpenseHistory_pk(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "id":
 			out.Values[i] = ec._ExpenseHistory_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5062,6 +5336,11 @@ func (ec *executionContext) _IncomeHistory(ctx context.Context, sel ast.Selectio
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("IncomeHistory")
+		case "pk":
+			out.Values[i] = ec._IncomeHistory_pk(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "id":
 			out.Values[i] = ec._IncomeHistory_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5201,6 +5480,11 @@ func (ec *executionContext) _Payment(ctx context.Context, sel ast.SelectionSet, 
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Payment")
+		case "pk":
+			out.Values[i] = ec._Payment_pk(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "id":
 			out.Values[i] = ec._Payment_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5300,6 +5584,11 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Product")
+		case "pk":
+			out.Values[i] = ec._Product_pk(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "id":
 			out.Values[i] = ec._Product_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5519,6 +5808,11 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("User")
+		case "pk":
+			out.Values[i] = ec._User_pk(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "id":
 			out.Values[i] = ec._User_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

@@ -3,14 +3,15 @@ package model
 import "github.com/kosnu/habook-backend/entity"
 
 type Payment struct {
+	Pk              int    `json:"pk"`
 	ID              string `json:"id"`
 	TaxIncluded     bool   `json:"taxIncluded"`
 	PaidOn          string `json:"paidOn"`
 	NumberOfProduct int    `json:"numberOfProduct"`
 	Amount          int    `json:"amount"`
 	ProductID       string `json:"product"`
-	UserID          string `json:"user"`
 	CategoryID      string `json:"category"`
+	UserID          string `json:"user"`
 	CreatedAt       string `json:"createdAt"`
 	UpdatedAt       string `json:"updatedAt"`
 }

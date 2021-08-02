@@ -3,6 +3,7 @@ package model
 import "github.com/kosnu/habook-backend/entity"
 
 type User struct {
+	Pk        int    `json:"pk"`
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Enable    bool   `json:"enable"`
