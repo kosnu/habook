@@ -53,7 +53,7 @@ func Middleware(db *gorm.DB, next http.Handler) http.Handler {
 				wait:     1 * time.Millisecond,
 				fetch: func(ids []string) ([]*model.Category, []error) {
 					var records []entity.Category
-					if err := db.Find(&records, ids).Error; err != nil {
+					if err := db.Find(&records, "id in ?", ids).Error; err != nil {
 						return nil, []error{err}
 					}
 

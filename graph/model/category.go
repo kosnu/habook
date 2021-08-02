@@ -43,6 +43,7 @@ type SearchCategories struct {
 
 func CategoryFromEntity(entity *entity.Category) *Category {
 	return &Category{
+		Pk:        int(entity.Pk),
 		ID:        entity.Id,
 		Name:      entity.Name,
 		Enable:    entity.Enable,
