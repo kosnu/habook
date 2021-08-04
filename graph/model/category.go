@@ -1,6 +1,8 @@
 package model
 
 import (
+	"strconv"
+
 	"github.com/kosnu/habook-backend/entity"
 )
 
@@ -71,9 +73,8 @@ func CategoryToConnection(categories []*Category, page PaginationInput) *Categor
 	for index, category := range categories {
 		cursor := createCursor(
 			CursorResource{
-				Name:      "Category",
-				ID:        category.ID,
-				CreatedAt: category.CreatedAt,
+				Name: "Category",
+				Pk:   strconv.Itoa(category.Pk),
 			},
 			nil,
 		)
