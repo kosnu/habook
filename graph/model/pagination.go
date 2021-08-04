@@ -44,7 +44,7 @@ var (
 	desc direction = "desc"
 )
 
-func PageDB(db *gorm.DB, col string, dir direction, page PaginationInput) (*gorm.DB, error) {
+func PageDB(db *gorm.DB, dir direction, page PaginationInput) (*gorm.DB, error) {
 	var limit int
 	if page.First == nil {
 		limit = 11
@@ -62,30 +62,24 @@ func PageDB(db *gorm.DB, col string, dir direction, page PaginationInput) (*gorm
 		if resourceSecond != nil {
 			switch dir {
 			case asc:
-				db = db.Where(
-					fmt.Sprintf("(%s > ?) OR (%s = ? AND %s > ?)", col, col, col),
-					resourceFirst.Pk, resourceFirst.Pk, resourceSecond.Pk,
-				)
+				db = db.Where("pk >= ?", resourceSecond.Pk)
 			case desc:
-				db = db.Where(
-					fmt.Sprintf("(%s < ?) OR (%s = ? AND %s < ?)", col, col, col),
-					resourceFirst.Pk, resourceFirst.Pk, resourceSecond.Pk,
-				)
+				db = db.Where("pk <= ?", resourceSecond.Pk)
 			}
 		} else {
 			switch dir {
 			case asc:
-				db = db.Where(fmt.Sprintf("%s > ?", col), resourceFirst.Pk)
+				db = db.Where("pk > ?", resourceFirst.Pk)
 			case desc:
-				db = db.Where(fmt.Sprintf("%s < ?", col), resourceFirst.Pk)
+				db = db.Where("pk < ?", resourceFirst.Pk)
 			}
 		}
 	}
 	switch dir {
 	case asc:
-		db = db.Order(fmt.Sprintf("%s IS NULL ASC, pk ASC", col))
+		db = db.Order("pk ASC")
 	case desc:
-		db = db.Order(fmt.Sprintf("%s DESC, pk DESC", col))
+		db = db.Order("pk DESC")
 	}
 
 	return db.Limit(limit), nil
