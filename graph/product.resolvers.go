@@ -19,10 +19,14 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 	return model.ProductFromEntity(&record), nil
 }
 
-func (r *queryResolver) Products(ctx context.Context, input *model.SearchProduct) ([]*model.Product, error) {
+func (r *queryResolver) Products(ctx context.Context, input *model.SearchProduct, page model.PaginationInput) (*model.ProductConnection, error) {
 	var records []entity.Product
 	// TODO: Sortを引数に入れる
-	query := r.DB.Debug().Joins("left join payments on payments.product_id = products.id")
+	query, err := model.PageDB(r.DB.Debug(), "asc", page)
+	if err != nil {
+		return &model.ProductConnection{}, err
+	}
+	query = query.Joins("left join payments on payments.product_id = products.id")
 	if input != nil {
 		query = query.Where("payments.user_id = ?", input.UserID)
 		if input.ProductName != nil {
@@ -31,9 +35,9 @@ func (r *queryResolver) Products(ctx context.Context, input *model.SearchProduct
 		}
 	}
 
-	err := query.Order("products.name asc").Group("products.id").Find(&records).Error
+	err = query.Order("products.name asc").Group("products.id").Find(&records).Error
 	if err != nil {
-		return []*model.Product{}, err
+		return &model.ProductConnection{}, err
 	}
 
 	var products []*model.Product
@@ -41,5 +45,5 @@ func (r *queryResolver) Products(ctx context.Context, input *model.SearchProduct
 		products = append(products, model.ProductFromEntity(&record))
 	}
 
-	return products, nil
+	return model.ProductToConnection(products, page), nil
 }
