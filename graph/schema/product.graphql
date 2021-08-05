@@ -1,9 +1,19 @@
-type Product {
+type Product implements Node{
   pk: Int!
   id: ID!
   name: String!
   createdAt: String!
   updatedAt: String!
+}
+
+type ProductEdge implements Edge {
+  cursor: String!
+  node: Product!
+}
+
+type ProductConnection implements Connection {
+  edges: [ProductEdge]!
+  pageInfo: PageInfo!
 }
 
 input SearchProduct {
@@ -13,5 +23,5 @@ input SearchProduct {
 
 extend type Query {
   product(id: ID!): Product
-  products(input: SearchProduct): [Product!]!
+  products(input: SearchProduct, page: PaginationInput!): ProductConnection
 }
