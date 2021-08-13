@@ -851,7 +851,7 @@ input SearchCategories {
 
 extend type Query {
   category(id: ID!): Category
-  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection
+  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection!
 }
 
 extend type Mutation {
@@ -975,7 +975,7 @@ input SearchProduct {
 
 extend type Query {
   product(id: ID!): Product
-  products(input: SearchProduct, page: PaginationInput!): ProductConnection
+  products(input: SearchProduct, page: PaginationInput!): ProductConnection!
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/schema.graphql", Input: `type ExpenseHistory {
@@ -3256,11 +3256,14 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.CategoryConnection)
 	fc.Result = res
-	return ec.marshalOCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx, field.Selections, res)
+	return ec.marshalNCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_incomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3496,11 +3499,14 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.ProductConnection)
 	fc.Result = res
-	return ec.marshalOProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx, field.Selections, res)
+	return ec.marshalNProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_user(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5959,6 +5965,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_categories(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "incomeHistory":
@@ -6031,6 +6040,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_products(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "user":
@@ -6399,6 +6411,20 @@ func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 	return ec._Category(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNCategoryConnection2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v model.CategoryConnection) graphql.Marshaler {
+	return ec._CategoryConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.CategoryConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._CategoryConnection(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNCategoryEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx context.Context, sel ast.SelectionSet, v []*model.CategoryEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -6671,6 +6697,20 @@ func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑb
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProductConnection2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v model.ProductConnection) graphql.Marshaler {
+	return ec._ProductConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._ProductConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProductEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ProductEdge) graphql.Marshaler {
@@ -7036,13 +7076,6 @@ func (ec *executionContext) marshalOCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 	return ec._Category(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.CategoryConnection) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._CategoryConnection(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalOCategoryEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -7106,13 +7139,6 @@ func (ec *executionContext) marshalOProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑb
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductConnection) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ProductConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOProductEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProductEdge) graphql.Marshaler {

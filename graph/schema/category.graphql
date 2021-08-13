@@ -31,7 +31,7 @@ input SearchCategories {
 
 extend type Query {
   category(id: ID!): Category
-  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection
+  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection!
 }
 
 extend type Mutation {
