@@ -45,13 +45,6 @@ var (
 )
 
 func PageDB(db *gorm.DB, dir direction, page PaginationInput) (*gorm.DB, error) {
-	var limit int
-	if page.First == nil {
-		limit = 11
-	} else {
-		limit = *page.First + 1
-	}
-
 	if page.After != nil {
 		resourceFirst, resourceSecond, err := decodeCursor(*page.After)
 		if err != nil {
@@ -82,7 +75,14 @@ func PageDB(db *gorm.DB, dir direction, page PaginationInput) (*gorm.DB, error) 
 		db = db.Order("pk DESC")
 	}
 
-	return db.Limit(limit), nil
+	var limit int
+
+	if page.First == nil {
+		return db, nil
+	} else {
+		limit = *page.First + 1
+		return db.Limit(limit), nil
+	}
 }
 
 func createCursor(first CursorResource, second *CursorResource) string {
