@@ -91,6 +91,7 @@ type ComplexityRoot struct {
 		CreateIncomeHistory  func(childComplexity int, input model.NewIncomeHistory) int
 		CreatePayment        func(childComplexity int, input model.NewPayment) int
 		CreateUser           func(childComplexity int, input model.NewUser) int
+		DeleteCategory       func(childComplexity int, input model.DeleteCategory) int
 	}
 
 	PageInfo struct {
@@ -164,6 +165,7 @@ type IncomeHistoryResolver interface {
 type MutationResolver interface {
 	CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error)
 	CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error)
+	DeleteCategory(ctx context.Context, input model.DeleteCategory) (*model.Category, error)
 	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error)
 	CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error)
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
@@ -423,6 +425,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewUser)), true
+
+	case "Mutation.deleteCategory":
+		if e.complexity.Mutation.DeleteCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteCategory_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteCategory(childComplexity, args["input"].(model.DeleteCategory)), true
 
 	case "PageInfo.endCursor":
 		if e.complexity.PageInfo.EndCursor == nil {
@@ -843,6 +857,11 @@ input NewCategory {
   userId: ID!
 }
 
+input DeleteCategory {
+  id: ID!
+  userId: ID!
+}
+
 input SearchCategories {
   name: String
   enable: Boolean
@@ -851,11 +870,12 @@ input SearchCategories {
 
 extend type Query {
   category(id: ID!): Category
-  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection
+  categories(input: SearchCategories, page: PaginationInput!): CategoryConnection!
 }
 
 extend type Mutation {
   createCategory(input: NewCategory!): Category!
+  deleteCategory(input: DeleteCategory!): Category!
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/income_history.graphql", Input: `type IncomeHistory {
@@ -975,7 +995,7 @@ input SearchProduct {
 
 extend type Query {
   product(id: ID!): Product
-  products(input: SearchProduct, page: PaginationInput!): ProductConnection
+  products(input: SearchProduct, page: PaginationInput!): ProductConnection!
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/schema.graphql", Input: `type ExpenseHistory {
@@ -1097,6 +1117,21 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐNewUser(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.DeleteCategory
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNDeleteCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐDeleteCategory(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2215,6 +2250,48 @@ func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field 
 	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation_deleteCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deleteCategory_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteCategory(rctx, args["input"].(model.DeleteCategory))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Category)
+	fc.Result = res
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Mutation_createIncomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3256,11 +3333,14 @@ func (ec *executionContext) _Query_categories(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.CategoryConnection)
 	fc.Result = res
-	return ec.marshalOCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx, field.Selections, res)
+	return ec.marshalNCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_incomeHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3496,11 +3576,14 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.ProductConnection)
 	fc.Result = res
-	return ec.marshalOProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx, field.Selections, res)
+	return ec.marshalNProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_user(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4945,6 +5028,34 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputDeleteCategory(ctx context.Context, obj interface{}) (model.DeleteCategory, error) {
+	var it model.DeleteCategory
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewCategory(ctx context.Context, obj interface{}) (model.NewCategory, error) {
 	var it model.NewCategory
 	var asMap = obj.(map[string]interface{})
@@ -5626,6 +5737,11 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "deleteCategory":
+			out.Values[i] = ec._Mutation_deleteCategory(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "createIncomeHistory":
 			out.Values[i] = ec._Mutation_createIncomeHistory(ctx, field)
 			if out.Values[i] == graphql.Null {
@@ -5959,6 +6075,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_categories(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "incomeHistory":
@@ -6031,6 +6150,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_products(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "user":
@@ -6399,6 +6521,20 @@ func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 	return ec._Category(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNCategoryConnection2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v model.CategoryConnection) graphql.Marshaler {
+	return ec._CategoryConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.CategoryConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._CategoryConnection(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNCategoryEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx context.Context, sel ast.SelectionSet, v []*model.CategoryEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -6434,6 +6570,11 @@ func (ec *executionContext) marshalNCategoryEdge2ᚕᚖgithubᚗcomᚋkosnuᚋha
 	}
 	wg.Wait()
 	return ret
+}
+
+func (ec *executionContext) unmarshalNDeleteCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐDeleteCategory(ctx context.Context, v interface{}) (model.DeleteCategory, error) {
+	res, err := ec.unmarshalInputDeleteCategory(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNExpenseHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx context.Context, sel ast.SelectionSet, v model.ExpenseHistory) graphql.Marshaler {
@@ -6671,6 +6812,20 @@ func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑb
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProductConnection2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v model.ProductConnection) graphql.Marshaler {
+	return ec._ProductConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._ProductConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProductEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ProductEdge) graphql.Marshaler {
@@ -7036,13 +7191,6 @@ func (ec *executionContext) marshalOCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑ
 	return ec._Category(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCategoryConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.CategoryConnection) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._CategoryConnection(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalOCategoryEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.CategoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -7106,13 +7254,6 @@ func (ec *executionContext) marshalOProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑb
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOProductConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductConnection) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ProductConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOProductEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProductEdge) graphql.Marshaler {

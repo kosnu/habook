@@ -23,5 +23,5 @@ input SearchProduct {
 
 extend type Query {
   product(id: ID!): Product
-  products(input: SearchProduct, page: PaginationInput!): ProductConnection
+  products(input: SearchProduct, page: PaginationInput!): ProductConnection!
 }
