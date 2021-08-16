@@ -37,6 +37,11 @@ type NewCategory struct {
 	UserID string `json:"userId"`
 }
 
+type DeleteCategory struct {
+	ID     string `json:"id"`
+	UserID string `json:"userId"`
+}
+
 type SearchCategories struct {
 	Name   *string `json:"name"`
 	Enable *bool   `json:"enable"`
