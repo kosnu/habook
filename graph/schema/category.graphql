@@ -23,6 +23,11 @@ input NewCategory {
   userId: ID!
 }
 
+input DeleteCategory {
+  id: ID!
+  userId: ID!
+}
+
 input SearchCategories {
   name: String
   enable: Boolean
@@ -36,4 +41,5 @@ extend type Query {
 
 extend type Mutation {
   createCategory(input: NewCategory!): Category!
+  deleteCategory(input: DeleteCategory!): Category!
 }
