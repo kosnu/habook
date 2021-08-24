@@ -67,7 +67,7 @@ func (r *queryResolver) Category(ctx context.Context, id string) (*model.Categor
 func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories, page model.PaginationInput) (*model.CategoryConnection, error) {
 	var records []entity.Category
 	// TODO: Sortを引数に入れる
-	query, err := model.PageDB(r.DB.Debug(), "asc", page)
+	query, err := model.PageDB(r.DB.Debug(), "asc", page, "categories")
 	if err != nil {
 		return &model.CategoryConnection{}, err
 	}

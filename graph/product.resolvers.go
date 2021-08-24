@@ -22,7 +22,7 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 func (r *queryResolver) Products(ctx context.Context, input *model.SearchProduct, page model.PaginationInput) (*model.ProductConnection, error) {
 	var records []entity.Product
 	// TODO: Sortを引数に入れる
-	query, err := model.PageDB(r.DB.Debug(), "asc", page)
+	query, err := model.PageDB(r.DB.Debug(), "asc", page, "products")
 	if err != nil {
 		return &model.ProductConnection{}, err
 	}

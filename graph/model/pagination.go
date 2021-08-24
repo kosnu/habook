@@ -44,7 +44,8 @@ var (
 	desc direction = "desc"
 )
 
-func PageDB(db *gorm.DB, dir direction, page PaginationInput) (*gorm.DB, error) {
+// PageDB TODO: どこのテーブルのカラムかがわかるようにする
+func PageDB(db *gorm.DB, dir direction, page PaginationInput, tableName string) (*gorm.DB, error) {
 	if page.After != nil {
 		resourceFirst, resourceSecond, err := decodeCursor(*page.After)
 		if err != nil {
@@ -55,24 +56,24 @@ func PageDB(db *gorm.DB, dir direction, page PaginationInput) (*gorm.DB, error) 
 		if resourceSecond != nil {
 			switch dir {
 			case asc:
-				db = db.Where("pk >= ?", resourceSecond.Pk)
+				db = db.Where(fmt.Sprintf("%s.pk >= ?", tableName), resourceSecond.Pk)
 			case desc:
-				db = db.Where("pk <= ?", resourceSecond.Pk)
+				db = db.Where(fmt.Sprintf("%s.pk <= ?", tableName), resourceSecond.Pk)
 			}
 		} else {
 			switch dir {
 			case asc:
-				db = db.Where("pk > ?", resourceFirst.Pk)
+				db = db.Where(fmt.Sprintf("%s.pk > ?", tableName), resourceFirst.Pk)
 			case desc:
-				db = db.Where("pk < ?", resourceFirst.Pk)
+				db = db.Where(fmt.Sprintf("%s.pk < ?", tableName), resourceFirst.Pk)
 			}
 		}
 	}
 	switch dir {
 	case asc:
-		db = db.Order("pk ASC")
+		db = db.Order(fmt.Sprintf("%s.pk ASC", tableName))
 	case desc:
-		db = db.Order("pk DESC")
+		db = db.Order(fmt.Sprintf("%s.pk DESC", tableName))
 	}
 
 	var limit int
