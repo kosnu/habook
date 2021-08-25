@@ -44,6 +44,16 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 	return model.CategoryFromEntity(&record), nil
 }
 
+func (r *mutationResolver) UpdateCategory(ctx context.Context, input model.UpdateCategory) (*model.Category, error) {
+	var record entity.Category
+	err := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID).Update("name", input.Name).Error
+	if err != nil {
+		return &model.Category{}, err
+	}
+
+	return model.CategoryFromEntity(&record), nil
+}
+
 func (r *mutationResolver) DeleteCategory(ctx context.Context, input model.DeleteCategory) (*model.Category, error) {
 	var record entity.Category
 	err := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID).Update("enable", false).Error

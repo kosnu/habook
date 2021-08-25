@@ -92,6 +92,7 @@ type ComplexityRoot struct {
 		CreatePayment        func(childComplexity int, input model.NewPayment) int
 		CreateUser           func(childComplexity int, input model.NewUser) int
 		DeleteCategory       func(childComplexity int, input model.DeleteCategory) int
+		UpdateCategory       func(childComplexity int, input model.UpdateCategory) int
 	}
 
 	PageInfo struct {
@@ -165,6 +166,7 @@ type IncomeHistoryResolver interface {
 type MutationResolver interface {
 	CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error)
 	CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error)
+	UpdateCategory(ctx context.Context, input model.UpdateCategory) (*model.Category, error)
 	DeleteCategory(ctx context.Context, input model.DeleteCategory) (*model.Category, error)
 	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error)
 	CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error)
@@ -437,6 +439,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteCategory(childComplexity, args["input"].(model.DeleteCategory)), true
+
+	case "Mutation.updateCategory":
+		if e.complexity.Mutation.UpdateCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCategory_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCategory(childComplexity, args["input"].(model.UpdateCategory)), true
 
 	case "PageInfo.endCursor":
 		if e.complexity.PageInfo.EndCursor == nil {
@@ -857,6 +871,12 @@ input NewCategory {
   userId: ID!
 }
 
+input UpdateCategory {
+  id: ID!
+  name: String!
+  userId: ID!
+}
+
 input DeleteCategory {
   id: ID!
   userId: ID!
@@ -875,6 +895,7 @@ extend type Query {
 
 extend type Mutation {
   createCategory(input: NewCategory!): Category!
+  updateCategory(input: UpdateCategory!): Category!
   deleteCategory(input: DeleteCategory!): Category!
 }
 `, BuiltIn: false},
@@ -1132,6 +1153,21 @@ func (ec *executionContext) field_Mutation_deleteCategory_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNDeleteCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐDeleteCategory(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdateCategory
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNUpdateCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUpdateCategory(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2234,6 +2270,48 @@ func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field 
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().CreateCategory(rctx, args["input"].(model.NewCategory))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Category)
+	fc.Result = res
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_updateCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_updateCategory_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateCategory(rctx, args["input"].(model.UpdateCategory))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5392,6 +5470,42 @@ func (ec *executionContext) unmarshalInputSearchProduct(ctx context.Context, obj
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateCategory(ctx context.Context, obj interface{}) (model.UpdateCategory, error) {
+	var it model.UpdateCategory
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "name":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -5734,6 +5848,11 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "createCategory":
 			out.Values[i] = ec._Mutation_createCategory(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updateCategory":
+			out.Values[i] = ec._Mutation_updateCategory(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6878,6 +6997,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUpdateCategory(ctx context.Context, v interface{}) (model.UpdateCategory, error) {
+	res, err := ec.unmarshalInputUpdateCategory(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNUser2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {

@@ -23,6 +23,12 @@ input NewCategory {
   userId: ID!
 }
 
+input UpdateCategory {
+  id: ID!
+  name: String!
+  userId: ID!
+}
+
 input DeleteCategory {
   id: ID!
   userId: ID!
@@ -41,5 +47,6 @@ extend type Query {
 
 extend type Mutation {
   createCategory(input: NewCategory!): Category!
+  updateCategory(input: UpdateCategory!): Category!
   deleteCategory(input: DeleteCategory!): Category!
 }

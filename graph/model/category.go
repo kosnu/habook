@@ -37,6 +37,12 @@ type NewCategory struct {
 	UserID string `json:"userId"`
 }
 
+type UpdateCategory struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	UserID string `json:"userId"`
+}
+
 type DeleteCategory struct {
 	ID     string `json:"id"`
 	UserID string `json:"userId"`
