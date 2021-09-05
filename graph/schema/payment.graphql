@@ -1,4 +1,4 @@
-type Payment {
+type Payment implements Node{
   pk: Int!
   id: ID!
   taxIncluded: Boolean!
@@ -10,6 +10,16 @@ type Payment {
   user: User!
   createdAt: String!
   updatedAt: String!
+}
+
+type PaymentEdge implements Edge{
+  cursor: String!
+  node: Payment!
+}
+
+type PaymentConnection implements Connection {
+  edges: [PaymentEdge]!
+  pageInfo: PageInfo!
 }
 
 input NewPayment {
@@ -30,7 +40,7 @@ input SearchPayments {
 
 extend type Query {
   payment(id: ID!): Payment
-  payments(input: SearchPayments): [Payment!]!
+  payments(input: SearchPayments, page: PaginationInput!): PaymentConnection!
 }
 
 extend type Mutation {

@@ -16,6 +16,7 @@ type Loaders struct {
 	UserById     UserLoader
 	CategoryById CategoryLoader
 	ProductById  ProductLoader
+	PaymentById  PaymentLoader
 }
 
 func Middleware(db *gorm.DB, next http.Handler) http.Handler {
@@ -92,6 +93,29 @@ func Middleware(db *gorm.DB, next http.Handler) http.Handler {
 					}
 
 					return products, nil
+				},
+			},
+			PaymentById: PaymentLoader{
+				maxBatch: 100,
+				wait:     1 * time.Millisecond,
+				fetch: func(ids []string) ([]*model.Payment, []error) {
+					var records []entity.Payment
+					if err := db.Find(&records, "id in ?", ids).Error; err != nil {
+						return nil, []error{err}
+					}
+
+					paymentByID := map[string]*model.Payment{}
+					for _, record := range records {
+						payment := model.PaymentFromEntity(&record)
+						paymentByID[payment.ID] = payment
+					}
+
+					payments := make([]*model.Payment, len(ids))
+					for i, key := range ids {
+						payments[i] = paymentByID[key]
+					}
+
+					return payments, nil
 				},
 			},
 		})

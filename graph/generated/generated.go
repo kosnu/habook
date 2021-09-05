@@ -114,6 +114,16 @@ type ComplexityRoot struct {
 		User            func(childComplexity int) int
 	}
 
+	PaymentConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	PaymentEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	Product struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
@@ -140,7 +150,7 @@ type ComplexityRoot struct {
 		IncomeHistories  func(childComplexity int, input *model.SearchIncomeHistory) int
 		IncomeHistory    func(childComplexity int, id string) int
 		Payment          func(childComplexity int, id string) int
-		Payments         func(childComplexity int, input *model.SearchPayments) int
+		Payments         func(childComplexity int, input *model.SearchPayments, page model.PaginationInput) int
 		Product          func(childComplexity int, id string) int
 		Products         func(childComplexity int, input *model.SearchProduct, page model.PaginationInput) int
 		User             func(childComplexity int, id string) int
@@ -185,7 +195,7 @@ type QueryResolver interface {
 	IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error)
 	IncomeHistories(ctx context.Context, input *model.SearchIncomeHistory) ([]*model.IncomeHistory, error)
 	Payment(ctx context.Context, id string) (*model.Payment, error)
-	Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error)
+	Payments(ctx context.Context, input *model.SearchPayments, page model.PaginationInput) (*model.PaymentConnection, error)
 	Product(ctx context.Context, id string) (*model.Product, error)
 	Products(ctx context.Context, input *model.SearchProduct, page model.PaginationInput) (*model.ProductConnection, error)
 	User(ctx context.Context, id string) (*model.User, error)
@@ -543,6 +553,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Payment.User(childComplexity), true
 
+	case "PaymentConnection.edges":
+		if e.complexity.PaymentConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.PaymentConnection.Edges(childComplexity), true
+
+	case "PaymentConnection.pageInfo":
+		if e.complexity.PaymentConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.PaymentConnection.PageInfo(childComplexity), true
+
+	case "PaymentEdge.cursor":
+		if e.complexity.PaymentEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PaymentEdge.Cursor(childComplexity), true
+
+	case "PaymentEdge.node":
+		if e.complexity.PaymentEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PaymentEdge.Node(childComplexity), true
+
 	case "Product.createdAt":
 		if e.complexity.Product.CreatedAt == nil {
 			break
@@ -695,7 +733,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Payments(childComplexity, args["input"].(*model.SearchPayments)), true
+		return e.complexity.Query.Payments(childComplexity, args["input"].(*model.SearchPayments), args["page"].(model.PaginationInput)), true
 
 	case "Query.product":
 		if e.complexity.Query.Product == nil {
@@ -952,7 +990,7 @@ input PaginationInput {
   after: String
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/payment.graphql", Input: `type Payment {
+	{Name: "graph/schema/payment.graphql", Input: `type Payment implements Node{
   pk: Int!
   id: ID!
   taxIncluded: Boolean!
@@ -964,6 +1002,16 @@ input PaginationInput {
   user: User!
   createdAt: String!
   updatedAt: String!
+}
+
+type PaymentEdge implements Edge{
+  cursor: String!
+  node: Payment!
+}
+
+type PaymentConnection implements Connection {
+  edges: [PaymentEdge]!
+  pageInfo: PageInfo!
 }
 
 input NewPayment {
@@ -984,7 +1032,7 @@ input SearchPayments {
 
 extend type Query {
   payment(id: ID!): Payment
-  payments(input: SearchPayments): [Payment!]!
+  payments(input: SearchPayments, page: PaginationInput!): PaymentConnection!
 }
 
 extend type Mutation {
@@ -1302,6 +1350,15 @@ func (ec *executionContext) field_Query_payments_args(ctx context.Context, rawAr
 		}
 	}
 	args["input"] = arg0
+	var arg1 model.PaginationInput
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg1, err = ec.unmarshalNPaginationInput2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaginationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg1
 	return args, nil
 }
 
@@ -2951,6 +3008,146 @@ func (ec *executionContext) _Payment_updatedAt(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PaymentConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.PaymentConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PaymentConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.PaymentEdge)
+	fc.Result = res
+	return ec.marshalNPaymentEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.PaymentConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PaymentConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.PaymentEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PaymentEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.PaymentEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PaymentEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Payment)
+	fc.Result = res
+	return ec.marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Product_pk(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3566,7 +3763,7 @@ func (ec *executionContext) _Query_payments(ctx context.Context, field graphql.C
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Payments(rctx, args["input"].(*model.SearchPayments))
+		return ec.resolvers.Query().Payments(rctx, args["input"].(*model.SearchPayments), args["page"].(model.PaginationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3578,9 +3775,9 @@ func (ec *executionContext) _Query_payments(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Payment)
+	res := resTmp.(*model.PaymentConnection)
 	fc.Result = res
-	return ec.marshalNPayment2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentᚄ(ctx, field.Selections, res)
+	return ec.marshalNPaymentConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_product(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5521,6 +5718,13 @@ func (ec *executionContext) _Connection(ctx context.Context, sel ast.SelectionSe
 			return graphql.Null
 		}
 		return ec._CategoryConnection(ctx, sel, obj)
+	case model.PaymentConnection:
+		return ec._PaymentConnection(ctx, sel, &obj)
+	case *model.PaymentConnection:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PaymentConnection(ctx, sel, obj)
 	case model.ProductConnection:
 		return ec._ProductConnection(ctx, sel, &obj)
 	case *model.ProductConnection:
@@ -5544,6 +5748,13 @@ func (ec *executionContext) _Edge(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._CategoryEdge(ctx, sel, obj)
+	case model.PaymentEdge:
+		return ec._PaymentEdge(ctx, sel, &obj)
+	case *model.PaymentEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PaymentEdge(ctx, sel, obj)
 	case model.ProductEdge:
 		return ec._ProductEdge(ctx, sel, &obj)
 	case *model.ProductEdge:
@@ -5567,6 +5778,13 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._Category(ctx, sel, obj)
+	case model.Payment:
+		return ec._Payment(ctx, sel, &obj)
+	case *model.Payment:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Payment(ctx, sel, obj)
 	case model.Product:
 		return ec._Product(ctx, sel, &obj)
 	case *model.Product:
@@ -5919,7 +6137,7 @@ func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var paymentImplementors = []string{"Payment"}
+var paymentImplementors = []string{"Payment", "Node"}
 
 func (ec *executionContext) _Payment(ctx context.Context, sel ast.SelectionSet, obj *model.Payment) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, paymentImplementors)
@@ -6011,6 +6229,70 @@ func (ec *executionContext) _Payment(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Payment_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var paymentConnectionImplementors = []string{"PaymentConnection", "Connection"}
+
+func (ec *executionContext) _PaymentConnection(ctx context.Context, sel ast.SelectionSet, obj *model.PaymentConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paymentConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaymentConnection")
+		case "edges":
+			out.Values[i] = ec._PaymentConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._PaymentConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var paymentEdgeImplementors = []string{"PaymentEdge", "Edge"}
+
+func (ec *executionContext) _PaymentEdge(ctx context.Context, sel ast.SelectionSet, obj *model.PaymentEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paymentEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaymentEdge")
+		case "cursor":
+			out.Values[i] = ec._PaymentEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "node":
+			out.Values[i] = ec._PaymentEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -6872,7 +7154,31 @@ func (ec *executionContext) marshalNPayment2githubᚗcomᚋkosnuᚋhabookᚑback
 	return ec._Payment(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNPayment2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Payment) graphql.Marshaler {
+func (ec *executionContext) marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx context.Context, sel ast.SelectionSet, v *model.Payment) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Payment(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaymentConnection2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentConnection(ctx context.Context, sel ast.SelectionSet, v model.PaymentConnection) graphql.Marshaler {
+	return ec._PaymentConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaymentConnection2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentConnection(ctx context.Context, sel ast.SelectionSet, v *model.PaymentConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._PaymentConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPaymentEdge2ᚕᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentEdge(ctx context.Context, sel ast.SelectionSet, v []*model.PaymentEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6896,7 +7202,7 @@ func (ec *executionContext) marshalNPayment2ᚕᚖgithubᚗcomᚋkosnuᚋhabook�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx, sel, v[i])
+			ret[i] = ec.marshalOPaymentEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6907,16 +7213,6 @@ func (ec *executionContext) marshalNPayment2ᚕᚖgithubᚗcomᚋkosnuᚋhabook�
 	}
 	wg.Wait()
 	return ret
-}
-
-func (ec *executionContext) marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx context.Context, sel ast.SelectionSet, v *model.Payment) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Payment(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProduct2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v model.Product) graphql.Marshaler {
@@ -7371,6 +7667,13 @@ func (ec *executionContext) marshalOPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑb
 		return graphql.Null
 	}
 	return ec._Payment(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPaymentEdge2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPaymentEdge(ctx context.Context, sel ast.SelectionSet, v *model.PaymentEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PaymentEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOProduct2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
