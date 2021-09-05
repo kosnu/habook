@@ -1,6 +1,10 @@
 package model
 
-import "github.com/kosnu/habook-backend/entity"
+import (
+	"strconv"
+
+	"github.com/kosnu/habook-backend/entity"
+)
 
 type Payment struct {
 	Pk              int    `json:"pk"`
@@ -15,6 +19,22 @@ type Payment struct {
 	CreatedAt       string `json:"createdAt"`
 	UpdatedAt       string `json:"updatedAt"`
 }
+
+func (Payment) IsNode() {}
+
+type PaymentConnection struct {
+	Edges    []*PaymentEdge `json:"edges"`
+	PageInfo *PageInfo      `json:"pageInfo"`
+}
+
+func (PaymentConnection) IsConnection() {}
+
+type PaymentEdge struct {
+	Cursor string   `json:"cursor"`
+	Node   *Payment `json:"node"`
+}
+
+func (PaymentEdge) IsEdge() {}
 
 type NewPayment struct {
 	TaxIncluded     bool   `json:"taxIncluded"`
@@ -45,5 +65,47 @@ func PaymentFromEntity(entity *entity.Payment) *Payment {
 		ProductID:       entity.ProductId,
 		CreatedAt:       entity.CreatedAt.String(),
 		UpdatedAt:       entity.UpdatedAt.String(),
+	}
+}
+
+func PaymentToConnection(payments []*Payment, page PaginationInput) *PaymentConnection {
+	if len(payments) == 0 {
+		return &PaymentConnection{PageInfo: &PageInfo{}}
+	}
+
+	pageInfo := PageInfo{}
+	if page.First != nil {
+		if len(payments) >= *page.First+1 {
+			pageInfo.HasNextPage = true
+			payments = payments[:*page.First]
+		}
+	}
+
+	paymentsEdges := make([]*PaymentEdge, len(payments))
+
+	for index, payment := range payments {
+		cursor := createCursor(
+			CursorResource{
+				Name: "Payment",
+				Pk:   strconv.Itoa(payment.Pk),
+			},
+			nil,
+		)
+
+		paymentsEdges[index] = &PaymentEdge{
+			Cursor: cursor,
+			Node:   payment,
+		}
+	}
+
+	if page.First != nil && len(payments) >= *page.First+1 {
+		pageInfo.EndCursor = paymentsEdges[*page.First-1].Cursor
+	} else {
+		pageInfo.EndCursor = paymentsEdges[len(payments)-1].Cursor
+	}
+
+	return &PaymentConnection{
+		Edges:    paymentsEdges,
+		PageInfo: &pageInfo,
 	}
 }

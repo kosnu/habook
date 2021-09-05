@@ -90,10 +90,13 @@ func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment,
 	return model.PaymentFromEntity(&record), nil
 }
 
-func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments) ([]*model.Payment, error) {
+func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments, page model.PaginationInput) (*model.PaymentConnection, error) {
 	var records []entity.Payment
 	// TODO: Sortを引数に入れる
-	query := r.DB.Debug()
+	query, err := model.PageDB(r.DB.Debug(), "asc", page, "payments")
+	if err != nil {
+		return &model.PaymentConnection{}, err
+	}
 	if input != nil {
 		query = query.Where(&entity.Payment{UserId: input.UserID})
 		if input.CategoryID != nil {
@@ -106,7 +109,7 @@ func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayment
 	}
 
 	if err := query.Order("payments.created_at asc").Find(&records).Error; err != nil {
-		return []*model.Payment{}, err
+		return &model.PaymentConnection{}, err
 	}
 
 	var payments []*model.Payment
@@ -114,7 +117,7 @@ func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayment
 		payments = append(payments, model.PaymentFromEntity(&record))
 	}
 
-	return payments, nil
+	return model.PaymentToConnection(payments, page), nil
 }
 
 // Payment returns generated.PaymentResolver implementation.
