@@ -1,0 +1,29 @@
+query products(
+    $userId: ID!
+    $productName: String
+    $cursor: String,
+    $limit: Int
+) {
+    products(
+        input: {
+            userId: $userId,
+            productName: $productName
+        }
+        page: {
+            first: $limit,
+            after: $cursor
+        }
+    ) {
+        pageInfo {
+            endCursor
+            hasNextPage
+        }
+        edges {
+            cursor
+            node {
+                id
+                name
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+mutation deleteCategory(
+    $id: ID!
+    $userId: ID!
+) {
+    deleteCategory(
+        input: {
+            id: $id,
+            userId: $userId
+        }
+    ) {
+        ...Categories_Category
+    }
+}

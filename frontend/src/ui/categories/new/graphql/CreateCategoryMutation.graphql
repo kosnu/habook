@@ -1,0 +1,13 @@
+mutation createCategory(
+    $userId: ID!, $categoryName: String!
+) {
+    createCategory(
+        input:{
+            userId: $userId,
+            name: $categoryName
+        }
+    ) {
+        id
+        name
+    }
+}

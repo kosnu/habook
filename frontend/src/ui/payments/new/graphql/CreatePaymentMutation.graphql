@@ -1,0 +1,33 @@
+mutation createPayment(
+    $userId: ID!,
+    $categoryId: ID!,
+    $paidOnDate: String!,
+    $taxIncluded: Boolean!,
+    $numberOfProduct: Int!,
+    $amount: Int!
+    $productName: String!
+) {
+    createPayment(
+        input: {
+            userId: $userId,
+            categoryId: $categoryId,
+            paidOn: $paidOnDate,
+            taxIncluded: $taxIncluded,
+            numberOfProduct: $numberOfProduct,
+            amount: $amount,
+            productName: $productName
+        }
+    ) {
+        id
+        category {
+            id
+        }
+        paidOn
+        taxIncluded
+        numberOfProduct
+        amount
+        product {
+            name
+        }
+    }
+}

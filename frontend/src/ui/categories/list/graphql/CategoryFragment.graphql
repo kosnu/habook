@@ -1,0 +1,6 @@
+fragment Categories_Category on Category {
+    __typename
+    id
+    name
+    enable
+}

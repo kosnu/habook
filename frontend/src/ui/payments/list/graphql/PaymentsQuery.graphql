@@ -1,0 +1,56 @@
+fragment Payments_CategoryFragment on Category {
+    __typename
+    id
+    name
+}
+
+fragment Payments_ProductFragment on Product {
+    __typename
+    id
+    name
+}
+
+fragment Payments_PaymentFragment on Payment {
+    __typename
+    id
+    category {
+        ...Payments_CategoryFragment
+    }
+    product {
+        ...Payments_ProductFragment
+    }
+    paidOn
+    taxIncluded
+    amount
+    numberOfProduct
+}
+
+query paymentsQuery(
+    $userId: ID!
+    $categoryId: ID
+    $productName: String
+    $cursor: String,
+    $limit: Int
+) {
+    payments(
+        input: {
+            userId: $userId,
+            categoryId: $categoryId,
+            productName: $productName
+        }
+        page: {
+            first: $limit,
+            after: $cursor
+        }
+    ) {
+        pageInfo {
+            endCursor
+            hasNextPage
+        }
+        edges {
+            node {
+                ...Payments_PaymentFragment
+            }
+        }
+    }
+}
