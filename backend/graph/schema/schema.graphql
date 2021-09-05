@@ -1,0 +1,22 @@
+type ExpenseHistory {
+  pk: Int!
+  id: ID!
+  expense: Int!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Query {
+  expenseHistory(id: ID!): ExpenseHistory
+  expenseHistories: [ExpenseHistory!]!
+}
+
+input NewExpenseHistory {
+  expense: Int!
+  userId: ID!
+}
+
+type Mutation {
+  createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
+}

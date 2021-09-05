@@ -1,0 +1,48 @@
+type Payment implements Node{
+  pk: Int!
+  id: ID!
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  product: Product!
+  category: Category!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type PaymentEdge implements Edge{
+  cursor: String!
+  node: Payment!
+}
+
+type PaymentConnection implements Connection {
+  edges: [PaymentEdge]!
+  pageInfo: PageInfo!
+}
+
+input NewPayment {
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  productName: String!
+  categoryId: ID!
+  userId: ID!
+}
+
+input SearchPayments {
+  userId: ID!
+  productName: String
+  categoryId: ID
+}
+
+extend type Query {
+  payment(id: ID!): Payment
+  payments(input: SearchPayments, page: PaginationInput!): PaymentConnection!
+}
+
+extend type Mutation {
+  createPayment(input: NewPayment!): Payment!
+}

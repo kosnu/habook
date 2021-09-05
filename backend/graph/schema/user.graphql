@@ -1,0 +1,21 @@
+type User {
+  pk: Int!
+  id: ID!
+  name: String!
+  enable: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input NewUser {
+  name: String!
+}
+
+extend type Query {
+  user(id: ID!): User
+  users: [User!]!
+}
+
+extend type Mutation {
+  createUser(input: NewUser!): User!
+}

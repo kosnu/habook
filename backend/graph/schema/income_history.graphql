@@ -1,0 +1,28 @@
+type IncomeHistory {
+  pk: Int!
+  id: ID!
+  income: Int!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input NewIncomeHistory {
+  income: Int!
+  userId: ID!
+}
+
+input SearchIncomeHistory {
+  userId: ID!
+  beginningOfPeriod: String
+  endOfPeriod: String
+}
+
+extend type Query {
+  incomeHistory(id: ID!): IncomeHistory
+  incomeHistories(input: SearchIncomeHistory): [IncomeHistory!]!
+}
+
+extend type Mutation {
+  createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
+}
