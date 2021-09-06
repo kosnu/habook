@@ -1,4 +1,12 @@
-import { List, Typography } from "@material-ui/core"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@material-ui/core"
 import React from "react"
 import { usePaymentsQueryQuery } from "../../../../graphql/types"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
@@ -26,10 +34,26 @@ export function PaymentList() {
 
   // TODO: ページネーションをできるようにする
   return (
-    <List>
-      {payments.map((payment, index) => {
-        return <PaymentItem key={index} payment={payment} />
-      })}
-    </List>
+    <>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>商品名</TableCell>
+              <TableCell align="right">カテゴリー</TableCell>
+              <TableCell align="right">値段</TableCell>
+              <TableCell align="right">個数</TableCell>
+              <TableCell align="right">購入日</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {payments.map((payment, index) => {
+              return <PaymentItem key={index} payment={payment} />
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }

@@ -1,10 +1,6 @@
-import {
-  IconButton,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-} from "@material-ui/core"
+import { IconButton, TableCell, TableRow } from "@material-ui/core"
 import { MoreVert as MoreVertIcon } from "@material-ui/icons"
+import { format } from "date-fns"
 import React from "react"
 import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
 
@@ -12,19 +8,32 @@ interface PaymentItemProps {
   payment: Payments_PaymentFragmentFragment
 }
 
-// TODO: 支払日やカテゴリー、値段などの情報を表示できるようにする
 // TODO: 支払いに対するアクションを追加する
 export function PaymentItem({ payment }: PaymentItemProps) {
   return (
     <>
-      <ListItem button>
-        <ListItemText primary={payment.product.name} />
-        <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="category-menu-more">
+      <TableRow key={payment.id}>
+        <TableCell component="th" scope="row">
+          {payment.product.name}
+        </TableCell>
+        <TableCell align="right">{payment.category.name}</TableCell>
+        <TableCell align="right">
+          {payment.taxIncluded ? "（税込）" : "（税抜）"}
+          {payment.amount.toLocaleString("ja-JP", {
+            style: "currency",
+            currency: "JPY",
+          })}
+        </TableCell>
+        <TableCell align="right">{payment.numberOfProduct}</TableCell>
+        <TableCell align="right">
+          {format(new Date(payment.paidOn), "yyyy/MM/dd")}
+        </TableCell>
+        <TableCell align="right">
+          <IconButton edge="end" aria-label="payment-menu-more">
             <MoreVertIcon />
           </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
+        </TableCell>
+      </TableRow>
     </>
   )
 }
