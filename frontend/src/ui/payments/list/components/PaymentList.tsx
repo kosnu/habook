@@ -9,11 +9,18 @@ import {
 } from "@material-ui/core"
 import React from "react"
 import { usePaymentsQueryQuery } from "../../../../graphql/types"
+import { LoadingCircular } from "../../../common/components/LoadingCircular"
+import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
+import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
+import { useAnchorElement } from "../../../common/hooks/useAnchorElement"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { PaymentItem } from "./PaymentItem"
+import { PaymentOperationMenu } from "./PaymentOperationMenu"
 
 export function PaymentList() {
   const { userId } = useLoginUser()
+  const { anchorEl, setAnchorElement, resetAnchorElement } =
+    useAnchorElement("payment-menu")
 
   const { data, loading, error } = usePaymentsQueryQuery({
     variables: { userId: userId, limit: 30 },
@@ -32,6 +39,23 @@ export function PaymentList() {
     .filter((value): value is NonNullable<typeof value> => !!value)
     .map((edge) => edge.node)
 
+  function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+    setAnchorElement(event)
+  }
+
+  function handleMenuClose() {
+    resetAnchorElement()
+  }
+
+  function handleEditButtonClick() {
+    resetAnchorElement()
+  }
+
+  async function handleDeleteButtonClick() {
+    // TODO: 支払い削除Mutation
+    resetAnchorElement()
+  }
+
   // TODO: ページネーションをできるようにする
   return (
     <>
@@ -49,11 +73,26 @@ export function PaymentList() {
           </TableHead>
           <TableBody>
             {payments.map((payment, index) => {
-              return <PaymentItem key={index} payment={payment} />
+              return (
+                <PaymentItem
+                  key={index}
+                  payment={payment}
+                  onMenuButtonClick={handleMenuButtonClick}
+                />
+              )
             })}
           </TableBody>
         </Table>
       </TableContainer>
+      <SuccessSnackBar />
+      <WarningSnackBar />
+      <LoadingCircular loading={loading} />
+      <PaymentOperationMenu
+        anchorElement={anchorEl}
+        onMenuClose={handleMenuClose}
+        onEditButtonClick={handleEditButtonClick}
+        onDeleteButtonClick={handleDeleteButtonClick}
+      />
     </>
   )
 }

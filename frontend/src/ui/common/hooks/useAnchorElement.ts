@@ -1,7 +1,7 @@
 import React from "react"
 import { atomFamily, useRecoilState, useResetRecoilState } from "recoil"
 
-type AnchorElement = HTMLElement | null
+export type AnchorElement = HTMLElement | null
 
 const anchorElementStateFamily = atomFamily<AnchorElement, string>({
   key: "anchor-element-state-family",

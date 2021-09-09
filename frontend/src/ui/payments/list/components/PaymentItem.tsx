@@ -6,10 +6,11 @@ import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
 
 interface PaymentItemProps {
   payment: Payments_PaymentFragmentFragment
+  onMenuButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 // TODO: 支払いに対するアクションを追加する
-export function PaymentItem({ payment }: PaymentItemProps) {
+export function PaymentItem({ payment, onMenuButtonClick }: PaymentItemProps) {
   return (
     <>
       <TableRow key={payment.id}>
@@ -29,7 +30,11 @@ export function PaymentItem({ payment }: PaymentItemProps) {
           {format(new Date(payment.paidOn), "yyyy/MM/dd")}
         </TableCell>
         <TableCell align="right">
-          <IconButton edge="end" aria-label="payment-menu-more">
+          <IconButton
+            edge="end"
+            aria-label="payment-menu-more"
+            onClick={onMenuButtonClick}
+          >
             <MoreVertIcon />
           </IconButton>
         </TableCell>
