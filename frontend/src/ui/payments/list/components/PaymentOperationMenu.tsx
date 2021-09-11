@@ -1,5 +1,4 @@
 import { Menu, MenuItem, Typography } from "@material-ui/core"
-import Link from "next/link"
 import React from "react"
 import { AnchorElement } from "../../../common/hooks/useAnchorElement"
 
@@ -26,7 +25,7 @@ export function PaymentOperationMenu({
         onClose={onMenuClose}
       >
         <MenuItem onClick={onEditButtonClick}>
-          <Link href={"/payments/edit"}>編集</Link>
+          <Typography>編集</Typography>
         </MenuItem>
         <MenuItem onClick={onDeleteButtonClick}>
           <Typography color={"error"}>削除</Typography>

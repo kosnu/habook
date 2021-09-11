@@ -12,15 +12,17 @@ import { usePaymentsQueryQuery } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/LoadingCircular"
 import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
-import { useAnchorElement } from "../../../common/hooks/useAnchorElement"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
+import { usePaymentFormModal } from "../hooks/usePaymentFormModal"
+import { usePaymentOperationMenu } from "../hooks/usePaymentOperationMenu"
+import { PaymentFormModal } from "./PaymentFormModal"
 import { PaymentItem } from "./PaymentItem"
 import { PaymentOperationMenu } from "./PaymentOperationMenu"
 
 export function PaymentList() {
   const { userId } = useLoginUser()
-  const { anchorEl, setAnchorElement, resetAnchorElement } =
-    useAnchorElement("payment-menu")
+  const { menuAnchorEl, openMenu, closeMenu } = usePaymentOperationMenu()
+  const { openModal } = usePaymentFormModal()
 
   const { data, loading, error } = usePaymentsQueryQuery({
     variables: { userId: userId, limit: 30 },
@@ -40,20 +42,21 @@ export function PaymentList() {
     .map((edge) => edge.node)
 
   function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
-    setAnchorElement(event)
+    openMenu(event)
   }
 
   function handleMenuClose() {
-    resetAnchorElement()
+    closeMenu()
   }
 
   function handleEditButtonClick() {
-    resetAnchorElement()
+    openModal()
+    closeMenu()
   }
 
   async function handleDeleteButtonClick() {
     // TODO: 支払い削除Mutation
-    resetAnchorElement()
+    closeMenu()
   }
 
   // TODO: ページネーションをできるようにする
@@ -87,8 +90,9 @@ export function PaymentList() {
       <SuccessSnackBar />
       <WarningSnackBar />
       <LoadingCircular loading={loading} />
+      <PaymentFormModal />
       <PaymentOperationMenu
-        anchorElement={anchorEl}
+        anchorElement={menuAnchorEl}
         onMenuClose={handleMenuClose}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleDeleteButtonClick}
