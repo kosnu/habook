@@ -6,11 +6,17 @@ import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
 
 interface PaymentItemProps {
   payment: Payments_PaymentFragmentFragment
-  onMenuButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onMenuButtonClick: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    payment: Payments_PaymentFragmentFragment,
+  ) => void
 }
 
-// TODO: 支払いに対するアクションを追加する
 export function PaymentItem({ payment, onMenuButtonClick }: PaymentItemProps) {
+  function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+    onMenuButtonClick(event, payment)
+  }
+
   return (
     <>
       <TableRow key={payment.id}>
@@ -33,7 +39,7 @@ export function PaymentItem({ payment, onMenuButtonClick }: PaymentItemProps) {
           <IconButton
             edge="end"
             aria-label="payment-menu-more"
-            onClick={onMenuButtonClick}
+            onClick={handleMenuButtonClick}
           >
             <MoreVertIcon />
           </IconButton>

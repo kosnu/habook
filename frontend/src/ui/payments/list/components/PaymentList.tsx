@@ -8,11 +8,15 @@ import {
   Typography,
 } from "@material-ui/core"
 import React from "react"
-import { usePaymentsQueryQuery } from "../../../../graphql/types"
+import {
+  Payments_PaymentFragmentFragment,
+  usePaymentsQueryQuery,
+} from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/LoadingCircular"
 import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
+import { usePayment } from "../hooks/usePayment"
 import { usePaymentFormModal } from "../hooks/usePaymentFormModal"
 import { usePaymentOperationMenu } from "../hooks/usePaymentOperationMenu"
 import { PaymentFormModal } from "./PaymentFormModal"
@@ -22,6 +26,7 @@ import { PaymentOperationMenu } from "./PaymentOperationMenu"
 export function PaymentList() {
   const { userId } = useLoginUser()
   const { menuAnchorEl, openMenu, closeMenu } = usePaymentOperationMenu()
+  const { selectPayment, deletePayment } = usePayment()
   const { openModal } = usePaymentFormModal()
 
   const { data, loading, error } = usePaymentsQueryQuery({
@@ -41,8 +46,12 @@ export function PaymentList() {
     .filter((value): value is NonNullable<typeof value> => !!value)
     .map((edge) => edge.node)
 
-  function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+  function handleMenuButtonClick(
+    event: React.MouseEvent<HTMLButtonElement>,
+    payment: Payments_PaymentFragmentFragment,
+  ) {
     openMenu(event)
+    selectPayment(payment)
   }
 
   function handleMenuClose() {
@@ -55,7 +64,7 @@ export function PaymentList() {
   }
 
   async function handleDeleteButtonClick() {
-    // TODO: 支払い削除Mutation
+    await deletePayment()
     closeMenu()
   }
 

@@ -6,11 +6,12 @@ import {
   DialogTitle,
 } from "@material-ui/core"
 import React, { useCallback } from "react"
+import { usePayment } from "../hooks/usePayment"
 import { usePaymentFormModal } from "../hooks/usePaymentFormModal"
 
 export function PaymentFormModal() {
   const { open, closeModal } = usePaymentFormModal()
-  // TODO: UpdatePayment
+  const { selectedPayment, updatePayment } = usePayment()
   // TODO: Validation
 
   const handleClose = useCallback(() => {
@@ -18,13 +19,18 @@ export function PaymentFormModal() {
   }, [closeModal])
 
   const handleUpdateButtonClick = useCallback(async () => {
+    await updatePayment()
     closeModal()
-  }, [closeModal])
+  }, [updatePayment, closeModal])
+
   return (
     <>
       <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
         <DialogTitle>支払いの編集</DialogTitle>
-        <DialogContent>{/* TODO: 支払いフォーム */}</DialogContent>
+        <DialogContent>
+          {/* TODO: 支払いフォーム */}
+          {selectedPayment?.product.name}
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color={"primary"}>
             キャンセル
