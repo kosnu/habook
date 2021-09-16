@@ -21,13 +21,13 @@ export type Scalars = {
 
 export type Category = Node & {
   __typename?: "Category"
-  createdAt: Scalars["String"]
-  enable: Scalars["Boolean"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  enable: Scalars["Boolean"]
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type CategoryConnection = Connection & {
@@ -43,8 +43,8 @@ export type CategoryEdge = Edge & {
 }
 
 export type Connection = {
-  edges: Array<Maybe<Edge>>
   pageInfo: PageInfo
+  edges: Array<Maybe<Edge>>
 }
 
 export type DeleteCategory = {
@@ -59,22 +59,22 @@ export type Edge = {
 
 export type ExpenseHistory = {
   __typename?: "ExpenseHistory"
-  createdAt: Scalars["String"]
-  expense: Scalars["Int"]
-  id: Scalars["ID"]
   pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  id: Scalars["ID"]
+  expense: Scalars["Int"]
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type IncomeHistory = {
   __typename?: "IncomeHistory"
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   income: Scalars["Int"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type Mutation = {
@@ -132,12 +132,12 @@ export type NewIncomeHistory = {
 }
 
 export type NewPayment = {
-  amount: Scalars["Int"]
-  categoryId: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
-  productName: Scalars["String"]
   taxIncluded: Scalars["Boolean"]
+  paidOn: Scalars["String"]
+  numberOfProduct: Scalars["Int"]
+  amount: Scalars["Int"]
+  productName: Scalars["String"]
+  categoryId: Scalars["ID"]
   userId: Scalars["ID"]
 }
 
@@ -156,23 +156,23 @@ export type PageInfo = {
 }
 
 export type PaginationInput = {
-  after?: Maybe<Scalars["String"]>
   first?: Maybe<Scalars["Int"]>
+  after?: Maybe<Scalars["String"]>
 }
 
 export type Payment = Node & {
   __typename?: "Payment"
-  amount: Scalars["Int"]
-  category: Category
-  createdAt: Scalars["String"]
-  id: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
   pk: Scalars["Int"]
-  product: Product
+  id: Scalars["ID"]
   taxIncluded: Scalars["Boolean"]
-  updatedAt: Scalars["String"]
+  paidOn: Scalars["String"]
+  numberOfProduct: Scalars["Int"]
+  amount: Scalars["Int"]
+  product: Product
+  category: Category
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type PaymentConnection = Connection & {
@@ -189,10 +189,10 @@ export type PaymentEdge = Edge & {
 
 export type Product = Node & {
   __typename?: "Product"
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
   updatedAt: Scalars["String"]
 }
 
@@ -268,26 +268,26 @@ export type QueryUserArgs = {
 }
 
 export type SearchCategories = {
-  enable?: Maybe<Scalars["Boolean"]>
   name?: Maybe<Scalars["String"]>
+  enable?: Maybe<Scalars["Boolean"]>
   userId: Scalars["ID"]
 }
 
 export type SearchIncomeHistory = {
+  userId: Scalars["ID"]
   beginningOfPeriod?: Maybe<Scalars["String"]>
   endOfPeriod?: Maybe<Scalars["String"]>
-  userId: Scalars["ID"]
 }
 
 export type SearchPayments = {
-  categoryId?: Maybe<Scalars["ID"]>
-  productName?: Maybe<Scalars["String"]>
   userId: Scalars["ID"]
+  productName?: Maybe<Scalars["String"]>
+  categoryId?: Maybe<Scalars["ID"]>
 }
 
 export type SearchProduct = {
-  productName?: Maybe<Scalars["String"]>
   userId: Scalars["ID"]
+  productName?: Maybe<Scalars["String"]>
 }
 
 export type UpdateCategory = {
@@ -298,11 +298,11 @@ export type UpdateCategory = {
 
 export type User = {
   __typename?: "User"
-  createdAt: Scalars["String"]
-  enable: Scalars["Boolean"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  pk: Scalars["Int"]
+  enable: Scalars["Boolean"]
+  createdAt: Scalars["String"]
   updatedAt: Scalars["String"]
 }
 
