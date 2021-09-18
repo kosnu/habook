@@ -5,6 +5,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -55,6 +56,20 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 	}
 
 	return model.PaymentFromEntity(&record), nil
+}
+
+func (r *mutationResolver) UpdatePayment(ctx context.Context, input model.UpdatePayment) (*model.Payment, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeletePayment(ctx context.Context, input model.DeletePayment) (bool, error) {
+	var record entity.Payment
+	err := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID).Delete(&record).Error
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
