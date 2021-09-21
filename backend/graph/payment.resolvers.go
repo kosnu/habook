@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
+	"github.com/kosnu/habook-backend/lib"
 	"gorm.io/gorm"
 )
 
@@ -31,11 +31,15 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 		if err != nil {
 			return err
 		}
+		paidOn, err := lib.StringToTime(input.PaidOn)
+		if err != nil {
+			return err
+		}
 
 		record = entity.Payment{
 			Id:              paymentId,
 			TaxIncluded:     input.TaxIncluded,
-			PaidOn:          input.PaidOn,
+			PaidOn:          paidOn,
 			NumberOfProduct: input.NumberOfProduct,
 			Amount:          input.Amount,
 			UserId:          input.UserID,
@@ -59,7 +63,26 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 }
 
 func (r *mutationResolver) UpdatePayment(ctx context.Context, input model.UpdatePayment) (*model.Payment, error) {
-	panic(fmt.Errorf("not implemented"))
+	var record entity.Payment
+	paymentRecord := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID)
+	paidOn, err := lib.StringToTime(input.PaidOn)
+	if err != nil {
+		return &model.Payment{}, err
+	}
+
+	err = paymentRecord.Select("TaxIncluded", "PaidOn", "NumberOfProduct", "Amount", "CategoryID").Updates(entity.Payment{
+		TaxIncluded:     input.TaxIncluded,
+		PaidOn:          paidOn,
+		NumberOfProduct: input.NumberOfProduct,
+		Amount:          input.Amount,
+		CategoryId:      input.CategoryID,
+	}).Error
+
+	if err != nil {
+		return &model.Payment{}, err
+	}
+
+	return model.PaymentFromEntity(&record), nil
 }
 
 func (r *mutationResolver) DeletePayment(ctx context.Context, input model.DeletePayment) (bool, error) {

@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/kosnu/habook-backend/entity"
+	"github.com/kosnu/habook-backend/lib"
 )
 
 type Payment struct {
@@ -73,7 +74,7 @@ func PaymentFromEntity(entity *entity.Payment) *Payment {
 		Pk:              int(entity.Pk),
 		ID:              entity.Id,
 		TaxIncluded:     entity.TaxIncluded,
-		PaidOn:          entity.PaidOn,
+		PaidOn:          lib.TimeToString(entity.PaidOn),
 		NumberOfProduct: entity.NumberOfProduct,
 		Amount:          entity.Amount,
 		UserID:          entity.UserId,
