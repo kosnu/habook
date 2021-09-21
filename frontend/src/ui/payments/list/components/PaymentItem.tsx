@@ -1,8 +1,8 @@
 import { IconButton, TableCell, TableRow } from "@material-ui/core"
 import { MoreVert as MoreVertIcon } from "@material-ui/icons"
-import { format } from "date-fns"
 import React from "react"
 import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
+import { dateFormatter } from "../../../common/utils/formatter"
 
 interface PaymentItemProps {
   payment: Payments_PaymentFragmentFragment
@@ -32,9 +32,7 @@ export function PaymentItem({ payment, onMenuButtonClick }: PaymentItemProps) {
           })}
         </TableCell>
         <TableCell align="right">{payment.numberOfProduct}</TableCell>
-        <TableCell align="right">
-          {format(new Date(payment.paidOn), "yyyy/MM/dd")}
-        </TableCell>
+        <TableCell align="right">{dateFormatter(payment.paidOn)}</TableCell>
         <TableCell align="right">
           <IconButton
             edge="end"
