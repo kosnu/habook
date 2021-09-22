@@ -1,0 +1,10 @@
+mutation deletePayment(
+    $id: ID!
+    $userId: ID!
+) {
+    deletePayment(
+        input: {
+            id: $id
+            userId: $userId
+        })
+}
