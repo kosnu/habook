@@ -1,5 +1,6 @@
 import { useCallback } from "react"
 import { atom, selector, useRecoilState } from "recoil"
+import { dateToString } from "../../../common/utils/formatter"
 
 const createPaymentState = atom<CreatePaymentType>({
   key: "create-payment-state",
@@ -124,7 +125,7 @@ export const createPaymentParamsSelector = selector({
   get: ({ get }) => {
     return {
       ...get(createPaymentState),
-      paidOnDate: get(createPaymentState).paidOnDate.toLocaleString(),
+      paidOnDate: dateToString(get(createPaymentState).paidOnDate),
       taxIncluded: !!get(createPaymentState).taxIncluded,
     }
   },
