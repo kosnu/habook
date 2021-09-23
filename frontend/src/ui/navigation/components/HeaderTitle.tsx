@@ -6,7 +6,7 @@ import { LogoIcon } from "../../theme/LogoIcon"
 export function HeaderTitle() {
   return (
     <>
-      <Link href={"/"}>
+      <Link href={"/"} passHref>
         <Grid
           container
           spacing={1}

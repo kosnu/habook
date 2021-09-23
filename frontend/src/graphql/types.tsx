@@ -5,10 +5,12 @@ export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>
+}
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>
+}
 const defaultOptions = {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -648,6 +650,7 @@ export function useCategoriesListQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useQuery<CategoriesListQuery, CategoriesListQueryVariables>(
     CategoriesListDocument,
     options,
@@ -661,6 +664,7 @@ export function useCategoriesListLazyQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useLazyQuery<CategoriesListQuery, CategoriesListQueryVariables>(
     CategoriesListDocument,
     options,
@@ -715,6 +719,7 @@ export function useDeleteCategoryMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     DeleteCategoryMutation,
     DeleteCategoryMutationVariables
@@ -769,6 +774,7 @@ export function useUpdateCategoryMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables
@@ -822,6 +828,7 @@ export function useCreateCategoryMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     CreateCategoryMutation,
     CreateCategoryMutationVariables
@@ -872,6 +879,7 @@ export function useDeletePaymentMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     DeletePaymentMutation,
     DeletePaymentMutationVariables
@@ -944,6 +952,7 @@ export function usePaymentsQueryQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useQuery<PaymentsQueryQuery, PaymentsQueryQueryVariables>(
     PaymentsQueryDocument,
     options,
@@ -957,6 +966,7 @@ export function usePaymentsQueryLazyQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useLazyQuery<PaymentsQueryQuery, PaymentsQueryQueryVariables>(
     PaymentsQueryDocument,
     options,
@@ -1026,6 +1036,7 @@ export function useCategoriesQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(
     CategoriesDocument,
     options,
@@ -1039,6 +1050,7 @@ export function useCategoriesLazyQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(
     CategoriesDocument,
     options,
@@ -1123,6 +1135,7 @@ export function useCreatePaymentMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     CreatePaymentMutation,
     CreatePaymentMutationVariables
@@ -1187,6 +1200,7 @@ export function useProductsQuery(
   baseOptions: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(
     ProductsDocument,
     options,
@@ -1200,6 +1214,7 @@ export function useProductsLazyQuery(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(
     ProductsDocument,
     options,

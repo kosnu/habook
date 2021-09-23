@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint --fix -c .eslintrc .",
     "codegen": "graphql-codegen --config codegen.yml",
     "format": "prettier --write '{**/*,*}.{js,ts,jsx,tsx}'"
   },

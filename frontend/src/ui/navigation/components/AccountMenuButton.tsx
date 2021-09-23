@@ -14,6 +14,7 @@ const menuId = "primary-account-menu"
 
 export function AccountMenuButton() {
   const { anchorEl, openAccountMenu, closeAccountMenu } = useAccountMenu()
+
   return (
     <>
       <IconButton

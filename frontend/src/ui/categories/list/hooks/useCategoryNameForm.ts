@@ -44,6 +44,7 @@ export function useCategoryNameForm() {
         currVal.categoryName.length < 2
           ? "2文字以上の名前を入力してください"
           : null
+
       return {
         ...currVal,
         validationMessage: {

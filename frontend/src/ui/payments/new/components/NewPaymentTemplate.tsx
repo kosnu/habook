@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
 import { Container, Divider, Grid, Typography } from "@material-ui/core"
-import React, { useCallback } from "react"
+import React from "react"
 import { useRecoilValue } from "recoil"
 import { useCreatePaymentMutation } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/LoadingCircular"
@@ -28,7 +28,7 @@ export function NewPaymentTemplate() {
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const [createPayment, { loading }] = useCreatePaymentMutation()
 
-  const handleSubmitButtonClick = useCallback(async () => {
+  async function handleSubmitButtonClick() {
     try {
       await createPayment({
         variables: {
@@ -40,7 +40,7 @@ export function NewPaymentTemplate() {
     } catch (e) {
       openWarningSnackbar(e.message)
     }
-  }, [params, openWarningSnackbar, userId, createPayment])
+  }
 
   return (
     <>

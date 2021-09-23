@@ -1,6 +1,5 @@
 import { css } from "@emotion/react"
 import { Grid } from "@material-ui/core"
-import Head from "next/head"
 import React from "react"
 import { theme } from "../../theme"
 import { TotalExpense } from "./TotalExpense"

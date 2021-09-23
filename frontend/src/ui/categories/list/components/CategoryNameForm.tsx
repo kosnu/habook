@@ -13,6 +13,7 @@ export function CategoryNameForm() {
     },
     [changeCategoryName],
   )
+
   return (
     <>
       <TextField

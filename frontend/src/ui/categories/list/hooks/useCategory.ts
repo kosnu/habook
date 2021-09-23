@@ -36,6 +36,7 @@ export function useCategory() {
     const invalid = validation.isError
     if (invalid || !category) {
       openWarningSnackbar("入力が正しくありません")
+
       return
     }
     try {

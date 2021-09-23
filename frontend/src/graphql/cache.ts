@@ -25,5 +25,6 @@ function merge(existing: any, incoming: any) {
   const { edges, ...rest } = incoming
   const result = rest
   result.edges = [...existing.edges, ...edges]
+
   return result
 }

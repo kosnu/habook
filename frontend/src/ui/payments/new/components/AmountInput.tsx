@@ -88,6 +88,7 @@ export function AmountInput() {
             >
               {Array.from(Array(10).keys()).map((num, index) => {
                 const valueNumber = num + 1
+
                 return (
                   <MenuItem key={index} value={valueNumber}>
                     {valueNumber}

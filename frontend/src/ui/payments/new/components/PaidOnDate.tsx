@@ -4,6 +4,7 @@ import { useCreatePayment } from "../hooks/useCreatePayment"
 
 export function PaidOnDate() {
   const { paidOnDate, onPaidOnDateChange } = useCreatePayment()
+
   return (
     <>
       <KeyboardDatePicker
