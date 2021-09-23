@@ -1,7 +1,11 @@
 import { atom, useRecoilState } from "recoil"
-import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
+import {
+  Payments_PaymentFragmentFragment,
+  useDeletePaymentMutation,
+} from "../../../../graphql/types"
 import { useSuccessSnackbar } from "../../../common/components/SuccessSnackBar"
 import { useWarningSnackbar } from "../../../common/components/WarningSnackBar"
+import { useLoginUser } from "../../../common/hooks/useLoginUser"
 
 const selectedPaymentState = atom<Payments_PaymentFragmentFragment | null>({
   key: "selected-payment-state",
@@ -9,7 +13,9 @@ const selectedPaymentState = atom<Payments_PaymentFragmentFragment | null>({
 })
 
 export function usePayment() {
+  const { userId } = useLoginUser()
   const [payment, setPayment] = useRecoilState(selectedPaymentState)
+  const [deletePayment] = useDeletePaymentMutation()
   const { openWarningSnackbar } = useWarningSnackbar()
   const { openSuccessSnackbar } = useSuccessSnackbar()
 
@@ -29,8 +35,10 @@ export function usePayment() {
 
   async function handlePaymentDelete() {
     try {
-      // TODO: DeletePayment
-      openSuccessSnackbar("支払いを削除しました")
+      if (payment) {
+        await deletePayment({ variables: { id: payment.id, userId: userId } })
+        openSuccessSnackbar("支払いを削除しました")
+      }
     } catch (e) {
       openWarningSnackbar(e.message)
     }

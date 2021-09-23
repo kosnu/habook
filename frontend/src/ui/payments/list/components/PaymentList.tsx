@@ -29,7 +29,7 @@ export function PaymentList() {
   const { selectPayment, deletePayment } = usePayment()
   const { openModal } = usePaymentFormModal()
 
-  const { data, loading, error } = usePaymentsQueryQuery({
+  const { data, loading, error, refetch } = usePaymentsQueryQuery({
     variables: { userId: userId, limit: 30 },
   })
 
@@ -65,6 +65,7 @@ export function PaymentList() {
 
   async function handleDeleteButtonClick() {
     await deletePayment()
+    await refetch()
     closeMenu()
   }
 
