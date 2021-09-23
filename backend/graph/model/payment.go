@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/kosnu/habook-backend/entity"
+	"github.com/kosnu/habook-backend/lib"
 )
 
 type Payment struct {
@@ -46,6 +47,22 @@ type NewPayment struct {
 	UserID          string `json:"userId"`
 }
 
+type DeletePayment struct {
+	ID     string `json:"id"`
+	UserID string `json:"userId"`
+}
+
+type UpdatePayment struct {
+	ID              string `json:"id"`
+	TaxIncluded     bool   `json:"taxIncluded"`
+	PaidOn          string `json:"paidOn"`
+	NumberOfProduct int    `json:"numberOfProduct"`
+	Amount          int    `json:"amount"`
+	ProductName     string `json:"productName"`
+	CategoryID      string `json:"categoryId"`
+	UserID          string `json:"userId"`
+}
+
 type SearchPayments struct {
 	UserID      string  `json:"userId"`
 	ProductName *string `json:"productName"`
@@ -57,7 +74,7 @@ func PaymentFromEntity(entity *entity.Payment) *Payment {
 		Pk:              int(entity.Pk),
 		ID:              entity.Id,
 		TaxIncluded:     entity.TaxIncluded,
-		PaidOn:          entity.PaidOn,
+		PaidOn:          lib.TimeToString(entity.PaidOn),
 		NumberOfProduct: entity.NumberOfProduct,
 		Amount:          entity.Amount,
 		UserID:          entity.UserId,

@@ -10,8 +10,8 @@ import {
 import { LoadingCircular } from "../../../common/components/LoadingCircular"
 import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
+import { useAnchorElement } from "../../../common/hooks/useAnchorElement"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
-import { useAnchorElement } from "../hooks/useAnchorElement"
 import { useCategory } from "../hooks/useCategory"
 import { useCategoryFormModal } from "../hooks/useCategoryFormModal"
 import { CategoryFormModal } from "./CategoryFormModal"
@@ -20,7 +20,8 @@ import { CategoryOperationMenu } from "./CategoryOperationMenu"
 
 export function CategoryList() {
   const { userId } = useLoginUser()
-  const { anchorEl, openMenu, closeMenu } = useAnchorElement()
+  const { anchorEl, setAnchorElement, resetAnchorElement } =
+    useAnchorElement("category-menu")
   const { openModal } = useCategoryFormModal()
   const { selectCategory, deleteCategory } = useCategory()
   const { data, fetchMore, loading, error } = useCategoriesListQuery({
@@ -53,22 +54,22 @@ export function CategoryList() {
     event: React.MouseEvent<HTMLButtonElement>,
     category: Categories_CategoryFragment,
   ) {
-    openMenu(event)
+    setAnchorElement(event)
     selectCategory(category)
   }
 
   function handleMenuClose() {
-    closeMenu()
+    resetAnchorElement()
   }
 
   function handleEditButtonClick() {
     openModal()
-    closeMenu()
+    resetAnchorElement()
   }
 
   async function handleDeleteButtonClick() {
     await deleteCategory()
-    closeMenu()
+    resetAnchorElement()
   }
 
   return (

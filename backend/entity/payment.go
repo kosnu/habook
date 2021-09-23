@@ -6,7 +6,7 @@ type Payment struct {
 	Pk              uint `gorm:"primaryKey"`
 	Id              string
 	TaxIncluded     bool
-	PaidOn          string
+	PaidOn          time.Time
 	NumberOfProduct int
 	Amount          int
 	ProductId       string

@@ -21,13 +21,13 @@ export type Scalars = {
 
 export type Category = Node & {
   __typename?: "Category"
-  createdAt: Scalars["String"]
-  enable: Scalars["Boolean"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  enable: Scalars["Boolean"]
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type CategoryConnection = Connection & {
@@ -43,11 +43,16 @@ export type CategoryEdge = Edge & {
 }
 
 export type Connection = {
-  edges: Array<Maybe<Edge>>
   pageInfo: PageInfo
+  edges: Array<Maybe<Edge>>
 }
 
 export type DeleteCategory = {
+  id: Scalars["ID"]
+  userId: Scalars["ID"]
+}
+
+export type DeletePayment = {
   id: Scalars["ID"]
   userId: Scalars["ID"]
 }
@@ -59,22 +64,22 @@ export type Edge = {
 
 export type ExpenseHistory = {
   __typename?: "ExpenseHistory"
-  createdAt: Scalars["String"]
-  expense: Scalars["Int"]
-  id: Scalars["ID"]
   pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  id: Scalars["ID"]
+  expense: Scalars["Int"]
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type IncomeHistory = {
   __typename?: "IncomeHistory"
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   income: Scalars["Int"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type Mutation = {
@@ -85,7 +90,9 @@ export type Mutation = {
   createPayment: Payment
   createUser: User
   deleteCategory: Category
+  deletePayment: Scalars["Boolean"]
   updateCategory: Category
+  updatePayment: Payment
 }
 
 export type MutationCreateCategoryArgs = {
@@ -112,8 +119,16 @@ export type MutationDeleteCategoryArgs = {
   input: DeleteCategory
 }
 
+export type MutationDeletePaymentArgs = {
+  input: DeletePayment
+}
+
 export type MutationUpdateCategoryArgs = {
   input: UpdateCategory
+}
+
+export type MutationUpdatePaymentArgs = {
+  input: UpdatePayment
 }
 
 export type NewCategory = {
@@ -132,12 +147,12 @@ export type NewIncomeHistory = {
 }
 
 export type NewPayment = {
-  amount: Scalars["Int"]
-  categoryId: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
-  productName: Scalars["String"]
   taxIncluded: Scalars["Boolean"]
+  paidOn: Scalars["String"]
+  numberOfProduct: Scalars["Int"]
+  amount: Scalars["Int"]
+  productName: Scalars["String"]
+  categoryId: Scalars["ID"]
   userId: Scalars["ID"]
 }
 
@@ -156,23 +171,23 @@ export type PageInfo = {
 }
 
 export type PaginationInput = {
-  after?: Maybe<Scalars["String"]>
   first?: Maybe<Scalars["Int"]>
+  after?: Maybe<Scalars["String"]>
 }
 
 export type Payment = Node & {
   __typename?: "Payment"
-  amount: Scalars["Int"]
-  category: Category
-  createdAt: Scalars["String"]
-  id: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
   pk: Scalars["Int"]
-  product: Product
+  id: Scalars["ID"]
   taxIncluded: Scalars["Boolean"]
-  updatedAt: Scalars["String"]
+  paidOn: Scalars["String"]
+  numberOfProduct: Scalars["Int"]
+  amount: Scalars["Int"]
+  product: Product
+  category: Category
   user: User
+  createdAt: Scalars["String"]
+  updatedAt: Scalars["String"]
 }
 
 export type PaymentConnection = Connection & {
@@ -189,10 +204,10 @@ export type PaymentEdge = Edge & {
 
 export type Product = Node & {
   __typename?: "Product"
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
   updatedAt: Scalars["String"]
 }
 
@@ -268,26 +283,26 @@ export type QueryUserArgs = {
 }
 
 export type SearchCategories = {
-  enable?: Maybe<Scalars["Boolean"]>
   name?: Maybe<Scalars["String"]>
+  enable?: Maybe<Scalars["Boolean"]>
   userId: Scalars["ID"]
 }
 
 export type SearchIncomeHistory = {
+  userId: Scalars["ID"]
   beginningOfPeriod?: Maybe<Scalars["String"]>
   endOfPeriod?: Maybe<Scalars["String"]>
-  userId: Scalars["ID"]
 }
 
 export type SearchPayments = {
-  categoryId?: Maybe<Scalars["ID"]>
-  productName?: Maybe<Scalars["String"]>
   userId: Scalars["ID"]
+  productName?: Maybe<Scalars["String"]>
+  categoryId?: Maybe<Scalars["ID"]>
 }
 
 export type SearchProduct = {
-  productName?: Maybe<Scalars["String"]>
   userId: Scalars["ID"]
+  productName?: Maybe<Scalars["String"]>
 }
 
 export type UpdateCategory = {
@@ -296,13 +311,24 @@ export type UpdateCategory = {
   userId: Scalars["ID"]
 }
 
+export type UpdatePayment = {
+  id: Scalars["ID"]
+  taxIncluded: Scalars["Boolean"]
+  paidOn: Scalars["String"]
+  numberOfProduct: Scalars["Int"]
+  amount: Scalars["Int"]
+  productName: Scalars["String"]
+  categoryId: Scalars["ID"]
+  userId: Scalars["ID"]
+}
+
 export type User = {
   __typename?: "User"
-  createdAt: Scalars["String"]
-  enable: Scalars["Boolean"]
+  pk: Scalars["Int"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  pk: Scalars["Int"]
+  enable: Scalars["Boolean"]
+  createdAt: Scalars["String"]
   updatedAt: Scalars["String"]
 }
 
@@ -382,6 +408,16 @@ export type CreateCategoryMutationVariables = Exact<{
 export type CreateCategoryMutation = {
   __typename?: "Mutation"
   createCategory: { __typename?: "Category"; id: string; name: string }
+}
+
+export type DeletePaymentMutationVariables = Exact<{
+  id: Scalars["ID"]
+  userId: Scalars["ID"]
+}>
+
+export type DeletePaymentMutation = {
+  __typename?: "Mutation"
+  deletePayment: boolean
 }
 
 export type Payments_CategoryFragmentFragment = {
@@ -800,6 +836,56 @@ export type CreateCategoryMutationResult =
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<
   CreateCategoryMutation,
   CreateCategoryMutationVariables
+>
+export const DeletePaymentDocument = gql`
+  mutation deletePayment($id: ID!, $userId: ID!) {
+    deletePayment(input: { id: $id, userId: $userId })
+  }
+`
+export type DeletePaymentMutationFn = Apollo.MutationFunction<
+  DeletePaymentMutation,
+  DeletePaymentMutationVariables
+>
+
+/**
+ * __useDeletePaymentMutation__
+ *
+ * To run a mutation, you first call `useDeletePaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePaymentMutation, { data, loading, error }] = useDeletePaymentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useDeletePaymentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeletePaymentMutation,
+    DeletePaymentMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DeletePaymentMutation,
+    DeletePaymentMutationVariables
+  >(DeletePaymentDocument, options)
+}
+
+export type DeletePaymentMutationHookResult = ReturnType<
+  typeof useDeletePaymentMutation
+>
+export type DeletePaymentMutationResult =
+  Apollo.MutationResult<DeletePaymentMutation>
+export type DeletePaymentMutationOptions = Apollo.BaseMutationOptions<
+  DeletePaymentMutation,
+  DeletePaymentMutationVariables
 >
 export const PaymentsQueryDocument = gql`
   query paymentsQuery(

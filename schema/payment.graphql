@@ -32,6 +32,22 @@ input NewPayment {
   userId: ID!
 }
 
+input UpdatePayment {
+  id: ID!
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  productName: String!
+  categoryId: ID!
+  userId: ID!
+}
+
+input DeletePayment {
+  id: ID!
+  userId: ID!
+}
+
 input SearchPayments {
   userId: ID!
   productName: String
@@ -45,4 +61,6 @@ extend type Query {
 
 extend type Mutation {
   createPayment(input: NewPayment!): Payment!
+  updatePayment(input: UpdatePayment!): Payment!
+  deletePayment(input: DeletePayment!): Boolean!
 }

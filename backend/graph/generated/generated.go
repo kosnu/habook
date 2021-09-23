@@ -92,7 +92,9 @@ type ComplexityRoot struct {
 		CreatePayment        func(childComplexity int, input model.NewPayment) int
 		CreateUser           func(childComplexity int, input model.NewUser) int
 		DeleteCategory       func(childComplexity int, input model.DeleteCategory) int
+		DeletePayment        func(childComplexity int, input model.DeletePayment) int
 		UpdateCategory       func(childComplexity int, input model.UpdateCategory) int
+		UpdatePayment        func(childComplexity int, input model.UpdatePayment) int
 	}
 
 	PageInfo struct {
@@ -180,6 +182,8 @@ type MutationResolver interface {
 	DeleteCategory(ctx context.Context, input model.DeleteCategory) (*model.Category, error)
 	CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error)
 	CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error)
+	UpdatePayment(ctx context.Context, input model.UpdatePayment) (*model.Payment, error)
+	DeletePayment(ctx context.Context, input model.DeletePayment) (bool, error)
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
 }
 type PaymentResolver interface {
@@ -450,6 +454,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteCategory(childComplexity, args["input"].(model.DeleteCategory)), true
 
+	case "Mutation.deletePayment":
+		if e.complexity.Mutation.DeletePayment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deletePayment_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeletePayment(childComplexity, args["input"].(model.DeletePayment)), true
+
 	case "Mutation.updateCategory":
 		if e.complexity.Mutation.UpdateCategory == nil {
 			break
@@ -461,6 +477,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateCategory(childComplexity, args["input"].(model.UpdateCategory)), true
+
+	case "Mutation.updatePayment":
+		if e.complexity.Mutation.UpdatePayment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePayment_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePayment(childComplexity, args["input"].(model.UpdatePayment)), true
 
 	case "PageInfo.endCursor":
 		if e.complexity.PageInfo.EndCursor == nil {
@@ -884,7 +912,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/category.graphql", Input: `type Category implements Node {
+	{Name: "../schema/category.graphql", Input: `type Category implements Node {
   pk: Int!
   id: ID!
   name: String!
@@ -937,7 +965,7 @@ extend type Mutation {
   deleteCategory(input: DeleteCategory!): Category!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/income_history.graphql", Input: `type IncomeHistory {
+	{Name: "../schema/income_history.graphql", Input: `type IncomeHistory {
   pk: Int!
   id: ID!
   income: Int!
@@ -966,7 +994,7 @@ extend type Mutation {
   createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/pagination.graphql", Input: `type PageInfo {
+	{Name: "../schema/pagination.graphql", Input: `type PageInfo {
   endCursor: String!
   hasNextPage: Boolean!
 }
@@ -990,7 +1018,7 @@ input PaginationInput {
   after: String
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/payment.graphql", Input: `type Payment implements Node{
+	{Name: "../schema/payment.graphql", Input: `type Payment implements Node{
   pk: Int!
   id: ID!
   taxIncluded: Boolean!
@@ -1024,6 +1052,22 @@ input NewPayment {
   userId: ID!
 }
 
+input UpdatePayment {
+  id: ID!
+  taxIncluded: Boolean!
+  paidOn: String!
+  numberOfProduct: Int!
+  amount: Int!
+  productName: String!
+  categoryId: ID!
+  userId: ID!
+}
+
+input DeletePayment {
+  id: ID!
+  userId: ID!
+}
+
 input SearchPayments {
   userId: ID!
   productName: String
@@ -1037,9 +1081,11 @@ extend type Query {
 
 extend type Mutation {
   createPayment(input: NewPayment!): Payment!
+  updatePayment(input: UpdatePayment!): Payment!
+  deletePayment(input: DeletePayment!): Boolean!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/product.graphql", Input: `type Product implements Node{
+	{Name: "../schema/product.graphql", Input: `type Product implements Node{
   pk: Int!
   id: ID!
   name: String!
@@ -1067,7 +1113,7 @@ extend type Query {
   products(input: SearchProduct, page: PaginationInput!): ProductConnection!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/schema.graphql", Input: `type ExpenseHistory {
+	{Name: "../schema/schema.graphql", Input: `type ExpenseHistory {
   pk: Int!
   id: ID!
   expense: Int!
@@ -1090,7 +1136,7 @@ type Mutation {
   createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/user.graphql", Input: `type User {
+	{Name: "../schema/user.graphql", Input: `type User {
   pk: Int!
   id: ID!
   name: String!
@@ -1209,6 +1255,21 @@ func (ec *executionContext) field_Mutation_deleteCategory_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deletePayment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.DeletePayment
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNDeletePayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐDeletePayment(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1216,6 +1277,21 @@ func (ec *executionContext) field_Mutation_updateCategory_args(ctx context.Conte
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUpdateCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUpdateCategory(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePayment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdatePayment
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNUpdatePayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUpdatePayment(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2509,6 +2585,90 @@ func (ec *executionContext) _Mutation_createPayment(ctx context.Context, field g
 	res := resTmp.(*model.Payment)
 	fc.Result = res
 	return ec.marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_updatePayment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_updatePayment_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePayment(rctx, args["input"].(model.UpdatePayment))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Payment)
+	fc.Result = res
+	return ec.marshalNPayment2ᚖgithubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐPayment(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_deletePayment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deletePayment_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeletePayment(rctx, args["input"].(model.DeletePayment))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5331,6 +5491,34 @@ func (ec *executionContext) unmarshalInputDeleteCategory(ctx context.Context, ob
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputDeletePayment(ctx context.Context, obj interface{}) (model.DeletePayment, error) {
+	var it model.DeletePayment
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewCategory(ctx context.Context, obj interface{}) (model.NewCategory, error) {
 	var it model.NewCategory
 	var asMap = obj.(map[string]interface{})
@@ -5686,6 +5874,82 @@ func (ec *executionContext) unmarshalInputUpdateCategory(ctx context.Context, ob
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdatePayment(ctx context.Context, obj interface{}) (model.UpdatePayment, error) {
+	var it model.UpdatePayment
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "taxIncluded":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taxIncluded"))
+			it.TaxIncluded, err = ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "paidOn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("paidOn"))
+			it.PaidOn, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numberOfProduct":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("numberOfProduct"))
+			it.NumberOfProduct, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "amount":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
+			it.Amount, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "productName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productName"))
+			it.ProductName, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "categoryId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryId"))
+			it.CategoryID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6086,6 +6350,16 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "createPayment":
 			out.Values[i] = ec._Mutation_createPayment(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updatePayment":
+			out.Values[i] = ec._Mutation_updatePayment(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "deletePayment":
+			out.Values[i] = ec._Mutation_deletePayment(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6978,6 +7252,11 @@ func (ec *executionContext) unmarshalNDeleteCategory2githubᚗcomᚋkosnuᚋhabo
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNDeletePayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐDeletePayment(ctx context.Context, v interface{}) (model.DeletePayment, error) {
+	res, err := ec.unmarshalInputDeletePayment(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNExpenseHistory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐExpenseHistory(ctx context.Context, sel ast.SelectionSet, v model.ExpenseHistory) graphql.Marshaler {
 	return ec._ExpenseHistory(ctx, sel, &v)
 }
@@ -7297,6 +7576,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 
 func (ec *executionContext) unmarshalNUpdateCategory2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUpdateCategory(ctx context.Context, v interface{}) (model.UpdateCategory, error) {
 	res, err := ec.unmarshalInputUpdateCategory(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePayment2githubᚗcomᚋkosnuᚋhabookᚑbackendᚋgraphᚋmodelᚐUpdatePayment(ctx context.Context, v interface{}) (model.UpdatePayment, error) {
+	res, err := ec.unmarshalInputUpdatePayment(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

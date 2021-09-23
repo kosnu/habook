@@ -1,13 +1,35 @@
-import { List, Typography } from "@material-ui/core"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@material-ui/core"
 import React from "react"
-import { usePaymentsQueryQuery } from "../../../../graphql/types"
+import {
+  Payments_PaymentFragmentFragment,
+  usePaymentsQueryQuery,
+} from "../../../../graphql/types"
+import { LoadingCircular } from "../../../common/components/LoadingCircular"
+import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
+import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
+import { usePayment } from "../hooks/usePayment"
+import { usePaymentFormModal } from "../hooks/usePaymentFormModal"
+import { usePaymentOperationMenu } from "../hooks/usePaymentOperationMenu"
+import { PaymentFormModal } from "./PaymentFormModal"
 import { PaymentItem } from "./PaymentItem"
+import { PaymentOperationMenu } from "./PaymentOperationMenu"
 
 export function PaymentList() {
   const { userId } = useLoginUser()
+  const { menuAnchorEl, openMenu, closeMenu } = usePaymentOperationMenu()
+  const { selectPayment, deletePayment } = usePayment()
+  const { openModal } = usePaymentFormModal()
 
-  const { data, loading, error } = usePaymentsQueryQuery({
+  const { data, loading, error, refetch } = usePaymentsQueryQuery({
     variables: { userId: userId, limit: 30 },
   })
 
@@ -24,12 +46,67 @@ export function PaymentList() {
     .filter((value): value is NonNullable<typeof value> => !!value)
     .map((edge) => edge.node)
 
+  function handleMenuButtonClick(
+    event: React.MouseEvent<HTMLButtonElement>,
+    payment: Payments_PaymentFragmentFragment,
+  ) {
+    openMenu(event)
+    selectPayment(payment)
+  }
+
+  function handleMenuClose() {
+    closeMenu()
+  }
+
+  function handleEditButtonClick() {
+    openModal()
+    closeMenu()
+  }
+
+  async function handleDeleteButtonClick() {
+    await deletePayment()
+    await refetch()
+    closeMenu()
+  }
+
   // TODO: ページネーションをできるようにする
   return (
-    <List>
-      {payments.map((payment, index) => {
-        return <PaymentItem key={index} payment={payment} />
-      })}
-    </List>
+    <>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>商品名</TableCell>
+              <TableCell align="right">カテゴリー</TableCell>
+              <TableCell align="right">値段</TableCell>
+              <TableCell align="right">個数</TableCell>
+              <TableCell align="right">購入日</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {payments.map((payment, index) => {
+              return (
+                <PaymentItem
+                  key={index}
+                  payment={payment}
+                  onMenuButtonClick={handleMenuButtonClick}
+                />
+              )
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <SuccessSnackBar />
+      <WarningSnackBar />
+      <LoadingCircular loading={loading} />
+      <PaymentFormModal />
+      <PaymentOperationMenu
+        anchorElement={menuAnchorEl}
+        onMenuClose={handleMenuClose}
+        onEditButtonClick={handleEditButtonClick}
+        onDeleteButtonClick={handleDeleteButtonClick}
+      />
+    </>
   )
 }
