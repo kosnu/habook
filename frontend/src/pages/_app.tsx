@@ -5,10 +5,10 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers"
 import type { AppProps } from "next/app"
 import React from "react"
 import { RecoilRoot } from "recoil"
-import "../../styles/globals.css"
 import { client } from "../graphql/apollo"
 import { Header } from "../ui/navigation/components/Header"
 import { theme } from "../ui/theme"
+import "../ui/theme/styles/globals.css"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
