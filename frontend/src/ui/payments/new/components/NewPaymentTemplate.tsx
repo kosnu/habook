@@ -3,15 +3,15 @@ import { Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
 import { useRecoilValue } from "recoil"
 import { useCreatePaymentMutation } from "../../../../graphql/types"
-import { LoadingCircular } from "../../../common/components/LoadingCircular"
+import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import {
   SuccessSnackBar,
   useSuccessSnackbar,
-} from "../../../common/components/SuccessSnackBar"
+} from "../../../common/components/molecules/SuccessSnackBar"
 import {
   useWarningSnackbar,
   WarningSnackBar,
-} from "../../../common/components/WarningSnackBar"
+} from "../../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { theme } from "../../../theme"
 import { createPaymentParamsSelector } from "../hooks/useCreatePayment"

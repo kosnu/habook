@@ -12,9 +12,9 @@ import {
   Payments_PaymentFragmentFragment,
   usePaymentsQueryQuery,
 } from "../../../../graphql/types"
-import { LoadingCircular } from "../../../common/components/LoadingCircular"
-import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
-import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
+import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
+import { SuccessSnackBar } from "../../../common/components/molecules/SuccessSnackBar"
+import { WarningSnackBar } from "../../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { usePayment } from "../hooks/usePayment"
 import { usePaymentFormModal } from "../hooks/usePaymentFormModal"

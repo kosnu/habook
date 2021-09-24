@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { HomeTemplate } from "src/ui/home/components/HomeTemplate"
+import { HomeTemplate } from "src/ui/home/components/templates/HomeTemplate"
 
 export default function Home() {
   // 仮で置いている値

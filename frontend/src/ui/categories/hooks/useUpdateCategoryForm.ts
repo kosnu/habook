@@ -1,6 +1,6 @@
 import { useUpdateCategoryMutation } from "../../../graphql/types"
-import { useSuccessSnackbar } from "../../common/components/SuccessSnackBar"
-import { useWarningSnackbar } from "../../common/components/WarningSnackBar"
+import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSnackBar"
+import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { useCategory } from "./useCategory"
 import { useCategoryNameForm } from "./useCategoryNameForm"

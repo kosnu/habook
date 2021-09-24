@@ -1,8 +1,8 @@
 import { AppBar, Toolbar } from "@mui/material"
 import React from "react"
-import { AccountMenuButton } from "./AccountMenuButton"
-import { AdditionalMenuButton } from "./AdditionalMenuButton"
-import { HeaderTitle } from "./HeaderTitle"
+import { AccountMenuButton } from "../molecules/AccountMenuButton"
+import { AdditionalMenuButton } from "../molecules/AdditionalMenuButton"
+import { HeaderTitle } from "../molecules/HeaderTitle"
 
 export function Header() {
   return (

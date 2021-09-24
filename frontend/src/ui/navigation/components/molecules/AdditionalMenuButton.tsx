@@ -5,7 +5,7 @@ import {
 import { Button, Menu, MenuItem } from "@mui/material"
 import Link from "next/link"
 import React from "react"
-import { useAdditionalMenu } from "../hooks/useAdditionalMenu"
+import { useAdditionalMenu } from "../../hooks/useAdditionalMenu"
 
 const menuId = "primary-additional-menu"
 

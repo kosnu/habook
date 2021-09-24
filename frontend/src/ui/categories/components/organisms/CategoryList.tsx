@@ -7,7 +7,7 @@ import {
   CategoriesListQueryVariables,
   useCategoriesListQuery,
 } from "../../../../graphql/types"
-import { LoadingCircular } from "../../../common/components/LoadingCircular"
+import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { connectionToNodes } from "../../../common/utils/connectionToNodes"
 import { useCategory } from "../../hooks/useCategory"

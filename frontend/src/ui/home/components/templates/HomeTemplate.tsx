@@ -1,9 +1,9 @@
 import { css } from "@emotion/react"
 import { Grid } from "@mui/material"
 import React from "react"
-import { theme } from "../../theme"
-import { TotalExpense } from "./TotalExpense"
-import { TotalIncome } from "./TotalIncome"
+import { theme } from "../../../theme"
+import { TotalExpense } from "../molecules/TotalExpense"
+import { TotalIncome } from "../molecules/TotalIncome"
 
 interface HomeTemplateProps {
   totalExpense: number

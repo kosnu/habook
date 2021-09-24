@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material"
 import Link from "next/link"
 import React from "react"
-import { LogoIcon } from "../../theme/LogoIcon"
+import { LogoIcon } from "../../../common/components/atoms/LogoIcon"
 
 export function HeaderTitle() {
   return (

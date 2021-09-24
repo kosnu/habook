@@ -8,7 +8,7 @@ import type { AppProps } from "next/app"
 import React from "react"
 import { RecoilRoot } from "recoil"
 import { client } from "../graphql/apollo"
-import { Header } from "../ui/navigation/components/Header"
+import { Header } from "../ui/navigation/components/organisms/Header"
 import { theme } from "../ui/theme"
 import "../ui/theme/styles/globals.css"
 

@@ -1,7 +1,7 @@
 import { css } from "@emotion/react"
 import { Backdrop, CircularProgress } from "@mui/material"
 import React from "react"
-import { theme } from "../../theme"
+import { theme } from "../../../theme"
 
 interface LoadingCircularProps {
   loading: boolean

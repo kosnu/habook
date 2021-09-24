@@ -19,7 +19,7 @@ export function TotalIncome({ income }: TotalIncomeProps) {
             })}
           </Typography>
         </CardContent>
-      </Card>{" "}
+      </Card>
     </>
   )
 }
