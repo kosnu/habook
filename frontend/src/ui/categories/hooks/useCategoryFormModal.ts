@@ -1,4 +1,4 @@
-import { useBool } from "../../../common/hooks/useBool"
+import { useBool } from "../../common/hooks/useBool"
 
 const categoryFormModalKey = "category-form-modal-key"
 

@@ -1,18 +1,17 @@
 import { TextField } from "@material-ui/core"
-import React, { useCallback } from "react"
-import { useCategoryNameForm } from "../hooks/useCategoryNameForm"
+import React from "react"
+import { useCategoryNameForm } from "../../hooks/useCategoryNameForm"
 
 export function CategoryNameForm() {
   const { categoryName, validation, changeCategoryName, validateCategoryName } =
     useCategoryNameForm()
 
-  const handleCategoryNameChange = useCallback(
-    (event) => {
-      const name = event.target.value as string
-      changeCategoryName(name)
-    },
-    [changeCategoryName],
-  )
+  function handleCategoryNameChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const name = event.target.value
+    changeCategoryName(name)
+  }
 
   return (
     <>

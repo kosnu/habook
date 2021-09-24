@@ -1,0 +1,32 @@
+fragment Categories_CategoryEdge on CategoryEdge {
+    node {
+        ...Categories_Category
+    }
+}
+
+fragment Categories_CategoryConnection on CategoryConnection {
+    pageInfo {
+        ...PageInfo
+    }
+    edges {
+        ...Categories_CategoryEdge
+    }
+}
+
+query categoriesList(
+    $userId: ID!,
+    $cursor: String,
+) {
+    categories(
+        input: {
+            userId: $userId,
+            enable: true
+        },
+        page: {
+            first: 30,
+            after: $cursor
+        }
+    ) {
+        ...Categories_CategoryConnection
+    }
+}

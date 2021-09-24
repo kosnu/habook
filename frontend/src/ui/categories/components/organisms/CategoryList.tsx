@@ -8,24 +8,22 @@ import {
   useCategoriesListQuery,
 } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/LoadingCircular"
-import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
-import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
-import { useAnchorElement } from "../../../common/hooks/useAnchorElement"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
-import { useCategory } from "../hooks/useCategory"
-import { useCategoryFormModal } from "../hooks/useCategoryFormModal"
+import { connectionToNodes } from "../../../common/utils/connectionToNodes"
+import { useCategory } from "../../hooks/useCategory"
+import { useCategoryFormModal } from "../../hooks/useCategoryFormModal"
+import { useCategoryMenu } from "../../hooks/useCategoryMenu"
+import { CategoryItem } from "../molecules/CategoryItem"
+import { CategoryOperationMenu } from "../molecules/CategoryOperationMenu"
 import { CategoryFormModal } from "./CategoryFormModal"
-import { CategoryItem } from "./CategoryItem"
-import { CategoryOperationMenu } from "./CategoryOperationMenu"
 
 export function CategoryList() {
   const { userId } = useLoginUser()
-  const { anchorEl, setAnchorElement, resetAnchorElement } =
-    useAnchorElement("category-menu")
+  const { menuAnchorEl, openMenu, closeMenu } = useCategoryMenu()
   const { openModal } = useCategoryFormModal()
   const { selectCategory, deleteCategory } = useCategory()
-  const { data, fetchMore, loading, error } = useCategoriesListQuery({
-    variables: { userId: userId, enable: true, limit: 30 },
+  const { data, fetchMore, loading, error, refetch } = useCategoriesListQuery({
+    variables: { userId: userId },
   })
 
   // TODO: データがないときの画面表示を実装する
@@ -37,39 +35,45 @@ export function CategoryList() {
   if (error) return <Typography>Error</Typography>
 
   const pageInfo = data.categories.pageInfo
-  const categories = data.categories.edges
-    .filter((value): value is NonNullable<typeof value> => !!value)
-    .map((edge) => edge.node)
-    .filter((node) => node.enable) // TODO: QueryでもEnable: trueしているので消したい
+  const categories = connectionToNodes(data.categories)
 
   async function handleMoreFetch() {
-    return await fetchMore<CategoriesListQuery, CategoriesListQueryVariables>({
-      variables: {
-        cursor: pageInfo.endCursor,
-      },
-    })
+    try {
+      await fetchMore<CategoriesListQuery, CategoriesListQueryVariables>({
+        variables: {
+          cursor: pageInfo.endCursor,
+        },
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   function handleMenuButtonClick(
     event: React.MouseEvent<HTMLButtonElement>,
     category: Categories_CategoryFragment,
   ) {
-    setAnchorElement(event)
+    openMenu(event)
     selectCategory(category)
   }
 
   function handleMenuClose() {
-    resetAnchorElement()
+    closeMenu()
   }
 
   function handleEditButtonClick() {
     openModal()
-    resetAnchorElement()
+    closeMenu()
   }
 
   async function handleDeleteButtonClick() {
-    await deleteCategory()
-    resetAnchorElement()
+    try {
+      await deleteCategory()
+      await refetch()
+    } catch (e) {
+      console.error(e)
+    }
+    closeMenu()
   }
 
   return (
@@ -92,12 +96,10 @@ export function CategoryList() {
           })}
         </InfiniteScroll>
       </List>
-      <SuccessSnackBar />
-      <WarningSnackBar />
       <LoadingCircular loading={loading} />
       <CategoryFormModal />
       <CategoryOperationMenu
-        anchorElement={anchorEl}
+        anchorElement={menuAnchorEl}
         onMenuClose={handleMenuClose}
         onEditButtonClick={handleEditButtonClick}
         onDeleteButtonClick={handleDeleteButtonClick}

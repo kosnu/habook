@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { NewCategoryTemplate } from "../../../ui/categories/new/components/NewCategoryTemplate"
+import { NewCategoryTemplate } from "../../../ui/categories/components/templates/NewCategoryTemplate"
 
 export default function New() {
   return (

@@ -23,13 +23,13 @@ export type Scalars = {
 
 export type Category = Node & {
   __typename?: "Category"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
+  enable: Scalars["Boolean"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  enable: Scalars["Boolean"]
-  user: User
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type CategoryConnection = Connection & {
@@ -45,8 +45,8 @@ export type CategoryEdge = Edge & {
 }
 
 export type Connection = {
-  pageInfo: PageInfo
   edges: Array<Maybe<Edge>>
+  pageInfo: PageInfo
 }
 
 export type DeleteCategory = {
@@ -66,22 +66,22 @@ export type Edge = {
 
 export type ExpenseHistory = {
   __typename?: "ExpenseHistory"
-  pk: Scalars["Int"]
-  id: Scalars["ID"]
-  expense: Scalars["Int"]
-  user: User
   createdAt: Scalars["String"]
+  expense: Scalars["Int"]
+  id: Scalars["ID"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type IncomeHistory = {
   __typename?: "IncomeHistory"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
   id: Scalars["ID"]
   income: Scalars["Int"]
-  user: User
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type Mutation = {
@@ -149,12 +149,12 @@ export type NewIncomeHistory = {
 }
 
 export type NewPayment = {
-  taxIncluded: Scalars["Boolean"]
-  paidOn: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
-  productName: Scalars["String"]
   categoryId: Scalars["ID"]
+  numberOfProduct: Scalars["Int"]
+  paidOn: Scalars["String"]
+  productName: Scalars["String"]
+  taxIncluded: Scalars["Boolean"]
   userId: Scalars["ID"]
 }
 
@@ -173,23 +173,23 @@ export type PageInfo = {
 }
 
 export type PaginationInput = {
-  first?: Maybe<Scalars["Int"]>
   after?: Maybe<Scalars["String"]>
+  first?: Maybe<Scalars["Int"]>
 }
 
 export type Payment = Node & {
   __typename?: "Payment"
-  pk: Scalars["Int"]
-  id: Scalars["ID"]
-  taxIncluded: Scalars["Boolean"]
-  paidOn: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
-  product: Product
   category: Category
-  user: User
   createdAt: Scalars["String"]
+  id: Scalars["ID"]
+  numberOfProduct: Scalars["Int"]
+  paidOn: Scalars["String"]
+  pk: Scalars["Int"]
+  product: Product
+  taxIncluded: Scalars["Boolean"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type PaymentConnection = Connection & {
@@ -206,10 +206,10 @@ export type PaymentEdge = Edge & {
 
 export type Product = Node & {
   __typename?: "Product"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
 }
 
@@ -285,26 +285,26 @@ export type QueryUserArgs = {
 }
 
 export type SearchCategories = {
-  name?: Maybe<Scalars["String"]>
   enable?: Maybe<Scalars["Boolean"]>
+  name?: Maybe<Scalars["String"]>
   userId: Scalars["ID"]
 }
 
 export type SearchIncomeHistory = {
-  userId: Scalars["ID"]
   beginningOfPeriod?: Maybe<Scalars["String"]>
   endOfPeriod?: Maybe<Scalars["String"]>
+  userId: Scalars["ID"]
 }
 
 export type SearchPayments = {
-  userId: Scalars["ID"]
-  productName?: Maybe<Scalars["String"]>
   categoryId?: Maybe<Scalars["ID"]>
+  productName?: Maybe<Scalars["String"]>
+  userId: Scalars["ID"]
 }
 
 export type SearchProduct = {
-  userId: Scalars["ID"]
   productName?: Maybe<Scalars["String"]>
+  userId: Scalars["ID"]
 }
 
 export type UpdateCategory = {
@@ -314,31 +314,50 @@ export type UpdateCategory = {
 }
 
 export type UpdatePayment = {
-  id: Scalars["ID"]
-  taxIncluded: Scalars["Boolean"]
-  paidOn: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
-  productName: Scalars["String"]
   categoryId: Scalars["ID"]
+  id: Scalars["ID"]
+  numberOfProduct: Scalars["Int"]
+  paidOn: Scalars["String"]
+  productName: Scalars["String"]
+  taxIncluded: Scalars["Boolean"]
   userId: Scalars["ID"]
 }
 
 export type User = {
   __typename?: "User"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
+  enable: Scalars["Boolean"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  enable: Scalars["Boolean"]
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+}
+
+export type Categories_CategoryEdgeFragment = {
+  __typename?: "CategoryEdge"
+  node: { __typename: "Category"; id: string; name: string; enable: boolean }
+}
+
+export type Categories_CategoryConnectionFragment = {
+  __typename?: "CategoryConnection"
+  pageInfo: { __typename: "PageInfo"; endCursor: string; hasNextPage: boolean }
+  edges: Array<
+    Maybe<{
+      __typename?: "CategoryEdge"
+      node: {
+        __typename: "Category"
+        id: string
+        name: string
+        enable: boolean
+      }
+    }>
+  >
 }
 
 export type CategoriesListQueryVariables = Exact<{
   userId: Scalars["ID"]
-  enable?: Maybe<Scalars["Boolean"]>
   cursor?: Maybe<Scalars["String"]>
-  limit?: Maybe<Scalars["Int"]>
 }>
 
 export type CategoriesListQuery = {
@@ -346,7 +365,7 @@ export type CategoriesListQuery = {
   categories: {
     __typename?: "CategoryConnection"
     pageInfo: {
-      __typename?: "PageInfo"
+      __typename: "PageInfo"
       endCursor: string
       hasNextPage: boolean
     }
@@ -410,6 +429,12 @@ export type CreateCategoryMutationVariables = Exact<{
 export type CreateCategoryMutation = {
   __typename?: "Mutation"
   createCategory: { __typename?: "Category"; id: string; name: string }
+}
+
+export type PageInfoFragment = {
+  __typename: "PageInfo"
+  endCursor: string
+  hasNextPage: boolean
 }
 
 export type DeletePaymentMutationVariables = Exact<{
@@ -559,6 +584,13 @@ export type ProductsQuery = {
   }
 }
 
+export const PageInfoFragmentDoc = gql`
+  fragment PageInfo on PageInfo {
+    __typename
+    endCursor
+    hasNextPage
+  }
+`
 export const Categories_CategoryFragmentDoc = gql`
   fragment Categories_Category on Category {
     __typename
@@ -566,6 +598,26 @@ export const Categories_CategoryFragmentDoc = gql`
     name
     enable
   }
+`
+export const Categories_CategoryEdgeFragmentDoc = gql`
+  fragment Categories_CategoryEdge on CategoryEdge {
+    node {
+      ...Categories_Category
+    }
+  }
+  ${Categories_CategoryFragmentDoc}
+`
+export const Categories_CategoryConnectionFragmentDoc = gql`
+  fragment Categories_CategoryConnection on CategoryConnection {
+    pageInfo {
+      ...PageInfo
+    }
+    edges {
+      ...Categories_CategoryEdge
+    }
+  }
+  ${PageInfoFragmentDoc}
+  ${Categories_CategoryEdgeFragmentDoc}
 `
 export const Payments_CategoryFragmentFragmentDoc = gql`
   fragment Payments_CategoryFragment on Category {
@@ -600,28 +652,15 @@ export const Payments_PaymentFragmentFragmentDoc = gql`
   ${Payments_ProductFragmentFragmentDoc}
 `
 export const CategoriesListDocument = gql`
-  query categoriesList(
-    $userId: ID!
-    $enable: Boolean
-    $cursor: String
-    $limit: Int
-  ) {
+  query categoriesList($userId: ID!, $cursor: String) {
     categories(
-      input: { userId: $userId, enable: $enable }
-      page: { first: $limit, after: $cursor }
+      input: { userId: $userId, enable: true }
+      page: { first: 30, after: $cursor }
     ) {
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-      edges {
-        node {
-          ...Categories_Category
-        }
-      }
+      ...Categories_CategoryConnection
     }
   }
-  ${Categories_CategoryFragmentDoc}
+  ${Categories_CategoryConnectionFragmentDoc}
 `
 
 /**
@@ -637,9 +676,7 @@ export const CategoriesListDocument = gql`
  * const { data, loading, error } = useCategoriesListQuery({
  *   variables: {
  *      userId: // value for 'userId'
- *      enable: // value for 'enable'
  *      cursor: // value for 'cursor'
- *      limit: // value for 'limit'
  *   },
  * });
  */

@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { CategoryListTemplate } from "../../ui/categories/list/components/CategoryListTemplate"
+import { CategoryListTemplate } from "../../ui/categories/components/templates/CategoryListTemplate"
 
 export default function index() {
   return (

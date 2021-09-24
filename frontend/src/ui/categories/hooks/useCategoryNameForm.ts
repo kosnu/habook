@@ -1,4 +1,3 @@
-import { useCallback } from "react"
 import { atom, useRecoilState, useResetRecoilState } from "recoil"
 
 const updateCategoryNameState = atom<CategoryNameForm>({
@@ -24,21 +23,18 @@ export function useCategoryNameForm() {
   const [state, setState] = useRecoilState(updateCategoryNameState)
   const resetCategoryName = useResetRecoilState(updateCategoryNameState)
 
-  const handleCategoryNameChange = useCallback(
-    (categoryName: string) => {
-      const message =
-        categoryName.length < 2 ? "2文字以上の名前を入力してください" : null
-      setState({
-        categoryName: categoryName,
-        validationMessage: {
-          categoryName: message,
-        },
-      })
-    },
-    [setState],
-  )
+  function handleCategoryNameChange(categoryName: string) {
+    const message =
+      categoryName.length < 2 ? "2文字以上の名前を入力してください" : null
+    setState({
+      categoryName: categoryName,
+      validationMessage: {
+        categoryName: message,
+      },
+    })
+  }
 
-  const handleCategoryNameValidate = useCallback(() => {
+  function handleCategoryNameValidate() {
     setState((currVal) => {
       const message =
         currVal.categoryName.length < 2
@@ -52,7 +48,7 @@ export function useCategoryNameForm() {
         },
       }
     })
-  }, [setState])
+  }
 
   return {
     categoryName: state.categoryName,

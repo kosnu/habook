@@ -5,7 +5,7 @@ import {
   ListItemText,
 } from "@material-ui/core"
 import { MoreVert as MoreVertIcon } from "@material-ui/icons"
-import React, { useCallback } from "react"
+import React from "react"
 import { Categories_CategoryFragment } from "../../../../graphql/types"
 
 interface CategoryItemProps {
@@ -20,12 +20,9 @@ export function CategoryItem({
   category,
   onMenuButtonClick,
 }: CategoryItemProps) {
-  const handleMenuButtonClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      onMenuButtonClick(event, category)
-    },
-    [category, onMenuButtonClick],
-  )
+  function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+    onMenuButtonClick(event, category)
+  }
 
   return (
     <>
