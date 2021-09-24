@@ -8,17 +8,21 @@ import (
 	"strings"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/google/uuid"
 	"github.com/kosnu/habook-backend/dataloader"
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
+
+const CategoryNameValidationMessage = "2文字以上の名前を入力してください"
 
 func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*model.User, error) {
 	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
 	if err != nil {
-		return nil, err
+		return &model.User{}, err
 	}
 	return record, nil
 }
@@ -27,6 +31,11 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 	uuidV4 := uuid.New()
 	id := strings.Replace(uuidV4.String(), "-", "", -1)
 	now := time.Now()
+
+	if len(input.Name) < 2 {
+		graphql.AddError(ctx, gqlerror.Errorf(CategoryNameValidationMessage))
+		return &model.Category{}, nil
+	}
 
 	record := entity.Category{
 		Id:        id,
@@ -38,13 +47,18 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 	}
 
 	if err := r.DB.Create(&record).Error; err != nil {
-		return nil, err
+		return &model.Category{}, err
 	}
 
 	return model.CategoryFromEntity(&record), nil
 }
 
 func (r *mutationResolver) UpdateCategory(ctx context.Context, input model.UpdateCategory) (*model.Category, error) {
+	if len(input.Name) < 2 {
+		graphql.AddError(ctx, gqlerror.Errorf(CategoryNameValidationMessage))
+		return &model.Category{}, nil
+	}
+
 	var record entity.Category
 	err := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID).Update("name", input.Name).Error
 	if err != nil {
@@ -68,7 +82,7 @@ func (r *queryResolver) Category(ctx context.Context, id string) (*model.Categor
 	var record entity.Category
 	// TODO: 検索項目を増やす
 	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
-		return nil, err
+		return &model.Category{}, err
 	}
 
 	return model.CategoryFromEntity(&record), nil
