@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Grid } from "@material-ui/core"
+import { Grid } from "@mui/material"
 import React from "react"
 import { theme } from "../../theme"
 import { TotalExpense } from "./TotalExpense"
@@ -27,6 +27,6 @@ export function HomeTemplate({ totalExpense, totalIncome }: HomeTemplateProps) {
 
 const wrapperStyle = css`
   && {
-    padding: ${theme.spacing(1)}px ${theme.spacing(2)}px;
+    padding: ${theme.spacing(1)} ${theme.spacing(2)};
   }
 `

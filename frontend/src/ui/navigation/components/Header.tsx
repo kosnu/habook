@@ -1,4 +1,4 @@
-import { AppBar, Toolbar } from "@material-ui/core"
+import { AppBar, Toolbar } from "@mui/material"
 import React from "react"
 import { AccountMenuButton } from "./AccountMenuButton"
 import { AdditionalMenuButton } from "./AdditionalMenuButton"

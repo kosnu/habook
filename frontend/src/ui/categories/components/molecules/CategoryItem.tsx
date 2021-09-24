@@ -1,10 +1,10 @@
+import { MoreVert as MoreVertIcon } from "@mui/icons-material"
 import {
   IconButton,
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
-} from "@material-ui/core"
-import { MoreVert as MoreVertIcon } from "@material-ui/icons"
+} from "@mui/material"
 import React from "react"
 import { Categories_CategoryFragment } from "../../../../graphql/types"
 
@@ -33,6 +33,7 @@ export function CategoryItem({
             edge="end"
             aria-label="category-menu-more"
             onClick={handleMenuButtonClick}
+            size="large"
           >
             <MoreVertIcon />
           </IconButton>

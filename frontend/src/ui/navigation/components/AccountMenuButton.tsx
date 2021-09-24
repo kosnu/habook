@@ -1,11 +1,5 @@
-import {
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@material-ui/core"
-import { AccountCircle } from "@material-ui/icons"
+import { AccountCircle } from "@mui/icons-material"
+import { Divider, IconButton, Menu, MenuItem, Typography } from "@mui/material"
 import Link from "next/link"
 import React from "react"
 import { useAccountMenu } from "../hooks/useAccountMenu"
@@ -23,6 +17,7 @@ export function AccountMenuButton() {
         aria-haspopup="true"
         color="primary"
         onClick={openAccountMenu}
+        size="large"
       >
         <AccountCircle />
       </IconButton>

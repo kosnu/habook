@@ -1,6 +1,5 @@
 import { css } from "@emotion/react"
-import { CircularProgress, Paper, TextField } from "@material-ui/core"
-import { Autocomplete } from "@material-ui/lab"
+import { Autocomplete, CircularProgress, Paper, TextField } from "@mui/material"
 import React, { useCallback } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {

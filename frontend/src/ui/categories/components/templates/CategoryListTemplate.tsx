@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Container, Divider, Grid, Typography } from "@material-ui/core"
+import { Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
 import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
@@ -28,6 +28,6 @@ export function CategoryListTemplate() {
 
 const wrapperStyle = css`
   && {
-    padding: ${theme.spacing(3)}px;
+    padding: ${theme.spacing(3)};
   }
 `

@@ -1,4 +1,4 @@
-import { List, Typography } from "@material-ui/core"
+import { List, Typography } from "@mui/material"
 import React from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {

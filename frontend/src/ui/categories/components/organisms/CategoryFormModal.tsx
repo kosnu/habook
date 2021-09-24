@@ -4,7 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-} from "@material-ui/core"
+} from "@mui/material"
 import React from "react"
 import { useCategoryFormModal } from "../../hooks/useCategoryFormModal"
 import { useUpdateCategoryForm } from "../../hooks/useUpdateCategoryForm"

@@ -1,8 +1,8 @@
-import { Button, Menu, MenuItem } from "@material-ui/core"
 import {
   Add as AddIcon,
   ArrowDropDown as ArrowDropDownIcon,
-} from "@material-ui/icons"
+} from "@mui/icons-material"
+import { Button, Menu, MenuItem } from "@mui/material"
 import Link from "next/link"
 import React from "react"
 import { useAdditionalMenu } from "../hooks/useAdditionalMenu"

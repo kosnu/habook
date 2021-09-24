@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Backdrop, CircularProgress } from "@material-ui/core"
+import { Backdrop, CircularProgress } from "@mui/material"
 import React from "react"
 import { theme } from "../../theme"
 

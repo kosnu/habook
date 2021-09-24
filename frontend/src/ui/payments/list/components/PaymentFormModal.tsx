@@ -4,7 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-} from "@material-ui/core"
+} from "@mui/material"
 import React, { useCallback } from "react"
 import { usePayment } from "../hooks/usePayment"
 import { usePaymentFormModal } from "../hooks/usePaymentFormModal"

@@ -1,5 +1,5 @@
-import { IconButton, TableCell, TableRow } from "@material-ui/core"
-import { MoreVert as MoreVertIcon } from "@material-ui/icons"
+import { MoreVert as MoreVertIcon } from "@mui/icons-material"
+import { IconButton, TableCell, TableRow } from "@mui/material"
 import React from "react"
 import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
 import { dateFormatter } from "../../../common/utils/formatter"
@@ -38,6 +38,7 @@ export function PaymentItem({ payment, onMenuButtonClick }: PaymentItemProps) {
             edge="end"
             aria-label="payment-menu-more"
             onClick={handleMenuButtonClick}
+            size="large"
           >
             <MoreVertIcon />
           </IconButton>

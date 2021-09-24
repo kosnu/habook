@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
-import { Button, Container, Divider, Grid, Typography } from "@material-ui/core"
-import { Create as CreateIcon } from "@material-ui/icons"
+import { Create as CreateIcon } from "@mui/icons-material"
+import { Button, Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
 import { SuccessSnackBar } from "../../../common/components/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/WarningSnackBar"
@@ -52,6 +52,6 @@ export function NewCategoryTemplate() {
 
 const wrapperStyle = css`
   && {
-    padding: ${theme.spacing(3)}px;
+    padding: ${theme.spacing(3)};
   }
 `

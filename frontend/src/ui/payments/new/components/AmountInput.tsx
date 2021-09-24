@@ -7,7 +7,7 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@material-ui/core"
+} from "@mui/material"
 import React, { useCallback } from "react"
 import { useCreatePayment } from "../hooks/useCreatePayment"
 
@@ -54,6 +54,7 @@ export function AmountInput() {
             <Select
               labelId="fee-select-label"
               id="fee-select"
+              variant={"standard"}
               value={taxIncluded}
               onChange={handleTaxIncludedSelect}
             >
@@ -66,6 +67,7 @@ export function AmountInput() {
           <TextField
             id="amount-input"
             label="支払い金額"
+            variant={"standard"}
             css={wrapperFormStyle}
             value={amount}
             onChange={handleAmountChange}
@@ -83,6 +85,7 @@ export function AmountInput() {
             <Select
               labelId="number-select-label"
               id="number-select"
+              variant={"standard"}
               value={numberOfProduct}
               onChange={handleNumberOfProductChange}
             >

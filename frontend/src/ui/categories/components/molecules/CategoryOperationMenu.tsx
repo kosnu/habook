@@ -1,4 +1,4 @@
-import { Menu, MenuItem, Typography } from "@material-ui/core"
+import { Menu, MenuItem, Typography } from "@mui/material"
 import React from "react"
 
 interface CategoryOperationMenuProps {

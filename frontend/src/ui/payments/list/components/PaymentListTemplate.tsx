@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Box, Container, Divider, Typography } from "@material-ui/core"
+import { Box, Container, Divider, Typography } from "@mui/material"
 import React from "react"
 import { theme } from "../../../theme"
 import { PaymentList } from "./PaymentList"
@@ -19,6 +19,6 @@ export function PaymentListTemplate() {
 
 const wrapperStyle = css`
   && {
-    padding: ${theme.spacing(3)}px;
+    padding: ${theme.spacing(3)};
   }
 `

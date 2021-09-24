@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Container, Divider, Grid, Typography } from "@material-ui/core"
+import { Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
 import { useRecoilValue } from "recoil"
 import { useCreatePaymentMutation } from "../../../../graphql/types"
@@ -79,6 +79,6 @@ export function NewPaymentTemplate() {
 
 const wrapperStyle = css`
   && {
-    padding: ${theme.spacing(3)}px;
+    padding: ${theme.spacing(3)};
   }
 `

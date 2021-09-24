@@ -5,7 +5,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-} from "@material-ui/core"
+} from "@mui/material"
 import React, { useCallback } from "react"
 import { useCategoriesQuery } from "../../../../graphql/types"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
@@ -39,6 +39,7 @@ export function CategorySelect() {
         <Select
           labelId="category-select-label"
           id="category-select"
+          variant={"standard"}
           value={categoryId}
           onChange={handleChange}
         >

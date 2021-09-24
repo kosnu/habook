@@ -1,5 +1,4 @@
-import { Snackbar } from "@material-ui/core"
-import { Alert } from "@material-ui/lab"
+import { Alert, Snackbar } from "@mui/material"
 import React, { useCallback } from "react"
 import { atom, useRecoilState } from "recoil"
 

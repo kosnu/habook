@@ -1,4 +1,4 @@
-import { TextField } from "@material-ui/core"
+import { TextField } from "@mui/material"
 import React from "react"
 import { useCategoryNameForm } from "../../hooks/useCategoryNameForm"
 
@@ -18,6 +18,7 @@ export function CategoryNameForm() {
       <TextField
         id="category-name-input"
         label="カテゴリー名"
+        variant={"standard"}
         fullWidth
         error={validation.isError}
         value={categoryName}

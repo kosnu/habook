@@ -1,5 +1,5 @@
-import { Button } from "@material-ui/core"
-import { Create as CreateIcon } from "@material-ui/icons"
+import { Create as CreateIcon } from "@mui/icons-material"
+import { Button } from "@mui/material"
 import React from "react"
 
 interface CreatePaymentButtonProps {
@@ -10,8 +10,8 @@ export function CreatePaymentButton({ onClick }: CreatePaymentButtonProps) {
   return (
     <>
       <Button
-        variant="contained"
-        color="primary"
+        variant={"contained"}
+        color={"primary"}
         startIcon={<CreateIcon />}
         onClick={onClick}
       >
