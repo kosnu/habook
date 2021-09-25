@@ -2,10 +2,10 @@ import { atom, useRecoilState } from "recoil"
 import {
   Payments_PaymentFragmentFragment,
   useDeletePaymentMutation,
-} from "../../../../graphql/types"
-import { useSuccessSnackbar } from "../../../common/components/molecules/SuccessSnackBar"
-import { useWarningSnackbar } from "../../../common/components/molecules/WarningSnackBar"
-import { useLoginUser } from "../../../common/hooks/useLoginUser"
+} from "../../../graphql/types"
+import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSnackBar"
+import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
+import { useLoginUser } from "../../common/hooks/useLoginUser"
 
 const selectedPaymentState = atom<Payments_PaymentFragmentFragment | null>({
   key: "selected-payment-state",

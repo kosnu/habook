@@ -6,44 +6,38 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material"
-import React, { useCallback } from "react"
-import { useCreatePayment } from "../hooks/useCreatePayment"
+import React from "react"
+import { useAmountForm } from "../../hooks/useAmountForm"
 
-export function AmountInput() {
+export function AmountForm() {
   const {
-    amount,
     taxIncluded,
+    amount,
     numberOfProduct,
-    onAmountChange,
-    onTaxIncludedSelect,
-    onNumberOfProductSelect,
-  } = useCreatePayment()
+    changeTaxIncluded,
+    changeAmount,
+    changeNumberOfProduct,
+  } = useAmountForm()
 
-  const handleAmountChange = useCallback(
-    (event) => {
-      const amount: number = event.target.value
-      if (!isNaN(amount)) {
-        onAmountChange(Number(amount))
-      }
-    },
-    [onAmountChange],
-  )
+  function handleTaxIncludedSelect(event: SelectChangeEvent) {
+    const value = Boolean(parseInt(event.target.value))
+    changeTaxIncluded(value)
+  }
 
-  const handleTaxIncludedSelect = useCallback(
-    (event) => {
-      onTaxIncludedSelect(event.target.value)
-    },
-    [onTaxIncludedSelect],
-  )
+  function handleAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const amount = parseInt(event.target.value)
+    if (!isNaN(amount)) {
+      changeAmount(amount)
+    }
+  }
 
-  const handleNumberOfProductChange = useCallback(
-    (event) => {
-      onNumberOfProductSelect(event.target.value)
-    },
-    [onNumberOfProductSelect],
-  )
+  function handleNumberOfProductChange(event: SelectChangeEvent) {
+    const value = Number(event.target.value)
+    changeNumberOfProduct(value)
+  }
 
   return (
     <>
@@ -55,11 +49,11 @@ export function AmountInput() {
               labelId="fee-select-label"
               id="fee-select"
               variant={"standard"}
-              value={taxIncluded}
+              value={Number(taxIncluded).toString()}
               onChange={handleTaxIncludedSelect}
             >
-              <MenuItem value={1}>税込</MenuItem>
-              <MenuItem value={0}>税抜</MenuItem>
+              <MenuItem value={"1"}>税込</MenuItem>
+              <MenuItem value={"0"}>税抜</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -86,15 +80,15 @@ export function AmountInput() {
               labelId="number-select-label"
               id="number-select"
               variant={"standard"}
-              value={numberOfProduct}
+              value={numberOfProduct.toString()}
               onChange={handleNumberOfProductChange}
             >
-              {Array.from(Array(10).keys()).map((num, index) => {
-                const valueNumber = num + 1
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, index) => {
+                const value = num.toString()
 
                 return (
-                  <MenuItem key={index} value={valueNumber}>
-                    {valueNumber}
+                  <MenuItem key={index} value={value}>
+                    {value}
                   </MenuItem>
                 )
               })}

@@ -1,5 +1,5 @@
 import React from "react"
-import { useAnchorElement } from "../../../common/hooks/useAnchorElement"
+import { useAnchorElement } from "../../common/hooks/useAnchorElement"
 
 export function usePaymentOperationMenu() {
   const { anchorEl, setAnchorElement, resetAnchorElement } =

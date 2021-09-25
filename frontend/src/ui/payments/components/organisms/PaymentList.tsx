@@ -16,12 +16,12 @@ import { LoadingCircular } from "../../../common/components/atoms/LoadingCircula
 import { SuccessSnackBar } from "../../../common/components/molecules/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
-import { usePayment } from "../hooks/usePayment"
-import { usePaymentFormModal } from "../hooks/usePaymentFormModal"
-import { usePaymentOperationMenu } from "../hooks/usePaymentOperationMenu"
+import { usePayment } from "../../hooks/usePayment"
+import { usePaymentFormModal } from "../../hooks/usePaymentFormModal"
+import { usePaymentOperationMenu } from "../../hooks/usePaymentOperationMenu"
 import { PaymentFormModal } from "./PaymentFormModal"
-import { PaymentItem } from "./PaymentItem"
-import { PaymentOperationMenu } from "./PaymentOperationMenu"
+import { PaymentItem } from "../molecules/PaymentItem"
+import { PaymentOperationMenu } from "../molecules/PaymentOperationMenu"
 
 export function PaymentList() {
   const { userId } = useLoginUser()

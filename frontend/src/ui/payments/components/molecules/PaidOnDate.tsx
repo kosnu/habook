@@ -2,18 +2,19 @@ import { DatePicker } from "@mui/lab"
 import { TextField } from "@mui/material"
 
 import React from "react"
-import { useCreatePayment } from "../hooks/useCreatePayment"
+import { usePaidOnDate } from "../../hooks/usePaidOnDate"
 
 export function PaidOnDate() {
-  const { paidOnDate, onPaidOnDateChange } = useCreatePayment()
+  const { paidOnDate, changePaidOnDate } = usePaidOnDate()
 
   return (
     <>
       <DatePicker
         label="支払日"
-        inputFormat={"yyyy/MM/dd"}
+        mask="____/__/__"
+        inputFormat="yyyy/MM/dd"
         value={paidOnDate}
-        onChange={onPaidOnDateChange}
+        onChange={changePaidOnDate}
         renderInput={(params) => <TextField variant={"standard"} {...params} />}
       />
     </>

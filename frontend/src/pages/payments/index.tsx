@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { PaymentListTemplate } from "../../ui/payments/list/components/PaymentListTemplate"
+import { PaymentListTemplate } from "../../ui/payments/components/templates/PaymentListTemplate"
 
 export default function index() {
   return (

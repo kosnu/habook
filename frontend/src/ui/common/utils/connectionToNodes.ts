@@ -9,9 +9,11 @@ interface Connection<Node extends GeneratedNode> {
 }
 
 export function connectionToNodes<Node extends GeneratedNode>(
-  connection: Connection<Node>,
+  connection: Connection<Node> | undefined,
 ): Array<Node> {
-  return connection.edges
-    .filter((value): value is NonNullable<typeof value> => value !== null)
-    .map((edge) => edge.node)
+  return (
+    connection?.edges
+      .filter((value): value is NonNullable<typeof value> => value !== null)
+      .map((edge) => edge.node) ?? []
+  )
 }

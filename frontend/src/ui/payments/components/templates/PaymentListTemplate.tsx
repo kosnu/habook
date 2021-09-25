@@ -2,7 +2,7 @@ import { css } from "@emotion/react"
 import { Box, Container, Divider, Typography } from "@mui/material"
 import React from "react"
 import { theme } from "../../../theme"
-import { PaymentList } from "./PaymentList"
+import { PaymentList } from "../organisms/PaymentList"
 
 export function PaymentListTemplate() {
   return (

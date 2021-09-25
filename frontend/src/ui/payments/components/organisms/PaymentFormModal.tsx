@@ -6,8 +6,8 @@ import {
   DialogTitle,
 } from "@mui/material"
 import React, { useCallback } from "react"
-import { usePayment } from "../hooks/usePayment"
-import { usePaymentFormModal } from "../hooks/usePaymentFormModal"
+import { usePayment } from "../../hooks/usePayment"
+import { usePaymentFormModal } from "../../hooks/usePaymentFormModal"
 
 export function PaymentFormModal() {
   const { open, closeModal } = usePaymentFormModal()

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
 import { Autocomplete, CircularProgress, Paper, TextField } from "@mui/material"
-import React, { useCallback } from "react"
+import React from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {
   ProductsQuery,
@@ -9,30 +9,25 @@ import {
 } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
-import { useCreatePayment } from "../hooks/useCreatePayment"
+import { connectionToNodes } from "../../../common/utils/connectionToNodes"
+import { useProductNameAutocomplete } from "../../hooks/useProductNameAutocomplete"
 
 export function ProductNameAutocomplete() {
   const { userId } = useLoginUser()
-  const { productName, onProductNameChange } = useCreatePayment()
+  const { productName, changeProductName } = useProductNameAutocomplete()
   const { data, loading, error, fetchMore } = useProductsQuery({
     variables: { userId: userId, productName: productName, limit: 30 },
     fetchPolicy: "network-only",
   })
 
-  const products =
-    data?.products.edges
-      .filter((value): value is NonNullable<typeof value> => value !== null)
-      .map((edge) => edge.node) ?? []
+  const products = connectionToNodes(data?.products)
   const pageInfo = data?.products.pageInfo
 
-  const handleInputChange = useCallback(
-    (_: React.ChangeEvent<unknown>, value: string) => {
-      onProductNameChange(value)
-    },
-    [onProductNameChange],
-  )
+  function handleInputChange(_: React.ChangeEvent<unknown>, value: string) {
+    changeProductName(value)
+  }
 
-  const handleMoreFetch = useCallback(async () => {
+  async function handleMoreFetch() {
     try {
       await fetchMore<ProductsQuery, ProductsQueryVariables>({
         variables: {
@@ -42,7 +37,7 @@ export function ProductNameAutocomplete() {
     } catch (e) {
       console.error(e)
     }
-  }, [fetchMore, pageInfo?.endCursor])
+  }
 
   return (
     <>

@@ -5,32 +5,26 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
 } from "@mui/material"
-import React, { useCallback } from "react"
+import React from "react"
 import { useCategoriesQuery } from "../../../../graphql/types"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
-import { useCreatePayment } from "../hooks/useCreatePayment"
+import { connectionToNodes } from "../../../common/utils/connectionToNodes"
+import { useCategorySelect } from "../../hooks/useCategorySelect"
 
 export function CategorySelect() {
   const { userId } = useLoginUser()
-  const { categoryId, onCategoryIdChange } = useCreatePayment()
+  const { categoryId, changeCategory } = useCategorySelect()
   const { data, loading } = useCategoriesQuery({
     variables: { userId: userId, enable: true },
   })
 
-  const categories =
-    (data?.categories &&
-      data.categories.edges
-        .filter((value): value is NonNullable<typeof value> => !!value)
-        .map((edge) => edge.node)) ??
-    []
+  const categories = connectionToNodes(data?.categories)
 
-  const handleChange = useCallback(
-    (event) => {
-      onCategoryIdChange(event.target.value)
-    },
-    [onCategoryIdChange],
-  )
+  function handleChange(event: SelectChangeEvent) {
+    changeCategory(event.target.value as string)
+  }
 
   return (
     <>
@@ -45,7 +39,7 @@ export function CategorySelect() {
         >
           {loading && <CircularProgress />}
           {categories.length === 0 && (
-            <MenuItem value={0}>選択肢がありません</MenuItem>
+            <MenuItem value={""}>選択肢がありません</MenuItem>
           )}
           {categories.map((category, index) => {
             return (

@@ -1,4 +1,4 @@
-import { useBool } from "../../../common/hooks/useBool"
+import { useBool } from "../../common/hooks/useBool"
 
 const paymentFormModalKey = "payment-form-modal-key"
 
