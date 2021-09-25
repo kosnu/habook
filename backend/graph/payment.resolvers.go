@@ -8,30 +8,52 @@ import (
 	"strings"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/google/uuid"
 	"github.com/kosnu/habook-backend/dataloader"
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
 	"github.com/kosnu/habook-backend/lib"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gorm.io/gorm"
 )
+
+const ProductNameValidationMessage = "商品名を入力してください"
+const CategoryValidationMessage = "カテゴリーを選択してください"
 
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
 	uuidV4 := uuid.New()
 	paymentId := strings.Replace(uuidV4.String(), "-", "", -1)
 	productId := strings.Replace(uuidV4.String(), "-", "", -1)
+	paidOn, err := lib.StringToTime(input.PaidOn)
+	if err != nil {
+		return &model.Payment{}, err
+	}
 	now := time.Now()
+
+	if len(input.ProductName) <= 0 {
+		graphql.AddError(ctx, gqlerror.Errorf(ProductNameValidationMessage))
+		return &model.Payment{}, nil
+	}
+
+	if len(input.CategoryID) <= 0 {
+		graphql.AddError(ctx, gqlerror.Errorf(CategoryValidationMessage))
+		return &model.Payment{}, nil
+	}
+
+	var category *entity.Category
+	err = r.DB.Find(&category, "id = ? AND user_id = ?", input.CategoryID, input.UserID).Error
+	if err != nil {
+		graphql.AddError(ctx, gqlerror.Errorf(CategoryValidationMessage))
+		return &model.Payment{}, nil
+	}
 
 	var record entity.Payment
 	// TODO: paymentsに紐づくproductsを検索
-	err := r.DB.Transaction(func(tx *gorm.DB) error {
+	err = r.DB.Transaction(func(tx *gorm.DB) error {
 		var product *entity.Product
 		err := r.DB.Where(&entity.Product{Name: input.ProductName}).Attrs(&entity.Product{Id: productId, CreatedAt: now, UpdatedAt: now}).FirstOrCreate(&product).Error
-		if err != nil {
-			return err
-		}
-		paidOn, err := lib.StringToTime(input.PaidOn)
 		if err != nil {
 			return err
 		}
@@ -56,7 +78,7 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 	})
 
 	if err != nil {
-		return nil, err
+		return &model.Payment{}, err
 	}
 
 	return model.PaymentFromEntity(&record), nil
@@ -98,7 +120,7 @@ func (r *mutationResolver) DeletePayment(ctx context.Context, input model.Delete
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
 	record, err := dataloader.For(ctx).ProductById.Load(obj.ProductID)
 	if err != nil {
-		return nil, err
+		return &model.Product{}, err
 	}
 	return record, nil
 }
@@ -114,7 +136,7 @@ func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*mo
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
 	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
 	if err != nil {
-		return nil, err
+		return &model.User{}, err
 	}
 	return record, nil
 }
@@ -122,7 +144,7 @@ func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.
 func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
 	var record entity.Payment
 	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
-		return nil, err
+		return &model.Payment{}, err
 	}
 
 	return model.PaymentFromEntity(&record), nil
