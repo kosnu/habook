@@ -64,8 +64,12 @@ export function PaymentList() {
   }
 
   async function handleDeleteButtonClick() {
-    await deletePayment()
-    await refetch()
+    try {
+      await deletePayment()
+      await refetch()
+    } catch (e) {
+      console.error(e)
+    }
     closeMenu()
   }
 

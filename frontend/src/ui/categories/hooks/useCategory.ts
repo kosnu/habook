@@ -1,3 +1,4 @@
+import { ApolloError } from "@apollo/client"
 import { atom, useRecoilState } from "recoil"
 import {
   Categories_CategoryFragment,
@@ -35,7 +36,10 @@ export function useCategory() {
         openSuccessSnackbar("カテゴリーを削除しました")
       }
     } catch (e) {
-      openWarningSnackbar(e.message)
+      console.error(e)
+      if (e instanceof ApolloError) {
+        openWarningSnackbar(e.message)
+      }
     }
   }
 

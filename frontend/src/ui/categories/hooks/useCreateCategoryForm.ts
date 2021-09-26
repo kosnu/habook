@@ -1,3 +1,4 @@
+import { ApolloError } from "@apollo/client"
 import { useCreateCategoryMutation } from "../../../graphql/types"
 import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSnackBar"
 import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
@@ -32,7 +33,10 @@ export function useCreateCategoryForm() {
       openSuccessSnackbar("カテゴリーが作成できました")
       resetForm()
     } catch (e) {
-      openWarningSnackbar(e.message)
+      console.error(e)
+      if (e instanceof ApolloError) {
+        openWarningSnackbar(e.message)
+      }
     }
   }
 
