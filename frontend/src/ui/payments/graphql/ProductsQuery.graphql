@@ -1,4 +1,4 @@
-query products(
+query productsAutocomplete(
     $userId: ID!
     $productName: String
     $cursor: String,
@@ -15,14 +15,12 @@ query products(
         }
     ) {
         pageInfo {
-            endCursor
-            hasNextPage
+            ...PageInfo
         }
         edges {
             cursor
             node {
-                id
-                name
+                ...Payments_Product
             }
         }
     }

@@ -17,7 +17,7 @@ export function CategorySelect() {
   const { userId } = useLoginUser()
   const { categoryId, changeCategory } = useCategorySelect()
   const { data, loading } = useCategoriesQuery({
-    variables: { userId: userId, enable: true },
+    variables: { userId: userId },
   })
 
   const categories = connectionToNodes(data?.categories)

@@ -3,9 +3,9 @@ import { Autocomplete, CircularProgress, Paper, TextField } from "@mui/material"
 import React from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {
-  ProductsQuery,
-  ProductsQueryVariables,
-  useProductsQuery,
+  ProductsAutocompleteQuery,
+  ProductsAutocompleteQueryVariables,
+  useProductsAutocompleteQuery,
 } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
@@ -15,7 +15,7 @@ import { useProductNameAutocomplete } from "../../hooks/useProductNameAutocomple
 export function ProductNameAutocomplete() {
   const { userId } = useLoginUser()
   const { productName, changeProductName } = useProductNameAutocomplete()
-  const { data, loading, error, fetchMore } = useProductsQuery({
+  const { data, loading, error, fetchMore } = useProductsAutocompleteQuery({
     variables: { userId: userId, productName: productName, limit: 30 },
     fetchPolicy: "network-only",
   })
@@ -29,7 +29,10 @@ export function ProductNameAutocomplete() {
 
   async function handleMoreFetch() {
     try {
-      await fetchMore<ProductsQuery, ProductsQueryVariables>({
+      await fetchMore<
+        ProductsAutocompleteQuery,
+        ProductsAutocompleteQueryVariables
+      >({
         variables: {
           cursor: pageInfo?.endCursor ?? "",
         },

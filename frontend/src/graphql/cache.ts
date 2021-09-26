@@ -12,6 +12,10 @@ export const cache = new InMemoryCache({
           keyArgs: false,
           merge,
         },
+        payments: {
+          keyArgs: false,
+          merge,
+        },
       },
     },
   },

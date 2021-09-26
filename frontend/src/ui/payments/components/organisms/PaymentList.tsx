@@ -9,8 +9,8 @@ import {
 } from "@mui/material"
 import React from "react"
 import {
-  Payments_PaymentFragmentFragment,
-  usePaymentsQueryQuery,
+  Payments_PaymentFragment,
+  usePaymentsQuery,
 } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import { SuccessSnackBar } from "../../../common/components/molecules/SuccessSnackBar"
@@ -19,9 +19,9 @@ import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { usePayment } from "../../hooks/usePayment"
 import { usePaymentFormModal } from "../../hooks/usePaymentFormModal"
 import { usePaymentOperationMenu } from "../../hooks/usePaymentOperationMenu"
-import { PaymentFormModal } from "./PaymentFormModal"
 import { PaymentItem } from "../molecules/PaymentItem"
 import { PaymentOperationMenu } from "../molecules/PaymentOperationMenu"
+import { PaymentFormModal } from "./PaymentFormModal"
 
 export function PaymentList() {
   const { userId } = useLoginUser()
@@ -29,7 +29,7 @@ export function PaymentList() {
   const { selectPayment, deletePayment } = usePayment()
   const { openModal } = usePaymentFormModal()
 
-  const { data, loading, error, refetch } = usePaymentsQueryQuery({
+  const { data, loading, error, refetch } = usePaymentsQuery({
     variables: { userId: userId, limit: 30 },
   })
 
@@ -48,7 +48,7 @@ export function PaymentList() {
 
   function handleMenuButtonClick(
     event: React.MouseEvent<HTMLButtonElement>,
-    payment: Payments_PaymentFragmentFragment,
+    payment: Payments_PaymentFragment,
   ) {
     openMenu(event)
     selectPayment(payment)

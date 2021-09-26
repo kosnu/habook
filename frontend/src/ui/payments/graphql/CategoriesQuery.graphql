@@ -1,29 +1,25 @@
-query categories(
+query categoriesSelect(
     $userId: ID!,
-    $enable: Boolean,
     $cursor: String,
     $limit: Int
 ) {
     categories(
         input: {
             userId: $userId,
-            enable: $enable
+            enable: true
         },
         page: {
             first: $limit,
             after: $cursor
         }
     ) {
+        pageInfo {
+            ...PageInfo
+        }
         edges {
             cursor
             node {
-                __typename
-                pk
-                id
-                name
-                enable
-                createdAt
-                updatedAt
+                ...Payments_Category
             }
         }
     }

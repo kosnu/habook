@@ -1,0 +1,5 @@
+fragment Payments_Product on Product {
+    __typename
+    id
+    name
+}

@@ -7,7 +7,6 @@ mutation createCategory(
             name: $categoryName
         }
     ) {
-        id
-        name
+        ...Categories_Category
     }
 }

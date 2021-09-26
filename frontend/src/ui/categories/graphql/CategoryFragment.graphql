@@ -3,4 +3,5 @@ fragment Categories_Category on Category {
     id
     name
     enable
+    createdAt
 }

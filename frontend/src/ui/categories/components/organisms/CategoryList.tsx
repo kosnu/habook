@@ -3,9 +3,9 @@ import React from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {
   Categories_CategoryFragment,
-  CategoriesListQuery,
-  CategoriesListQueryVariables,
-  useCategoriesListQuery,
+  CategoriesQuery,
+  CategoriesQueryVariables,
+  useCategoriesQuery,
 } from "../../../../graphql/types"
 import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
@@ -22,7 +22,7 @@ export function CategoryList() {
   const { menuAnchorEl, openMenu, closeMenu } = useCategoryMenu()
   const { openModal } = useCategoryFormModal()
   const { selectCategory, deleteCategory } = useCategory()
-  const { data, fetchMore, loading, error, refetch } = useCategoriesListQuery({
+  const { data, fetchMore, loading, error, refetch } = useCategoriesQuery({
     variables: { userId: userId },
   })
 
@@ -39,7 +39,7 @@ export function CategoryList() {
 
   async function handleMoreFetch() {
     try {
-      await fetchMore<CategoriesListQuery, CategoriesListQueryVariables>({
+      await fetchMore<CategoriesQuery, CategoriesQueryVariables>({
         variables: {
           cursor: pageInfo.endCursor,
         },

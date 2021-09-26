@@ -1,0 +1,5 @@
+fragment Payments_Category on Category {
+    __typename
+    id
+    name
+}
