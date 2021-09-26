@@ -12,12 +12,12 @@ export function AccountMenuButton() {
   return (
     <>
       <IconButton
-        aria-label="account of current user"
-        aria-controls="primary-search-account-menu"
-        aria-haspopup="true"
-        color="primary"
+        aria-label={"account of current user"}
+        aria-controls={"primary-search-account-menu"}
+        aria-haspopup={"true"}
+        color={"primary"}
         onClick={openAccountMenu}
-        size="large"
+        size={"large"}
       >
         <AccountCircle />
       </IconButton>

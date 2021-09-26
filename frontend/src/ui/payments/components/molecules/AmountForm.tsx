@@ -44,10 +44,10 @@ export function AmountForm() {
       <Grid container spacing={2} direction={"row"}>
         <Grid item>
           <FormControl>
-            <InputLabel id="fee-select-label">{""}</InputLabel>
+            <InputLabel id={"fee-select-label"}>{""}</InputLabel>
             <Select
-              labelId="fee-select-label"
-              id="fee-select"
+              labelId={"fee-select-label"}
+              id={"fee-select"}
               variant={"standard"}
               value={Number(taxIncluded).toString()}
               onChange={handleTaxIncludedSelect}
@@ -59,8 +59,8 @@ export function AmountForm() {
         </Grid>
         <Grid item>
           <TextField
-            id="amount-input"
-            label="支払い金額"
+            id={"amount-input"}
+            label={"支払い金額"}
             variant={"standard"}
             css={wrapperFormStyle}
             value={amount}
@@ -68,17 +68,17 @@ export function AmountForm() {
             inputMode={"numeric"}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">¥</InputAdornment>
+                <InputAdornment position={"start"}>¥</InputAdornment>
               ),
             }}
           />
         </Grid>
         <Grid item>
           <FormControl>
-            <InputLabel id="number-select-label">個数</InputLabel>
+            <InputLabel id={"number-select-label"}>個数</InputLabel>
             <Select
-              labelId="number-select-label"
-              id="number-select"
+              labelId={"number-select-label"}
+              id={"number-select"}
               variant={"standard"}
               value={numberOfProduct.toString()}
               onChange={handleNumberOfProductChange}

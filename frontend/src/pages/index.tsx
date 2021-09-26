@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <Head>
         <title>HABook</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
       <HomeTemplate totalExpense={totalExpense} totalIncome={totalIncome} />
     </>

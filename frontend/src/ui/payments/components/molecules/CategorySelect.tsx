@@ -29,10 +29,10 @@ export function CategorySelect() {
   return (
     <>
       <FormControl css={wrapperStyle}>
-        <InputLabel id="category-select-label">カテゴリー</InputLabel>
+        <InputLabel id={"category-select-label"}>カテゴリー</InputLabel>
         <Select
-          labelId="category-select-label"
-          id="category-select"
+          labelId={"category-select-label"}
+          id={"category-select"}
           variant={"standard"}
           value={categoryId}
           onChange={handleChange}

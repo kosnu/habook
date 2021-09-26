@@ -7,7 +7,7 @@ import { HeaderTitle } from "../molecules/HeaderTitle"
 export function Header() {
   return (
     <>
-      <AppBar position="static" color={"default"}>
+      <AppBar position={"static"} color={"default"}>
         <Toolbar>
           <Grid
             container

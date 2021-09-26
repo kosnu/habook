@@ -46,22 +46,22 @@ export function ProductNameAutocomplete() {
     <>
       <Autocomplete
         freeSolo
-        id="combo-box-product-name"
+        id={"combo-box-product-name"}
         options={products.map((product) => product.name)}
         css={wrapperProductNameFormStyle}
         loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
-            label="商品名"
-            variant="standard"
+            label={"商品名"}
+            variant={"standard"}
             error={!!error}
             helperText={error?.message ?? ""}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {loading && <CircularProgress color="primary" size={20} />}
+                  {loading && <CircularProgress color={"primary"} size={20} />}
                   {params.InputProps.endAdornment}
                 </>
               ),

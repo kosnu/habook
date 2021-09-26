@@ -7,7 +7,7 @@ export default function New() {
     <>
       <Head>
         <title>支払いの作成 | HABook</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
       <NewPaymentTemplate />
     </>

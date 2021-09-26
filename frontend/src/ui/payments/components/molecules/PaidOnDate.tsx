@@ -10,9 +10,9 @@ export function PaidOnDate() {
   return (
     <>
       <DatePicker
-        label="支払日"
-        mask="____/__/__"
-        inputFormat="yyyy/MM/dd"
+        label={"支払日"}
+        mask={"____/__/__"}
+        inputFormat={"yyyy/MM/dd"}
         value={paidOnDate}
         onChange={changePaidOnDate}
         renderInput={(params) => <TextField variant={"standard"} {...params} />}

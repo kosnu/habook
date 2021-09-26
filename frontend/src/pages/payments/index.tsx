@@ -7,7 +7,7 @@ export default function index() {
     <>
       <Head>
         <title>支払い一覧 | HABook</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
       <PaymentListTemplate />
     </>

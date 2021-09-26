@@ -30,10 +30,10 @@ export function CategoryItem({
         <ListItemText primary={category.name} />
         <ListItemSecondaryAction>
           <IconButton
-            edge="end"
-            aria-label="category-menu-more"
+            edge={"end"}
+            aria-label={"category-menu-more"}
             onClick={handleMenuButtonClick}
-            size="large"
+            size={"large"}
           >
             <MoreVertIcon />
           </IconButton>

@@ -7,7 +7,7 @@ export default function index() {
     <>
       <Head>
         <title>カテゴリー | HABook</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
       <CategoryListTemplate />
     </>

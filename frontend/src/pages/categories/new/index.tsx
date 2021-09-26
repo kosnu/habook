@@ -7,7 +7,7 @@ export default function New() {
     <>
       <Head>
         <title>カテゴリーの作成 | HABook</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
       <NewCategoryTemplate />
     </>

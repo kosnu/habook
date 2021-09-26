@@ -16,10 +16,9 @@ export function AdditionalMenuButton() {
   return (
     <>
       <Button
-        aria-label="additional-menu-icon"
-        // aria-controls={menuId}
-        aria-haspopup="true"
-        color="primary"
+        aria-label={"additional-menu-icon"}
+        aria-haspopup={"true"}
+        color={"primary"}
         onClick={openAdditionalMenu}
       >
         <AddIcon />

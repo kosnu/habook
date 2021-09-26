@@ -16,8 +16,8 @@ export function CategoryNameForm() {
   return (
     <>
       <TextField
-        id="category-name-input"
-        label="カテゴリー名"
+        id={"category-name-input"}
+        label={"カテゴリー名"}
         variant={"standard"}
         fullWidth
         error={validation.isError}

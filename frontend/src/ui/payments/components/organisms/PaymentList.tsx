@@ -77,10 +77,10 @@ export function PaymentList() {
           <TableHead>
             <TableRow>
               <TableCell>商品名</TableCell>
-              <TableCell align="right">カテゴリー</TableCell>
-              <TableCell align="right">値段</TableCell>
-              <TableCell align="right">個数</TableCell>
-              <TableCell align="right">購入日</TableCell>
+              <TableCell align={"right"}>カテゴリー</TableCell>
+              <TableCell align={"right"}>値段</TableCell>
+              <TableCell align={"right"}>個数</TableCell>
+              <TableCell align={"right"}>購入日</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>

@@ -33,8 +33,8 @@ export function NewCategoryTemplate() {
           </Grid>
           <Grid item>
             <Button
-              variant="contained"
-              color="primary"
+              variant={"contained"}
+              color={"primary"}
               startIcon={<CreateIcon />}
               disabled={invalid}
               onClick={handleCreateButtonClick}

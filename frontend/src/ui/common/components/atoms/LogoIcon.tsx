@@ -16,9 +16,9 @@ export function LogoIcon({
     <svg
       width={width}
       height={height}
-      viewBox="0 0 70 60"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      viewBox={"0 0 70 60"}
+      fill={"none"}
+      xmlns={"http://www.w3.org/2000/svg"}
       {...props}
     >
       <ellipse
@@ -26,26 +26,26 @@ export function LogoIcon({
         cy={53.544}
         rx={33.321}
         ry={6.455}
-        fill="url(#prefix__paint0_linear)"
+        fill={"url(#prefix__paint0_linear)"}
       />
       <rect
         width={62.933}
         height={31.677}
         rx={8}
-        transform="matrix(.86312 -.505 .49502 .86888 0 31.78)"
+        transform={"matrix(.86312 -.505 .49502 .86888 0 31.78)"}
         fill={rectColor}
       />
       <defs>
         <linearGradient
-          id="prefix__paint0_linear"
+          id={"prefix__paint0_linear"}
           x1={22.015}
           y1={54.289}
           x2={67.832}
           y2={54.048}
-          gradientUnits="userSpaceOnUse"
+          gradientUnits={"userSpaceOnUse"}
         >
-          <stop stopColor="#E4BC2D" />
-          <stop offset={1} stopColor="#BC9A1F" />
+          <stop stopColor={"#E4BC2D"} />
+          <stop offset={1} stopColor={"#BC9A1F"} />
         </linearGradient>
       </defs>
     </svg>
