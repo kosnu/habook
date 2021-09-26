@@ -1,0 +1,28 @@
+query payments(
+    $userId: ID!
+    $categoryId: ID
+    $productName: String
+    $cursor: String,
+    $limit: Int
+) {
+    payments(
+        input: {
+            userId: $userId,
+            categoryId: $categoryId,
+            productName: $productName
+        }
+        page: {
+            first: $limit,
+            after: $cursor
+        }
+    ) {
+        pageInfo {
+            ...PageInfo
+        }
+        edges {
+            node {
+                ...Payments_Payment
+            }
+        }
+    }
+}

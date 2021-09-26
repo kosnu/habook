@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { HomeTemplate } from "src/ui/home/components/HomeTemplate"
+import { HomeTemplate } from "src/ui/home/components/templates/HomeTemplate"
 
 export default function Home() {
   // 仮で置いている値
@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <Head>
         <title>HABook</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
       <HomeTemplate totalExpense={totalExpense} totalIncome={totalIncome} />
     </>

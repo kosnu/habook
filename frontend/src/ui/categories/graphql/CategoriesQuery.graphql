@@ -1,0 +1,24 @@
+query categories(
+    $userId: ID!,
+    $cursor: String,
+) {
+    categories(
+        input: {
+            userId: $userId,
+            enable: true
+        },
+        page: {
+            first: 30,
+            after: $cursor
+        }
+    ) {
+        pageInfo {
+            ...PageInfo
+        }
+        edges {
+            node {
+                ...Categories_Category
+            }
+        }
+    }
+}

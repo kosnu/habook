@@ -5,10 +5,12 @@ export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>
+}
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>
+}
 const defaultOptions = {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -21,13 +23,13 @@ export type Scalars = {
 
 export type Category = Node & {
   __typename?: "Category"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
+  enable: Scalars["Boolean"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  enable: Scalars["Boolean"]
-  user: User
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type CategoryConnection = Connection & {
@@ -43,8 +45,8 @@ export type CategoryEdge = Edge & {
 }
 
 export type Connection = {
-  pageInfo: PageInfo
   edges: Array<Maybe<Edge>>
+  pageInfo: PageInfo
 }
 
 export type DeleteCategory = {
@@ -64,22 +66,22 @@ export type Edge = {
 
 export type ExpenseHistory = {
   __typename?: "ExpenseHistory"
-  pk: Scalars["Int"]
-  id: Scalars["ID"]
-  expense: Scalars["Int"]
-  user: User
   createdAt: Scalars["String"]
+  expense: Scalars["Int"]
+  id: Scalars["ID"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type IncomeHistory = {
   __typename?: "IncomeHistory"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
   id: Scalars["ID"]
   income: Scalars["Int"]
-  user: User
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type Mutation = {
@@ -147,12 +149,12 @@ export type NewIncomeHistory = {
 }
 
 export type NewPayment = {
-  taxIncluded: Scalars["Boolean"]
-  paidOn: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
-  productName: Scalars["String"]
   categoryId: Scalars["ID"]
+  numberOfProduct: Scalars["Int"]
+  paidOn: Scalars["String"]
+  productName: Scalars["String"]
+  taxIncluded: Scalars["Boolean"]
   userId: Scalars["ID"]
 }
 
@@ -171,23 +173,23 @@ export type PageInfo = {
 }
 
 export type PaginationInput = {
-  first?: Maybe<Scalars["Int"]>
   after?: Maybe<Scalars["String"]>
+  first?: Maybe<Scalars["Int"]>
 }
 
 export type Payment = Node & {
   __typename?: "Payment"
-  pk: Scalars["Int"]
-  id: Scalars["ID"]
-  taxIncluded: Scalars["Boolean"]
-  paidOn: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
-  product: Product
   category: Category
-  user: User
   createdAt: Scalars["String"]
+  id: Scalars["ID"]
+  numberOfProduct: Scalars["Int"]
+  paidOn: Scalars["String"]
+  pk: Scalars["Int"]
+  product: Product
+  taxIncluded: Scalars["Boolean"]
   updatedAt: Scalars["String"]
+  user: User
 }
 
 export type PaymentConnection = Connection & {
@@ -204,10 +206,10 @@ export type PaymentEdge = Edge & {
 
 export type Product = Node & {
   __typename?: "Product"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
 }
 
@@ -283,26 +285,26 @@ export type QueryUserArgs = {
 }
 
 export type SearchCategories = {
-  name?: Maybe<Scalars["String"]>
   enable?: Maybe<Scalars["Boolean"]>
+  name?: Maybe<Scalars["String"]>
   userId: Scalars["ID"]
 }
 
 export type SearchIncomeHistory = {
-  userId: Scalars["ID"]
   beginningOfPeriod?: Maybe<Scalars["String"]>
   endOfPeriod?: Maybe<Scalars["String"]>
+  userId: Scalars["ID"]
 }
 
 export type SearchPayments = {
-  userId: Scalars["ID"]
-  productName?: Maybe<Scalars["String"]>
   categoryId?: Maybe<Scalars["ID"]>
+  productName?: Maybe<Scalars["String"]>
+  userId: Scalars["ID"]
 }
 
 export type SearchProduct = {
-  userId: Scalars["ID"]
   productName?: Maybe<Scalars["String"]>
+  userId: Scalars["ID"]
 }
 
 export type UpdateCategory = {
@@ -312,39 +314,37 @@ export type UpdateCategory = {
 }
 
 export type UpdatePayment = {
-  id: Scalars["ID"]
-  taxIncluded: Scalars["Boolean"]
-  paidOn: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
-  productName: Scalars["String"]
   categoryId: Scalars["ID"]
+  id: Scalars["ID"]
+  numberOfProduct: Scalars["Int"]
+  paidOn: Scalars["String"]
+  productName: Scalars["String"]
+  taxIncluded: Scalars["Boolean"]
   userId: Scalars["ID"]
 }
 
 export type User = {
   __typename?: "User"
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]
+  enable: Scalars["Boolean"]
   id: Scalars["ID"]
   name: Scalars["String"]
-  enable: Scalars["Boolean"]
-  createdAt: Scalars["String"]
+  pk: Scalars["Int"]
   updatedAt: Scalars["String"]
 }
 
-export type CategoriesListQueryVariables = Exact<{
+export type CategoriesQueryVariables = Exact<{
   userId: Scalars["ID"]
-  enable?: Maybe<Scalars["Boolean"]>
   cursor?: Maybe<Scalars["String"]>
-  limit?: Maybe<Scalars["Int"]>
 }>
 
-export type CategoriesListQuery = {
+export type CategoriesQuery = {
   __typename?: "Query"
   categories: {
     __typename?: "CategoryConnection"
     pageInfo: {
-      __typename?: "PageInfo"
+      __typename: "PageInfo"
       endCursor: string
       hasNextPage: boolean
     }
@@ -356,6 +356,7 @@ export type CategoriesListQuery = {
           id: string
           name: string
           enable: boolean
+          createdAt: string
         }
       }>
     >
@@ -367,6 +368,23 @@ export type Categories_CategoryFragment = {
   id: string
   name: string
   enable: boolean
+  createdAt: string
+}
+
+export type CreateCategoryMutationVariables = Exact<{
+  userId: Scalars["ID"]
+  categoryName: Scalars["String"]
+}>
+
+export type CreateCategoryMutation = {
+  __typename?: "Mutation"
+  createCategory: {
+    __typename: "Category"
+    id: string
+    name: string
+    enable: boolean
+    createdAt: string
+  }
 }
 
 export type DeleteCategoryMutationVariables = Exact<{
@@ -381,6 +399,7 @@ export type DeleteCategoryMutation = {
     id: string
     name: string
     enable: boolean
+    createdAt: string
   }
 }
 
@@ -397,111 +416,36 @@ export type UpdateCategoryMutation = {
     id: string
     name: string
     enable: boolean
+    createdAt: string
   }
 }
 
-export type CreateCategoryMutationVariables = Exact<{
+export type PageInfoFragment = {
+  __typename: "PageInfo"
+  endCursor: string
+  hasNextPage: boolean
+}
+
+export type CategoriesSelectQueryVariables = Exact<{
   userId: Scalars["ID"]
-  categoryName: Scalars["String"]
-}>
-
-export type CreateCategoryMutation = {
-  __typename?: "Mutation"
-  createCategory: { __typename?: "Category"; id: string; name: string }
-}
-
-export type DeletePaymentMutationVariables = Exact<{
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
-}>
-
-export type DeletePaymentMutation = {
-  __typename?: "Mutation"
-  deletePayment: boolean
-}
-
-export type Payments_CategoryFragmentFragment = {
-  __typename: "Category"
-  id: string
-  name: string
-}
-
-export type Payments_ProductFragmentFragment = {
-  __typename: "Product"
-  id: string
-  name: string
-}
-
-export type Payments_PaymentFragmentFragment = {
-  __typename: "Payment"
-  id: string
-  paidOn: string
-  taxIncluded: boolean
-  amount: number
-  numberOfProduct: number
-  category: { __typename: "Category"; id: string; name: string }
-  product: { __typename: "Product"; id: string; name: string }
-}
-
-export type PaymentsQueryQueryVariables = Exact<{
-  userId: Scalars["ID"]
-  categoryId?: Maybe<Scalars["ID"]>
-  productName?: Maybe<Scalars["String"]>
   cursor?: Maybe<Scalars["String"]>
   limit?: Maybe<Scalars["Int"]>
 }>
 
-export type PaymentsQueryQuery = {
+export type CategoriesSelectQuery = {
   __typename?: "Query"
-  payments: {
-    __typename?: "PaymentConnection"
+  categories: {
+    __typename?: "CategoryConnection"
     pageInfo: {
-      __typename?: "PageInfo"
+      __typename: "PageInfo"
       endCursor: string
       hasNextPage: boolean
     }
     edges: Array<
       Maybe<{
-        __typename?: "PaymentEdge"
-        node: {
-          __typename: "Payment"
-          id: string
-          paidOn: string
-          taxIncluded: boolean
-          amount: number
-          numberOfProduct: number
-          category: { __typename: "Category"; id: string; name: string }
-          product: { __typename: "Product"; id: string; name: string }
-        }
-      }>
-    >
-  }
-}
-
-export type CategoriesQueryVariables = Exact<{
-  userId: Scalars["ID"]
-  enable?: Maybe<Scalars["Boolean"]>
-  cursor?: Maybe<Scalars["String"]>
-  limit?: Maybe<Scalars["Int"]>
-}>
-
-export type CategoriesQuery = {
-  __typename?: "Query"
-  categories: {
-    __typename?: "CategoryConnection"
-    edges: Array<
-      Maybe<{
         __typename?: "CategoryEdge"
         cursor: string
-        node: {
-          __typename: "Category"
-          pk: number
-          id: string
-          name: string
-          enable: boolean
-          createdAt: string
-          updatedAt: string
-        }
+        node: { __typename: "Category"; id: string; name: string }
       }>
     >
   }
@@ -520,30 +464,101 @@ export type CreatePaymentMutationVariables = Exact<{
 export type CreatePaymentMutation = {
   __typename?: "Mutation"
   createPayment: {
-    __typename?: "Payment"
+    __typename: "Payment"
     id: string
     paidOn: string
     taxIncluded: boolean
-    numberOfProduct: number
     amount: number
-    category: { __typename?: "Category"; id: string }
-    product: { __typename?: "Product"; name: string }
+    numberOfProduct: number
+    createdAt: string
+    category: { __typename: "Category"; id: string; name: string }
+    product: { __typename: "Product"; id: string; name: string }
   }
 }
 
-export type ProductsQueryVariables = Exact<{
+export type DeletePaymentMutationVariables = Exact<{
+  id: Scalars["ID"]
+  userId: Scalars["ID"]
+}>
+
+export type DeletePaymentMutation = {
+  __typename?: "Mutation"
+  deletePayment: boolean
+}
+
+export type Payments_PaymentFragment = {
+  __typename: "Payment"
+  id: string
+  paidOn: string
+  taxIncluded: boolean
+  amount: number
+  numberOfProduct: number
+  createdAt: string
+  category: { __typename: "Category"; id: string; name: string }
+  product: { __typename: "Product"; id: string; name: string }
+}
+
+export type Payments_CategoryFragment = {
+  __typename: "Category"
+  id: string
+  name: string
+}
+
+export type Payments_ProductFragment = {
+  __typename: "Product"
+  id: string
+  name: string
+}
+
+export type PaymentsQueryVariables = Exact<{
+  userId: Scalars["ID"]
+  categoryId?: Maybe<Scalars["ID"]>
+  productName?: Maybe<Scalars["String"]>
+  cursor?: Maybe<Scalars["String"]>
+  limit?: Maybe<Scalars["Int"]>
+}>
+
+export type PaymentsQuery = {
+  __typename?: "Query"
+  payments: {
+    __typename?: "PaymentConnection"
+    pageInfo: {
+      __typename: "PageInfo"
+      endCursor: string
+      hasNextPage: boolean
+    }
+    edges: Array<
+      Maybe<{
+        __typename?: "PaymentEdge"
+        node: {
+          __typename: "Payment"
+          id: string
+          paidOn: string
+          taxIncluded: boolean
+          amount: number
+          numberOfProduct: number
+          createdAt: string
+          category: { __typename: "Category"; id: string; name: string }
+          product: { __typename: "Product"; id: string; name: string }
+        }
+      }>
+    >
+  }
+}
+
+export type ProductsAutocompleteQueryVariables = Exact<{
   userId: Scalars["ID"]
   productName?: Maybe<Scalars["String"]>
   cursor?: Maybe<Scalars["String"]>
   limit?: Maybe<Scalars["Int"]>
 }>
 
-export type ProductsQuery = {
+export type ProductsAutocompleteQuery = {
   __typename?: "Query"
   products: {
     __typename?: "ProductConnection"
     pageInfo: {
-      __typename?: "PageInfo"
+      __typename: "PageInfo"
       endCursor: string
       hasNextPage: boolean
     }
@@ -551,7 +566,7 @@ export type ProductsQuery = {
       Maybe<{
         __typename?: "ProductEdge"
         cursor: string
-        node: { __typename?: "Product"; id: string; name: string }
+        node: { __typename: "Product"; id: string; name: string }
       }>
     >
   }
@@ -563,54 +578,57 @@ export const Categories_CategoryFragmentDoc = gql`
     id
     name
     enable
+    createdAt
   }
 `
-export const Payments_CategoryFragmentFragmentDoc = gql`
-  fragment Payments_CategoryFragment on Category {
+export const PageInfoFragmentDoc = gql`
+  fragment PageInfo on PageInfo {
+    __typename
+    endCursor
+    hasNextPage
+  }
+`
+export const Payments_CategoryFragmentDoc = gql`
+  fragment Payments_Category on Category {
     __typename
     id
     name
   }
 `
-export const Payments_ProductFragmentFragmentDoc = gql`
-  fragment Payments_ProductFragment on Product {
+export const Payments_ProductFragmentDoc = gql`
+  fragment Payments_Product on Product {
     __typename
     id
     name
   }
 `
-export const Payments_PaymentFragmentFragmentDoc = gql`
-  fragment Payments_PaymentFragment on Payment {
+export const Payments_PaymentFragmentDoc = gql`
+  fragment Payments_Payment on Payment {
     __typename
     id
     category {
-      ...Payments_CategoryFragment
+      ...Payments_Category
     }
     product {
-      ...Payments_ProductFragment
+      ...Payments_Product
     }
     paidOn
     taxIncluded
     amount
     numberOfProduct
+    createdAt
   }
-  ${Payments_CategoryFragmentFragmentDoc}
-  ${Payments_ProductFragmentFragmentDoc}
+  ${Payments_CategoryFragmentDoc}
+  ${Payments_ProductFragmentDoc}
 `
-export const CategoriesListDocument = gql`
-  query categoriesList(
-    $userId: ID!
-    $enable: Boolean
-    $cursor: String
-    $limit: Int
-  ) {
+export const CategoriesDocument = gql`
+  query categories($userId: ID!, $cursor: String) {
     categories(
-      input: { userId: $userId, enable: $enable }
-      page: { first: $limit, after: $cursor }
+      input: { userId: $userId, enable: true }
+      page: { first: 30, after: $cursor }
     ) {
       pageInfo {
-        endCursor
-        hasNextPage
+        ...PageInfo
       }
       edges {
         node {
@@ -619,63 +637,116 @@ export const CategoriesListDocument = gql`
       }
     }
   }
+  ${PageInfoFragmentDoc}
   ${Categories_CategoryFragmentDoc}
 `
 
 /**
- * __useCategoriesListQuery__
+ * __useCategoriesQuery__
  *
- * To run a query within a React component, call `useCategoriesListQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoriesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCategoriesListQuery({
+ * const { data, loading, error } = useCategoriesQuery({
  *   variables: {
  *      userId: // value for 'userId'
- *      enable: // value for 'enable'
  *      cursor: // value for 'cursor'
- *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useCategoriesListQuery(
+export function useCategoriesQuery(
   baseOptions: Apollo.QueryHookOptions<
-    CategoriesListQuery,
-    CategoriesListQueryVariables
+    CategoriesQuery,
+    CategoriesQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<CategoriesListQuery, CategoriesListQueryVariables>(
-    CategoriesListDocument,
+
+  return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(
+    CategoriesDocument,
     options,
   )
 }
 
-export function useCategoriesListLazyQuery(
+export function useCategoriesLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    CategoriesListQuery,
-    CategoriesListQueryVariables
+    CategoriesQuery,
+    CategoriesQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<CategoriesListQuery, CategoriesListQueryVariables>(
-    CategoriesListDocument,
+
+  return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(
+    CategoriesDocument,
     options,
   )
 }
 
-export type CategoriesListQueryHookResult = ReturnType<
-  typeof useCategoriesListQuery
+export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>
+export type CategoriesLazyQueryHookResult = ReturnType<
+  typeof useCategoriesLazyQuery
 >
-export type CategoriesListLazyQueryHookResult = ReturnType<
-  typeof useCategoriesListLazyQuery
+export type CategoriesQueryResult = Apollo.QueryResult<
+  CategoriesQuery,
+  CategoriesQueryVariables
 >
-export type CategoriesListQueryResult = Apollo.QueryResult<
-  CategoriesListQuery,
-  CategoriesListQueryVariables
+export const CreateCategoryDocument = gql`
+  mutation createCategory($userId: ID!, $categoryName: String!) {
+    createCategory(input: { userId: $userId, name: $categoryName }) {
+      ...Categories_Category
+    }
+  }
+  ${Categories_CategoryFragmentDoc}
+`
+export type CreateCategoryMutationFn = Apollo.MutationFunction<
+  CreateCategoryMutation,
+  CreateCategoryMutationVariables
+>
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      categoryName: // value for 'categoryName'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCategoryMutation,
+    CreateCategoryMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useMutation<
+    CreateCategoryMutation,
+    CreateCategoryMutationVariables
+  >(CreateCategoryDocument, options)
+}
+
+export type CreateCategoryMutationHookResult = ReturnType<
+  typeof useCreateCategoryMutation
+>
+export type CreateCategoryMutationResult =
+  Apollo.MutationResult<CreateCategoryMutation>
+export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<
+  CreateCategoryMutation,
+  CreateCategoryMutationVariables
 >
 export const DeleteCategoryDocument = gql`
   mutation deleteCategory($id: ID!, $userId: ID!) {
@@ -715,6 +786,7 @@ export function useDeleteCategoryMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     DeleteCategoryMutation,
     DeleteCategoryMutationVariables
@@ -769,6 +841,7 @@ export function useUpdateCategoryMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables
@@ -784,274 +857,82 @@ export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<
   UpdateCategoryMutation,
   UpdateCategoryMutationVariables
 >
-export const CreateCategoryDocument = gql`
-  mutation createCategory($userId: ID!, $categoryName: String!) {
-    createCategory(input: { userId: $userId, name: $categoryName }) {
-      id
-      name
-    }
-  }
-`
-export type CreateCategoryMutationFn = Apollo.MutationFunction<
-  CreateCategoryMutation,
-  CreateCategoryMutationVariables
->
-
-/**
- * __useCreateCategoryMutation__
- *
- * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
- *   variables: {
- *      userId: // value for 'userId'
- *      categoryName: // value for 'categoryName'
- *   },
- * });
- */
-export function useCreateCategoryMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCategoryMutation,
-    CreateCategoryMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateCategoryMutation,
-    CreateCategoryMutationVariables
-  >(CreateCategoryDocument, options)
-}
-
-export type CreateCategoryMutationHookResult = ReturnType<
-  typeof useCreateCategoryMutation
->
-export type CreateCategoryMutationResult =
-  Apollo.MutationResult<CreateCategoryMutation>
-export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<
-  CreateCategoryMutation,
-  CreateCategoryMutationVariables
->
-export const DeletePaymentDocument = gql`
-  mutation deletePayment($id: ID!, $userId: ID!) {
-    deletePayment(input: { id: $id, userId: $userId })
-  }
-`
-export type DeletePaymentMutationFn = Apollo.MutationFunction<
-  DeletePaymentMutation,
-  DeletePaymentMutationVariables
->
-
-/**
- * __useDeletePaymentMutation__
- *
- * To run a mutation, you first call `useDeletePaymentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeletePaymentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deletePaymentMutation, { data, loading, error }] = useDeletePaymentMutation({
- *   variables: {
- *      id: // value for 'id'
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useDeletePaymentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeletePaymentMutation,
-    DeletePaymentMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    DeletePaymentMutation,
-    DeletePaymentMutationVariables
-  >(DeletePaymentDocument, options)
-}
-
-export type DeletePaymentMutationHookResult = ReturnType<
-  typeof useDeletePaymentMutation
->
-export type DeletePaymentMutationResult =
-  Apollo.MutationResult<DeletePaymentMutation>
-export type DeletePaymentMutationOptions = Apollo.BaseMutationOptions<
-  DeletePaymentMutation,
-  DeletePaymentMutationVariables
->
-export const PaymentsQueryDocument = gql`
-  query paymentsQuery(
-    $userId: ID!
-    $categoryId: ID
-    $productName: String
-    $cursor: String
-    $limit: Int
-  ) {
-    payments(
-      input: {
-        userId: $userId
-        categoryId: $categoryId
-        productName: $productName
-      }
+export const CategoriesSelectDocument = gql`
+  query categoriesSelect($userId: ID!, $cursor: String, $limit: Int) {
+    categories(
+      input: { userId: $userId, enable: true }
       page: { first: $limit, after: $cursor }
     ) {
       pageInfo {
-        endCursor
-        hasNextPage
+        ...PageInfo
       }
-      edges {
-        node {
-          ...Payments_PaymentFragment
-        }
-      }
-    }
-  }
-  ${Payments_PaymentFragmentFragmentDoc}
-`
-
-/**
- * __usePaymentsQueryQuery__
- *
- * To run a query within a React component, call `usePaymentsQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `usePaymentsQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePaymentsQueryQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *      categoryId: // value for 'categoryId'
- *      productName: // value for 'productName'
- *      cursor: // value for 'cursor'
- *      limit: // value for 'limit'
- *   },
- * });
- */
-export function usePaymentsQueryQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    PaymentsQueryQuery,
-    PaymentsQueryQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<PaymentsQueryQuery, PaymentsQueryQueryVariables>(
-    PaymentsQueryDocument,
-    options,
-  )
-}
-
-export function usePaymentsQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PaymentsQueryQuery,
-    PaymentsQueryQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<PaymentsQueryQuery, PaymentsQueryQueryVariables>(
-    PaymentsQueryDocument,
-    options,
-  )
-}
-
-export type PaymentsQueryQueryHookResult = ReturnType<
-  typeof usePaymentsQueryQuery
->
-export type PaymentsQueryLazyQueryHookResult = ReturnType<
-  typeof usePaymentsQueryLazyQuery
->
-export type PaymentsQueryQueryResult = Apollo.QueryResult<
-  PaymentsQueryQuery,
-  PaymentsQueryQueryVariables
->
-export const CategoriesDocument = gql`
-  query categories(
-    $userId: ID!
-    $enable: Boolean
-    $cursor: String
-    $limit: Int
-  ) {
-    categories(
-      input: { userId: $userId, enable: $enable }
-      page: { first: $limit, after: $cursor }
-    ) {
       edges {
         cursor
         node {
-          __typename
-          pk
-          id
-          name
-          enable
-          createdAt
-          updatedAt
+          ...Payments_Category
         }
       }
     }
   }
+  ${PageInfoFragmentDoc}
+  ${Payments_CategoryFragmentDoc}
 `
 
 /**
- * __useCategoriesQuery__
+ * __useCategoriesSelectQuery__
  *
- * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCategoriesSelectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesSelectQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCategoriesQuery({
+ * const { data, loading, error } = useCategoriesSelectQuery({
  *   variables: {
  *      userId: // value for 'userId'
- *      enable: // value for 'enable'
  *      cursor: // value for 'cursor'
  *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useCategoriesQuery(
+export function useCategoriesSelectQuery(
   baseOptions: Apollo.QueryHookOptions<
-    CategoriesQuery,
-    CategoriesQueryVariables
+    CategoriesSelectQuery,
+    CategoriesSelectQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(
-    CategoriesDocument,
+
+  return Apollo.useQuery<CategoriesSelectQuery, CategoriesSelectQueryVariables>(
+    CategoriesSelectDocument,
     options,
   )
 }
 
-export function useCategoriesLazyQuery(
+export function useCategoriesSelectLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    CategoriesQuery,
-    CategoriesQueryVariables
+    CategoriesSelectQuery,
+    CategoriesSelectQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(
-    CategoriesDocument,
-    options,
-  )
+
+  return Apollo.useLazyQuery<
+    CategoriesSelectQuery,
+    CategoriesSelectQueryVariables
+  >(CategoriesSelectDocument, options)
 }
 
-export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>
-export type CategoriesLazyQueryHookResult = ReturnType<
-  typeof useCategoriesLazyQuery
+export type CategoriesSelectQueryHookResult = ReturnType<
+  typeof useCategoriesSelectQuery
 >
-export type CategoriesQueryResult = Apollo.QueryResult<
-  CategoriesQuery,
-  CategoriesQueryVariables
+export type CategoriesSelectLazyQueryHookResult = ReturnType<
+  typeof useCategoriesSelectLazyQuery
+>
+export type CategoriesSelectQueryResult = Apollo.QueryResult<
+  CategoriesSelectQuery,
+  CategoriesSelectQueryVariables
 >
 export const CreatePaymentDocument = gql`
   mutation createPayment(
@@ -1074,19 +955,10 @@ export const CreatePaymentDocument = gql`
         productName: $productName
       }
     ) {
-      id
-      category {
-        id
-      }
-      paidOn
-      taxIncluded
-      numberOfProduct
-      amount
-      product {
-        name
-      }
+      ...Payments_Payment
     }
   }
+  ${Payments_PaymentFragmentDoc}
 `
 export type CreatePaymentMutationFn = Apollo.MutationFunction<
   CreatePaymentMutation,
@@ -1123,6 +995,7 @@ export function useCreatePaymentMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<
     CreatePaymentMutation,
     CreatePaymentMutationVariables
@@ -1138,8 +1011,142 @@ export type CreatePaymentMutationOptions = Apollo.BaseMutationOptions<
   CreatePaymentMutation,
   CreatePaymentMutationVariables
 >
-export const ProductsDocument = gql`
-  query products(
+export const DeletePaymentDocument = gql`
+  mutation deletePayment($id: ID!, $userId: ID!) {
+    deletePayment(input: { id: $id, userId: $userId })
+  }
+`
+export type DeletePaymentMutationFn = Apollo.MutationFunction<
+  DeletePaymentMutation,
+  DeletePaymentMutationVariables
+>
+
+/**
+ * __useDeletePaymentMutation__
+ *
+ * To run a mutation, you first call `useDeletePaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePaymentMutation, { data, loading, error }] = useDeletePaymentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useDeletePaymentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeletePaymentMutation,
+    DeletePaymentMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useMutation<
+    DeletePaymentMutation,
+    DeletePaymentMutationVariables
+  >(DeletePaymentDocument, options)
+}
+
+export type DeletePaymentMutationHookResult = ReturnType<
+  typeof useDeletePaymentMutation
+>
+export type DeletePaymentMutationResult =
+  Apollo.MutationResult<DeletePaymentMutation>
+export type DeletePaymentMutationOptions = Apollo.BaseMutationOptions<
+  DeletePaymentMutation,
+  DeletePaymentMutationVariables
+>
+export const PaymentsDocument = gql`
+  query payments(
+    $userId: ID!
+    $categoryId: ID
+    $productName: String
+    $cursor: String
+    $limit: Int
+  ) {
+    payments(
+      input: {
+        userId: $userId
+        categoryId: $categoryId
+        productName: $productName
+      }
+      page: { first: $limit, after: $cursor }
+    ) {
+      pageInfo {
+        ...PageInfo
+      }
+      edges {
+        node {
+          ...Payments_Payment
+        }
+      }
+    }
+  }
+  ${PageInfoFragmentDoc}
+  ${Payments_PaymentFragmentDoc}
+`
+
+/**
+ * __usePaymentsQuery__
+ *
+ * To run a query within a React component, call `usePaymentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      categoryId: // value for 'categoryId'
+ *      productName: // value for 'productName'
+ *      cursor: // value for 'cursor'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function usePaymentsQuery(
+  baseOptions: Apollo.QueryHookOptions<PaymentsQuery, PaymentsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useQuery<PaymentsQuery, PaymentsQueryVariables>(
+    PaymentsDocument,
+    options,
+  )
+}
+
+export function usePaymentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PaymentsQuery,
+    PaymentsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useLazyQuery<PaymentsQuery, PaymentsQueryVariables>(
+    PaymentsDocument,
+    options,
+  )
+}
+
+export type PaymentsQueryHookResult = ReturnType<typeof usePaymentsQuery>
+export type PaymentsLazyQueryHookResult = ReturnType<
+  typeof usePaymentsLazyQuery
+>
+export type PaymentsQueryResult = Apollo.QueryResult<
+  PaymentsQuery,
+  PaymentsQueryVariables
+>
+export const ProductsAutocompleteDocument = gql`
+  query productsAutocomplete(
     $userId: ID!
     $productName: String
     $cursor: String
@@ -1150,31 +1157,31 @@ export const ProductsDocument = gql`
       page: { first: $limit, after: $cursor }
     ) {
       pageInfo {
-        endCursor
-        hasNextPage
+        ...PageInfo
       }
       edges {
         cursor
         node {
-          id
-          name
+          ...Payments_Product
         }
       }
     }
   }
+  ${PageInfoFragmentDoc}
+  ${Payments_ProductFragmentDoc}
 `
 
 /**
- * __useProductsQuery__
+ * __useProductsAutocompleteQuery__
  *
- * To run a query within a React component, call `useProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProductsAutocompleteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductsAutocompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProductsQuery({
+ * const { data, loading, error } = useProductsAutocompleteQuery({
  *   variables: {
  *      userId: // value for 'userId'
  *      productName: // value for 'productName'
@@ -1183,34 +1190,41 @@ export const ProductsDocument = gql`
  *   },
  * });
  */
-export function useProductsQuery(
-  baseOptions: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(
-    ProductsDocument,
-    options,
-  )
-}
-
-export function useProductsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProductsQuery,
-    ProductsQueryVariables
+export function useProductsAutocompleteQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProductsAutocompleteQuery,
+    ProductsAutocompleteQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(
-    ProductsDocument,
-    options,
-  )
+
+  return Apollo.useQuery<
+    ProductsAutocompleteQuery,
+    ProductsAutocompleteQueryVariables
+  >(ProductsAutocompleteDocument, options)
 }
 
-export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>
-export type ProductsLazyQueryHookResult = ReturnType<
-  typeof useProductsLazyQuery
+export function useProductsAutocompleteLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProductsAutocompleteQuery,
+    ProductsAutocompleteQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useLazyQuery<
+    ProductsAutocompleteQuery,
+    ProductsAutocompleteQueryVariables
+  >(ProductsAutocompleteDocument, options)
+}
+
+export type ProductsAutocompleteQueryHookResult = ReturnType<
+  typeof useProductsAutocompleteQuery
 >
-export type ProductsQueryResult = Apollo.QueryResult<
-  ProductsQuery,
-  ProductsQueryVariables
+export type ProductsAutocompleteLazyQueryHookResult = ReturnType<
+  typeof useProductsAutocompleteLazyQuery
+>
+export type ProductsAutocompleteQueryResult = Apollo.QueryResult<
+  ProductsAutocompleteQuery,
+  ProductsAutocompleteQueryVariables
 >

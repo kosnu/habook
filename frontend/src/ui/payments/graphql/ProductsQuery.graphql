@@ -1,0 +1,27 @@
+query productsAutocomplete(
+    $userId: ID!
+    $productName: String
+    $cursor: String,
+    $limit: Int
+) {
+    products(
+        input: {
+            userId: $userId,
+            productName: $productName
+        }
+        page: {
+            first: $limit,
+            after: $cursor
+        }
+    ) {
+        pageInfo {
+            ...PageInfo
+        }
+        edges {
+            cursor
+            node {
+                ...Payments_Product
+            }
+        }
+    }
+}

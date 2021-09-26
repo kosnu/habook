@@ -12,6 +12,10 @@ export const cache = new InMemoryCache({
           keyArgs: false,
           merge,
         },
+        payments: {
+          keyArgs: false,
+          merge,
+        },
       },
     },
   },
@@ -25,5 +29,6 @@ function merge(existing: any, incoming: any) {
   const { edges, ...rest } = incoming
   const result = rest
   result.edges = [...existing.edges, ...edges]
+
   return result
 }

@@ -1,0 +1,26 @@
+query categoriesSelect(
+    $userId: ID!,
+    $cursor: String,
+    $limit: Int
+) {
+    categories(
+        input: {
+            userId: $userId,
+            enable: true
+        },
+        page: {
+            first: $limit,
+            after: $cursor
+        }
+    ) {
+        pageInfo {
+            ...PageInfo
+        }
+        edges {
+            cursor
+            node {
+                ...Payments_Category
+            }
+        }
+    }
+}
