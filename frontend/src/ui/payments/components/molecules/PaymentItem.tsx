@@ -1,14 +1,14 @@
 import { MoreVert as MoreVertIcon } from "@mui/icons-material"
 import { IconButton, TableCell, TableRow } from "@mui/material"
 import React from "react"
-import { Payments_PaymentFragmentFragment } from "../../../../graphql/types"
+import { Payments_PaymentFragment } from "../../../../graphql/types"
 import { dateFormatter } from "../../../common/utils/formatter"
 
 interface PaymentItemProps {
-  payment: Payments_PaymentFragmentFragment
+  payment: Payments_PaymentFragment
   onMenuButtonClick: (
     event: React.MouseEvent<HTMLButtonElement>,
-    payment: Payments_PaymentFragmentFragment,
+    payment: Payments_PaymentFragment,
   ) => void
 }
 
