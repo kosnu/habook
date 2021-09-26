@@ -1,3 +1,4 @@
+import { ApolloError } from "@apollo/client"
 import { atom, useRecoilState } from "recoil"
 import {
   Payments_PaymentFragment,
@@ -29,7 +30,10 @@ export function usePayment() {
       // TODO: UpdatePayment
       openSuccessSnackbar("支払いを更新しました")
     } catch (e) {
-      openWarningSnackbar(e.message)
+      console.error(e)
+      if (e instanceof ApolloError) {
+        openWarningSnackbar(e.message)
+      }
     }
   }
 
@@ -40,7 +44,10 @@ export function usePayment() {
         openSuccessSnackbar("支払いを削除しました")
       }
     } catch (e) {
-      openWarningSnackbar(e.message)
+      console.error(e)
+      if (e instanceof ApolloError) {
+        openWarningSnackbar(e.message)
+      }
     }
   }
 
