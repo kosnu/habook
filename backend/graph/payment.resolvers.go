@@ -19,9 +19,6 @@ import (
 	"gorm.io/gorm"
 )
 
-const ProductNameValidationMessage = "商品名を入力してください"
-const CategoryValidationMessage = "カテゴリーを選択してください"
-
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
 	uuidV4 := uuid.New()
 	paymentId := strings.Replace(uuidV4.String(), "-", "", -1)
@@ -33,19 +30,19 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 	now := time.Now()
 
 	if len(input.ProductName) <= 0 {
-		graphql.AddError(ctx, gqlerror.Errorf(ProductNameValidationMessage))
+		graphql.AddError(ctx, gqlerror.Errorf(lib.ProductNameValidationMessage))
 		return &model.Payment{}, nil
 	}
 
 	if len(input.CategoryID) <= 0 {
-		graphql.AddError(ctx, gqlerror.Errorf(CategoryValidationMessage))
+		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryValidationMessage))
 		return &model.Payment{}, nil
 	}
 
 	var category *entity.Category
-	err = r.DB.Find(&category, "id = ? AND user_id = ?", input.CategoryID, input.UserID).Error
-	if err != nil {
-		graphql.AddError(ctx, gqlerror.Errorf(CategoryValidationMessage))
+	err = r.DB.Debug().First(&category, "id = ? AND user_id = ?", input.CategoryID, input.UserID).Error
+	if category == nil || err != nil {
+		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryValidationMessage))
 		return &model.Payment{}, nil
 	}
 
@@ -90,6 +87,18 @@ func (r *mutationResolver) UpdatePayment(ctx context.Context, input model.Update
 	paidOn, err := lib.StringToTime(input.PaidOn)
 	if err != nil {
 		return &model.Payment{}, err
+	}
+
+	if len(input.CategoryID) <= 0 {
+		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryValidationMessage))
+		return &model.Payment{}, nil
+	}
+
+	var category *entity.Category
+	err = r.DB.Find(&category, "id = ? AND user_id = ?", input.CategoryID, input.UserID).Error
+	if category == nil || err != nil {
+		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryValidationMessage))
+		return &model.Payment{}, nil
 	}
 
 	err = paymentRecord.Select("TaxIncluded", "PaidOn", "NumberOfProduct", "Amount", "CategoryID").Updates(entity.Payment{

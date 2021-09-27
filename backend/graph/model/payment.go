@@ -58,7 +58,6 @@ type UpdatePayment struct {
 	PaidOn          string `json:"paidOn"`
 	NumberOfProduct int    `json:"numberOfProduct"`
 	Amount          int    `json:"amount"`
-	ProductName     string `json:"productName"`
 	CategoryID      string `json:"categoryId"`
 	UserID          string `json:"userId"`
 }

@@ -14,10 +14,9 @@ import (
 	"github.com/kosnu/habook-backend/entity"
 	"github.com/kosnu/habook-backend/graph/generated"
 	"github.com/kosnu/habook-backend/graph/model"
+	"github.com/kosnu/habook-backend/lib"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
-
-const CategoryNameValidationMessage = "2文字以上の名前を入力してください"
 
 func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*model.User, error) {
 	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
@@ -33,7 +32,7 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 	now := time.Now()
 
 	if len(input.Name) < 2 {
-		graphql.AddError(ctx, gqlerror.Errorf(CategoryNameValidationMessage))
+		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryNameValidationMessage))
 		return &model.Category{}, nil
 	}
 
@@ -55,7 +54,7 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 
 func (r *mutationResolver) UpdateCategory(ctx context.Context, input model.UpdateCategory) (*model.Category, error) {
 	if len(input.Name) < 2 {
-		graphql.AddError(ctx, gqlerror.Errorf(CategoryNameValidationMessage))
+		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryNameValidationMessage))
 		return &model.Category{}, nil
 	}
 
