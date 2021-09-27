@@ -15,7 +15,7 @@ export function useCreateCategoryForm() {
 
   const invalid = validation.isError
 
-  function validateCreateForm() {
+  function handleCreateFormValidate() {
     validateCategoryName()
   }
 
@@ -46,7 +46,7 @@ export function useCreateCategoryForm() {
 
   return {
     invalid: invalid,
-    validateCreateForm: validateCreateForm,
+    validateCreateForm: handleCreateFormValidate,
     createCategory: handleCategoryCreate,
     resetForm: resetForm,
   }

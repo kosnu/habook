@@ -1,0 +1,23 @@
+mutation updatePayment(
+    $id: ID!
+    $userId: ID!,
+    $categoryId: ID!,
+    $paidOnDate: String!,
+    $taxIncluded: Boolean!,
+    $numberOfProduct: Int!,
+    $amount: Int!
+) {
+    updatePayment(
+        input: {
+            id: $id,
+            userId: $userId,
+            categoryId: $categoryId,
+            paidOn: $paidOnDate,
+            taxIncluded: $taxIncluded,
+            numberOfProduct: $numberOfProduct,
+            amount: $amount
+        }
+    ) {
+        ...Payments_Payment
+    }
+}

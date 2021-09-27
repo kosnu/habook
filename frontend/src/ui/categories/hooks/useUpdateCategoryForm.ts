@@ -17,7 +17,7 @@ export function useUpdateCategoryForm() {
 
   const invalid = validation.isError
 
-  function validateUpdateForm() {
+  function handleUpdateFormValidate() {
     validateCategoryName()
   }
 
@@ -51,7 +51,7 @@ export function useUpdateCategoryForm() {
 
   return {
     invalid: invalid,
-    validateUpdateForm: validateUpdateForm,
+    validateUpdateForm: handleUpdateFormValidate,
     updateCategory: handleCategoryUpdate,
     resetForm: resetForm,
   }
