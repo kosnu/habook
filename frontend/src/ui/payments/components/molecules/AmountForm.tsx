@@ -28,7 +28,7 @@ export function AmountForm() {
   }
 
   function handleAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const amount = parseInt(event.target.value)
+    const amount = Number(event.target.value)
     if (!isNaN(amount)) {
       changeAmount(amount)
     }
