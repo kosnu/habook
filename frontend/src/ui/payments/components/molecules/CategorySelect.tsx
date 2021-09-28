@@ -28,7 +28,7 @@ export function CategorySelect() {
 
   return (
     <>
-      <FormControl css={wrapperStyle}>
+      <FormControl variant="standard" sx={{ minWidth: 200 }}>
         <InputLabel id={"category-select-label"}>カテゴリー</InputLabel>
         <Select
           labelId={"category-select-label"}
@@ -53,10 +53,3 @@ export function CategorySelect() {
     </>
   )
 }
-
-const wrapperStyle = css`
-  && {
-    min-width: 200px;
-    width: 200px;
-  }
-`

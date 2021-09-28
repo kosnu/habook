@@ -1,3 +1,4 @@
+import { css } from "@emotion/react"
 import { TextField } from "@mui/material"
 import React from "react"
 
@@ -10,7 +11,9 @@ export function ReadOnlyProductNameForm({ productName }: ProductNameProps) {
     <>
       <TextField
         variant={"standard"}
-        fullWidth
+        css={css`
+          width: 400px;
+        `}
         label={"商品名"}
         defaultValue={productName}
         InputProps={{

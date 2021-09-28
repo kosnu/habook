@@ -41,40 +41,44 @@ export function AmountForm() {
 
   return (
     <>
-      <Grid container spacing={2} direction={"row"}>
-        <Grid item>
-          <FormControl>
-            <InputLabel id={"fee-select-label"}>{""}</InputLabel>
-            <Select
-              labelId={"fee-select-label"}
-              id={"fee-select"}
+      <Grid container spacing={2} direction={"column"}>
+        <Grid container item spacing={2} direction={"row"}>
+          <Grid item>
+            <FormControl variant="standard" sx={{ minWidth: 100 }}>
+              <InputLabel id={"fee-select-label"}>{""}</InputLabel>
+              <Select
+                labelId={"fee-select-label"}
+                id={"fee-select"}
+                variant={"standard"}
+                value={Number(taxIncluded).toString()}
+                onChange={handleTaxIncludedSelect}
+              >
+                <MenuItem value={"1"}>税込</MenuItem>
+                <MenuItem value={"0"}>税抜</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs>
+            <TextField
+              id={"amount-input"}
               variant={"standard"}
-              value={Number(taxIncluded).toString()}
-              onChange={handleTaxIncludedSelect}
-            >
-              <MenuItem value={"1"}>税込</MenuItem>
-              <MenuItem value={"0"}>税抜</MenuItem>
-            </Select>
-          </FormControl>
+              label={"支払い金額"}
+              css={css`
+                min-width: 200px;
+              `}
+              value={amount}
+              onChange={handleAmountChange}
+              inputMode={"numeric"}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position={"start"}>¥</InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
         </Grid>
         <Grid item>
-          <TextField
-            id={"amount-input"}
-            label={"支払い金額"}
-            variant={"standard"}
-            css={wrapperFormStyle}
-            value={amount}
-            onChange={handleAmountChange}
-            inputMode={"numeric"}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position={"start"}>¥</InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid item>
-          <FormControl>
+          <FormControl variant="standard" sx={{ minWidth: 100 }}>
             <InputLabel id={"number-select-label"}>個数</InputLabel>
             <Select
               labelId={"number-select-label"}
@@ -99,10 +103,3 @@ export function AmountForm() {
     </>
   )
 }
-
-const wrapperFormStyle = css`
-  && {
-    min-width: 200px;
-    width: 200px;
-  }
-`
