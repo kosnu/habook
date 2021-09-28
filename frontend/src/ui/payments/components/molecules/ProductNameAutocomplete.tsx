@@ -10,11 +10,11 @@ import {
 import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { connectionToNodes } from "../../../common/utils/connectionToNodes"
-import { useProductNameAutocomplete } from "../../hooks/useProductNameAutocomplete"
+import { useProductForm } from "../../hooks/useProductForm"
 
 export function ProductNameAutocomplete() {
   const { userId } = useLoginUser()
-  const { productName, changeProductName } = useProductNameAutocomplete()
+  const { productName, changeProductName } = useProductForm()
   const { data, loading, error, fetchMore } = useProductsAutocompleteQuery({
     variables: { userId: userId, productName: productName, limit: 30 },
     fetchPolicy: "network-only",

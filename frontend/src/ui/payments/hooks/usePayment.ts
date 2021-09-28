@@ -10,6 +10,7 @@ import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { useAmountForm } from "./useAmountForm"
 import { useCategorySelect } from "./useCategorySelect"
 import { usePaidOnDate } from "./usePaidOnDate"
+import { useProductForm } from "./useProductForm"
 
 const selectedPaymentState = atom<Payments_PaymentFragment | null>({
   key: "selected-payment-state",
@@ -21,8 +22,8 @@ export function usePayment() {
   const [payment, setPayment] = useRecoilState(selectedPaymentState)
   const { changePaidOnDate } = usePaidOnDate()
   const { changeCategory } = useCategorySelect()
-  const { changeTaxIncluded, changeAmount, changeNumberOfProduct } =
-    useAmountForm()
+  const { changeNumberOfProduct } = useProductForm()
+  const { changeTaxIncluded, changeAmount } = useAmountForm()
   const [deletePayment] = useDeletePaymentMutation()
   const { openWarningSnackbar } = useWarningSnackbar()
   const { openSuccessSnackbar } = useSuccessSnackbar()
@@ -32,9 +33,9 @@ export function usePayment() {
     // TODO: InitialStateでどうにかする
     changePaidOnDate(new Date(payment.paidOn))
     changeCategory(payment.category.id)
+    changeNumberOfProduct(payment.numberOfProduct)
     changeTaxIncluded(payment.taxIncluded)
     changeAmount(payment.amount)
-    changeNumberOfProduct(payment.numberOfProduct)
   }
 
   async function handlePaymentDelete() {

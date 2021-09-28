@@ -4,6 +4,7 @@ import { usePayment } from "../../hooks/usePayment"
 import { ReadOnlyProductNameForm } from "../atoms/ReadOnlyProductNameForm"
 import { AmountForm } from "../molecules/AmountForm"
 import { CategorySelect } from "../molecules/CategorySelect"
+import { NumberOfProductSelect } from "../molecules/NumberOfProductSelect"
 import { PaidOnDate } from "../molecules/PaidOnDate"
 
 export function UpdatePaymentForm() {
@@ -18,10 +19,15 @@ export function UpdatePaymentForm() {
         <Grid item>
           <CategorySelect />
         </Grid>
-        <Grid item>
-          <ReadOnlyProductNameForm
-            productName={selectedPayment?.product.name ?? ""}
-          />
+        <Grid item container spacing={2} direction={"row"}>
+          <Grid item>
+            <ReadOnlyProductNameForm
+              productName={selectedPayment?.product.name ?? ""}
+            />
+          </Grid>
+          <Grid item>
+            <NumberOfProductSelect />
+          </Grid>
         </Grid>
         <Grid item>
           <AmountForm />

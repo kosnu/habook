@@ -3,12 +3,11 @@ import { atom, useRecoilState, useResetRecoilState } from "recoil"
 interface AmountForm {
   taxIncluded: boolean
   amount: number
-  numberOfProduct: number
 }
 
 const amountFormAtom = atom<AmountForm>({
   key: "payments-amount-form-atom",
-  default: { taxIncluded: false, amount: 0, numberOfProduct: 1 },
+  default: { taxIncluded: false, amount: 0 },
 })
 
 export function useAmountForm() {
@@ -29,20 +28,11 @@ export function useAmountForm() {
     }))
   }
 
-  function handleNumberOfProductChange(numberOfProduct: number) {
-    setValue((currVal) => ({
-      ...currVal,
-      numberOfProduct: numberOfProduct,
-    }))
-  }
-
   return {
     taxIncluded: value.taxIncluded,
     amount: value.amount,
-    numberOfProduct: value.numberOfProduct,
     changeTaxIncluded: handleTaxIncludedChange,
     changeAmount: handleAmountChange,
-    changeNumberOfProduct: handleNumberOfProductChange,
     resetAmountForm: resetAmountForm,
   }
 }

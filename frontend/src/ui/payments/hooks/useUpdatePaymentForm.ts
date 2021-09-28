@@ -8,6 +8,7 @@ import { useAmountForm } from "./useAmountForm"
 import { useCategorySelect } from "./useCategorySelect"
 import { usePaidOnDate } from "./usePaidOnDate"
 import { usePayment } from "./usePayment"
+import { useProductForm } from "./useProductForm"
 
 export function useUpdatePaymentForm() {
   const { userId } = useLoginUser()
@@ -19,8 +20,8 @@ export function useUpdatePaymentForm() {
     validateCategory,
     resetCategorySelect,
   } = useCategorySelect()
-  const { taxIncluded, amount, numberOfProduct, resetAmountForm } =
-    useAmountForm()
+  const { numberOfProduct, resetNumberOfProductSelect } = useProductForm()
+  const { taxIncluded, amount, resetAmountForm } = useAmountForm()
   const [updatePayment] = useUpdatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
@@ -63,6 +64,7 @@ export function useUpdatePaymentForm() {
   function resetForm() {
     resetPaidOnDate()
     resetCategorySelect()
+    resetNumberOfProductSelect()
     resetAmountForm()
   }
 

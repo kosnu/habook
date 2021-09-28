@@ -4,6 +4,7 @@ import { useCreatePaymentForm } from "../../hooks/useCreatePaymentForm"
 import { AmountForm } from "../molecules/AmountForm"
 import { CategorySelect } from "../molecules/CategorySelect"
 import { CreatePaymentButton } from "../molecules/CreatePaymentButton"
+import { NumberOfProductSelect } from "../molecules/NumberOfProductSelect"
 import { PaidOnDate } from "../molecules/PaidOnDate"
 import { ProductNameAutocomplete } from "../molecules/ProductNameAutocomplete"
 
@@ -24,8 +25,13 @@ export function CreatePaymentForm() {
         <Grid item>
           <CategorySelect />
         </Grid>
-        <Grid item>
-          <ProductNameAutocomplete />
+        <Grid item container spacing={2}>
+          <Grid item>
+            <ProductNameAutocomplete />
+          </Grid>
+          <Grid item>
+            <NumberOfProductSelect />
+          </Grid>
         </Grid>
         <Grid item>
           <AmountForm />

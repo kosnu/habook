@@ -7,7 +7,7 @@ import { dateToString } from "../../common/utils/formatter"
 import { useAmountForm } from "./useAmountForm"
 import { useCategorySelect } from "./useCategorySelect"
 import { usePaidOnDate } from "./usePaidOnDate"
-import { useProductNameAutocomplete } from "./useProductNameAutocomplete"
+import { useProductForm } from "./useProductForm"
 
 export function useCreatePaymentForm() {
   const { userId } = useLoginUser()
@@ -23,9 +23,10 @@ export function useCreatePaymentForm() {
     productNameAutocompleteValidation,
     validateProductName,
     resetProductNameAutocomplete,
-  } = useProductNameAutocomplete()
-  const { taxIncluded, amount, numberOfProduct, resetAmountForm } =
-    useAmountForm()
+    numberOfProduct,
+    resetNumberOfProductSelect,
+  } = useProductForm()
+  const { taxIncluded, amount, resetAmountForm } = useAmountForm()
   const [createPayment] = useCreatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
@@ -72,12 +73,13 @@ export function useCreatePaymentForm() {
     resetPaidOnDate()
     resetCategorySelect()
     resetProductNameAutocomplete()
+    resetNumberOfProductSelect()
     resetAmountForm()
   }
 
   return {
     invalid: invalid,
-    validateUpdateForm: handleCreateFormValidate,
+    validateCreateForm: handleCreateFormValidate,
     createPayment: handlePaymentCreate,
     resetForm: resetForm,
   }
