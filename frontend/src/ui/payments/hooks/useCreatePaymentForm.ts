@@ -6,8 +6,9 @@ import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { dateToString } from "../../common/utils/formatter"
 import { useAmountForm } from "./useAmountForm"
 import { useCategorySelect } from "./useCategorySelect"
+import { useNumberOfProduct } from "./useNumberOfProduct"
 import { usePaidOnDate } from "./usePaidOnDate"
-import { useProductForm } from "./useProductForm"
+import { useProductNameAutocomplete } from "./useProductNameAutocomplete"
 
 export function useCreatePaymentForm() {
   const { userId } = useLoginUser()
@@ -23,9 +24,8 @@ export function useCreatePaymentForm() {
     productNameAutocompleteValidation,
     validateProductName,
     resetProductNameAutocomplete,
-    numberOfProduct,
-    resetNumberOfProductSelect,
-  } = useProductForm()
+  } = useProductNameAutocomplete()
+  const { numberOfProduct, resetNumberOfProductSelect } = useNumberOfProduct()
   const { taxIncluded, amount, resetAmountForm } = useAmountForm()
   const [createPayment] = useCreatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()

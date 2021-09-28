@@ -6,10 +6,10 @@ import {
   SelectChangeEvent,
 } from "@mui/material"
 import React from "react"
-import { useProductForm } from "../../hooks/useProductForm"
+import { useNumberOfProduct } from "../../hooks/useNumberOfProduct"
 
 export function NumberOfProductSelect() {
-  const { numberOfProduct, changeNumberOfProduct } = useProductForm()
+  const { numberOfProduct, changeNumberOfProduct } = useNumberOfProduct()
 
   function handleNumberOfProductChange(event: SelectChangeEvent) {
     const value = Number(event.target.value)

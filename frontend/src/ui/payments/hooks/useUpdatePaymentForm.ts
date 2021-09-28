@@ -6,9 +6,9 @@ import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { dateToString } from "../../common/utils/formatter"
 import { useAmountForm } from "./useAmountForm"
 import { useCategorySelect } from "./useCategorySelect"
+import { useNumberOfProduct } from "./useNumberOfProduct"
 import { usePaidOnDate } from "./usePaidOnDate"
 import { usePayment } from "./usePayment"
-import { useProductForm } from "./useProductForm"
 
 export function useUpdatePaymentForm() {
   const { userId } = useLoginUser()
@@ -20,7 +20,7 @@ export function useUpdatePaymentForm() {
     validateCategory,
     resetCategorySelect,
   } = useCategorySelect()
-  const { numberOfProduct, resetNumberOfProductSelect } = useProductForm()
+  const { numberOfProduct, resetNumberOfProductSelect } = useNumberOfProduct()
   const { taxIncluded, amount, resetAmountForm } = useAmountForm()
   const [updatePayment] = useUpdatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()
