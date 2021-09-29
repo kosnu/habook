@@ -4,11 +4,12 @@ import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSna
 import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { dateToString } from "../../common/utils/formatter"
-import { useAmountForm } from "./useAmountForm"
+import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
 import { useNumberOfProduct } from "./useNumberOfProduct"
 import { usePaidOnDate } from "./usePaidOnDate"
 import { useProductNameAutocomplete } from "./useProductNameAutocomplete"
+import { useTaxSelect } from "./useTaxSelect"
 
 export function useCreatePaymentForm() {
   const { userId } = useLoginUser()
@@ -26,7 +27,8 @@ export function useCreatePaymentForm() {
     resetProductNameAutocomplete,
   } = useProductNameAutocomplete()
   const { numberOfProduct, resetNumberOfProductSelect } = useNumberOfProduct()
-  const { taxIncluded, amount, resetAmountForm } = useAmountForm()
+  const { taxIncluded, resetTaxSelect } = useTaxSelect()
+  const { amount, resetAmountForm } = useAmountTextField()
   const [createPayment] = useCreatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
@@ -74,6 +76,7 @@ export function useCreatePaymentForm() {
     resetCategorySelect()
     resetProductNameAutocomplete()
     resetNumberOfProductSelect()
+    resetTaxSelect()
     resetAmountForm()
   }
 

@@ -7,7 +7,7 @@ import {
 import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSnackBar"
 import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../common/hooks/useLoginUser"
-import { useAmountForm } from "./useAmountForm"
+import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
 import { useNumberOfProduct } from "./useNumberOfProduct"
 import { usePaidOnDate } from "./usePaidOnDate"
@@ -23,7 +23,7 @@ export function usePayment() {
   const { changePaidOnDate } = usePaidOnDate()
   const { changeCategory } = useCategorySelect()
   const { changeNumberOfProduct } = useNumberOfProduct()
-  const { changeTaxIncluded, changeAmount } = useAmountForm()
+  const { changeTaxIncluded, changeAmount } = useAmountTextField()
   const [deletePayment] = useDeletePaymentMutation()
   const { openWarningSnackbar } = useWarningSnackbar()
   const { openSuccessSnackbar } = useSuccessSnackbar()

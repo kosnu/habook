@@ -4,11 +4,12 @@ import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSna
 import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { dateToString } from "../../common/utils/formatter"
-import { useAmountForm } from "./useAmountForm"
+import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
 import { useNumberOfProduct } from "./useNumberOfProduct"
 import { usePaidOnDate } from "./usePaidOnDate"
 import { usePayment } from "./usePayment"
+import { useTaxSelect } from "./useTaxSelect"
 
 export function useUpdatePaymentForm() {
   const { userId } = useLoginUser()
@@ -21,7 +22,8 @@ export function useUpdatePaymentForm() {
     resetCategorySelect,
   } = useCategorySelect()
   const { numberOfProduct, resetNumberOfProductSelect } = useNumberOfProduct()
-  const { taxIncluded, amount, resetAmountForm } = useAmountForm()
+  const { taxIncluded, resetTaxSelect } = useTaxSelect()
+  const { amount, resetAmountForm } = useAmountTextField()
   const [updatePayment] = useUpdatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
@@ -65,6 +67,7 @@ export function useUpdatePaymentForm() {
     resetPaidOnDate()
     resetCategorySelect()
     resetNumberOfProductSelect()
+    resetTaxSelect()
     resetAmountForm()
   }
 

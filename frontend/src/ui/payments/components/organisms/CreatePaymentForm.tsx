@@ -1,12 +1,13 @@
 import { Divider, Grid } from "@mui/material"
 import React from "react"
 import { useCreatePaymentForm } from "../../hooks/useCreatePaymentForm"
-import { AmountForm } from "../molecules/AmountForm"
+import { AmountTextField } from "../molecules/AmountTextField"
 import { CategorySelect } from "../molecules/CategorySelect"
 import { CreatePaymentButton } from "../molecules/CreatePaymentButton"
 import { NumberOfProductSelect } from "../molecules/NumberOfProductSelect"
 import { PaidOnDate } from "../molecules/PaidOnDate"
 import { ProductNameAutocomplete } from "../molecules/ProductNameAutocomplete"
+import { TaxSelect } from "../molecules/TaxSelect"
 
 export function CreatePaymentForm() {
   const { invalid, createPayment, validateCreateForm } = useCreatePaymentForm()
@@ -33,8 +34,13 @@ export function CreatePaymentForm() {
             <NumberOfProductSelect />
           </Grid>
         </Grid>
-        <Grid item>
-          <AmountForm />
+        <Grid item container spacing={2} direction={"row"}>
+          <Grid item>
+            <TaxSelect />
+          </Grid>
+          <Grid item>
+            <AmountTextField />
+          </Grid>
         </Grid>
         <Grid item>
           <Divider variant={"fullWidth"} />
