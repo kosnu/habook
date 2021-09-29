@@ -6,22 +6,23 @@ import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { dateToString } from "../../common/utils/formatter"
 import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
-import { useNumberOfProduct } from "./useNumberOfProduct"
-import { usePaidOnDate } from "./usePaidOnDate"
+import { useNumberOfProductSelect } from "./useNumberOfProductSelect"
+import { usePaidOnDatePicker } from "./usePaidOnDatePicker"
 import { usePayment } from "./usePayment"
 import { useTaxSelect } from "./useTaxSelect"
 
 export function useUpdatePaymentForm() {
   const { userId } = useLoginUser()
   const { selectedPayment } = usePayment()
-  const { paidOnDate, resetPaidOnDate } = usePaidOnDate()
+  const { paidOnDate, resetPaidOnDatePicker } = usePaidOnDatePicker()
   const {
     categoryId,
     categorySelectValidation,
     validateCategory,
     resetCategorySelect,
   } = useCategorySelect()
-  const { numberOfProduct, resetNumberOfProductSelect } = useNumberOfProduct()
+  const { numberOfProduct, resetNumberOfProductSelect } =
+    useNumberOfProductSelect()
   const { taxIncluded, resetTaxSelect } = useTaxSelect()
   const { amount, resetAmountForm } = useAmountTextField()
   const [updatePayment] = useUpdatePaymentMutation()
@@ -64,7 +65,7 @@ export function useUpdatePaymentForm() {
   }
 
   function resetForm() {
-    resetPaidOnDate()
+    resetPaidOnDatePicker()
     resetCategorySelect()
     resetNumberOfProductSelect()
     resetTaxSelect()

@@ -5,7 +5,7 @@ import { AmountTextField } from "../molecules/AmountTextField"
 import { CategorySelect } from "../molecules/CategorySelect"
 import { CreatePaymentButton } from "../molecules/CreatePaymentButton"
 import { NumberOfProductSelect } from "../molecules/NumberOfProductSelect"
-import { PaidOnDate } from "../molecules/PaidOnDate"
+import { PaidOnDatePicker } from "../molecules/PaidOnDatePicker"
 import { ProductNameAutocomplete } from "../molecules/ProductNameAutocomplete"
 import { TaxSelect } from "../molecules/TaxSelect"
 
@@ -21,7 +21,7 @@ export function CreatePaymentForm() {
     <>
       <Grid container spacing={4} direction={"column"}>
         <Grid item>
-          <PaidOnDate />
+          <PaidOnDatePicker />
         </Grid>
         <Grid item>
           <CategorySelect />

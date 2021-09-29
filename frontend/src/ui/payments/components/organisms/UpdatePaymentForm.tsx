@@ -5,7 +5,7 @@ import { ReadOnlyProductNameTextField } from "../atoms/ReadOnlyProductNameTextFi
 import { AmountTextField } from "../molecules/AmountTextField"
 import { CategorySelect } from "../molecules/CategorySelect"
 import { NumberOfProductSelect } from "../molecules/NumberOfProductSelect"
-import { PaidOnDate } from "../molecules/PaidOnDate"
+import { PaidOnDatePicker } from "../molecules/PaidOnDatePicker"
 import { TaxSelect } from "../molecules/TaxSelect"
 
 export function UpdatePaymentForm() {
@@ -15,7 +15,7 @@ export function UpdatePaymentForm() {
     <>
       <Grid container spacing={4} direction={"column"}>
         <Grid item>
-          <PaidOnDate />
+          <PaidOnDatePicker />
         </Grid>
         <Grid item>
           <CategorySelect />

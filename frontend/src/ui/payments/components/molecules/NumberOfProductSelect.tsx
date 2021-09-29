@@ -6,10 +6,10 @@ import {
   SelectChangeEvent,
 } from "@mui/material"
 import React from "react"
-import { useNumberOfProduct } from "../../hooks/useNumberOfProduct"
+import { useNumberOfProductSelect } from "../../hooks/useNumberOfProductSelect"
 
 export function NumberOfProductSelect() {
-  const { numberOfProduct, changeNumberOfProduct } = useNumberOfProduct()
+  const { numberOfProduct, changeNumberOfProduct } = useNumberOfProductSelect()
 
   function handleNumberOfProductChange(event: SelectChangeEvent) {
     const value = Number(event.target.value)

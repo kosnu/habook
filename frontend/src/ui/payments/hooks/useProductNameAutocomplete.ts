@@ -10,8 +10,8 @@ interface ProductNameAutocomplete {
   }
 }
 
-const productNameAtom = atom<ProductNameAutocomplete>({
-  key: "payments-product-name-atom",
+const productNameAutocompleteAtom = atom<ProductNameAutocomplete>({
+  key: "payments-product-name-autocomplete-atom",
   default: {
     value: "",
     validation: {
@@ -22,8 +22,12 @@ const productNameAtom = atom<ProductNameAutocomplete>({
 })
 
 export function useProductNameAutocomplete() {
-  const [productName, setProductName] = useRecoilState(productNameAtom)
-  const resetProductNameAutocomplete = useResetRecoilState(productNameAtom)
+  const [productName, setProductName] = useRecoilState(
+    productNameAutocompleteAtom,
+  )
+  const resetProductNameAutocomplete = useResetRecoilState(
+    productNameAutocompleteAtom,
+  )
 
   function handleProductNameChange(productName: string) {
     setProductName({

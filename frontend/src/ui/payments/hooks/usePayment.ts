@@ -9,8 +9,8 @@ import { useWarningSnackbar } from "../../common/components/molecules/WarningSna
 import { useLoginUser } from "../../common/hooks/useLoginUser"
 import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
-import { useNumberOfProduct } from "./useNumberOfProduct"
-import { usePaidOnDate } from "./usePaidOnDate"
+import { useNumberOfProductSelect } from "./useNumberOfProductSelect"
+import { usePaidOnDatePicker } from "./usePaidOnDatePicker"
 
 const selectedPaymentState = atom<Payments_PaymentFragment | null>({
   key: "selected-payment-state",
@@ -20,9 +20,9 @@ const selectedPaymentState = atom<Payments_PaymentFragment | null>({
 export function usePayment() {
   const { userId } = useLoginUser()
   const [payment, setPayment] = useRecoilState(selectedPaymentState)
-  const { changePaidOnDate } = usePaidOnDate()
+  const { changePaidOnDate } = usePaidOnDatePicker()
   const { changeCategory } = useCategorySelect()
-  const { changeNumberOfProduct } = useNumberOfProduct()
+  const { changeNumberOfProduct } = useNumberOfProductSelect()
   const { changeTaxIncluded, changeAmount } = useAmountTextField()
   const [deletePayment] = useDeletePaymentMutation()
   const { openWarningSnackbar } = useWarningSnackbar()
