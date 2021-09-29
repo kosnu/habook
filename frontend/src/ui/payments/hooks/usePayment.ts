@@ -11,6 +11,7 @@ import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
 import { useNumberOfProductSelect } from "./useNumberOfProductSelect"
 import { usePaidOnDatePicker } from "./usePaidOnDatePicker"
+import { useTaxSelect } from "./useTaxSelect"
 
 const selectedPaymentState = atom<Payments_PaymentFragment | null>({
   key: "selected-payment-state",
@@ -23,7 +24,8 @@ export function usePayment() {
   const { changePaidOnDate } = usePaidOnDatePicker()
   const { changeCategory } = useCategorySelect()
   const { changeNumberOfProduct } = useNumberOfProductSelect()
-  const { changeTaxIncluded, changeAmount } = useAmountTextField()
+  const { changeTaxIncluded } = useTaxSelect()
+  const { changeAmount } = useAmountTextField()
   const [deletePayment] = useDeletePaymentMutation()
   const { openWarningSnackbar } = useWarningSnackbar()
   const { openSuccessSnackbar } = useSuccessSnackbar()
