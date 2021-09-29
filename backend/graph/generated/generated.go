@@ -1058,7 +1058,6 @@ input UpdatePayment {
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
-  productName: String!
   categoryId: ID!
   userId: ID!
 }
@@ -5934,14 +5933,6 @@ func (ec *executionContext) unmarshalInputUpdatePayment(ctx context.Context, obj
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
 			it.Amount, err = ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "productName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productName"))
-			it.ProductName, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}

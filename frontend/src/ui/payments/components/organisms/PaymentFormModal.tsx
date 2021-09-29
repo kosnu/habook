@@ -5,31 +5,36 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material"
-import React, { useCallback } from "react"
-import { usePayment } from "../../hooks/usePayment"
+import React from "react"
 import { usePaymentFormModal } from "../../hooks/usePaymentFormModal"
+import { useUpdatePaymentForm } from "../../hooks/useUpdatePaymentForm"
+import { UpdatePaymentForm } from "./UpdatePaymentForm"
 
 export function PaymentFormModal() {
   const { open, closeModal } = usePaymentFormModal()
-  const { selectedPayment, updatePayment } = usePayment()
-  // TODO: Validation
+  const { invalid, validateUpdateForm, updatePayment } = useUpdatePaymentForm()
 
-  const handleClose = useCallback(() => {
+  function handleClose() {
     closeModal()
-  }, [closeModal])
+  }
 
-  const handleUpdateButtonClick = useCallback(async () => {
+  async function handleUpdateButtonClick() {
+    validateUpdateForm()
     await updatePayment()
     closeModal()
-  }, [updatePayment, closeModal])
+  }
 
   return (
     <>
-      <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
+      <Dialog
+        onClose={handleClose}
+        open={open}
+        maxWidth={"md"}
+        PaperProps={{ style: { width: "640px" } }}
+      >
         <DialogTitle>支払いの編集</DialogTitle>
         <DialogContent>
-          {/* TODO: 支払いフォーム */}
-          {selectedPayment?.product.name}
+          <UpdatePaymentForm />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color={"primary"}>
@@ -38,7 +43,7 @@ export function PaymentFormModal() {
           <Button
             color={"primary"}
             variant={"contained"}
-            // disabled={validation.isError}
+            disabled={invalid}
             onClick={handleUpdateButtonClick}
           >
             支払いを更新する

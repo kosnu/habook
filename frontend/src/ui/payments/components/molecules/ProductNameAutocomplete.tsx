@@ -48,13 +48,15 @@ export function ProductNameAutocomplete() {
         freeSolo
         id={"combo-box-product-name"}
         options={products.map((product) => product.name)}
-        css={wrapperProductNameFormStyle}
         loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
             label={"商品名"}
             variant={"standard"}
+            css={css`
+              width: 400px;
+            `}
             error={!!error}
             helperText={error?.message ?? ""}
             InputProps={{
@@ -88,10 +90,3 @@ export function ProductNameAutocomplete() {
     </>
   )
 }
-
-const wrapperProductNameFormStyle = css`
-  && {
-    min-width: 320px;
-    width: 320px;
-  }
-`

@@ -3,17 +3,17 @@ import { atom, useRecoilState, useResetRecoilState } from "recoil"
 const PRODUCT_NAME_AUTOCOMPLETE_VALIDATION_MESSAGE = "商品名を入力してください"
 
 interface ProductNameAutocomplete {
-  productName: string
+  value: string
   validation: {
     message: string | null
     isError: boolean
   }
 }
 
-const productNameAtom = atom<ProductNameAutocomplete>({
-  key: "payments-product-name-atom",
+const productNameAutocompleteAtom = atom<ProductNameAutocomplete>({
+  key: "payments-product-name-autocomplete-atom",
   default: {
-    productName: "",
+    value: "",
     validation: {
       message: null,
       isError: false,
@@ -22,12 +22,16 @@ const productNameAtom = atom<ProductNameAutocomplete>({
 })
 
 export function useProductNameAutocomplete() {
-  const [value, setValue] = useRecoilState(productNameAtom)
-  const resetProductNameAutocomplete = useResetRecoilState(productNameAtom)
+  const [productName, setProductName] = useRecoilState(
+    productNameAutocompleteAtom,
+  )
+  const resetProductNameAutocomplete = useResetRecoilState(
+    productNameAutocompleteAtom,
+  )
 
   function handleProductNameChange(productName: string) {
-    setValue({
-      productName: productName,
+    setProductName({
+      value: productName,
       validation: {
         message: !productName
           ? PRODUCT_NAME_AUTOCOMPLETE_VALIDATION_MESSAGE
@@ -38,22 +42,22 @@ export function useProductNameAutocomplete() {
   }
 
   function handleProductNameValidate() {
-    setValue((currVal) => {
+    setProductName((currVal) => {
       return {
         ...currVal,
         validation: {
-          message: !currVal.productName
+          message: !currVal.value
             ? PRODUCT_NAME_AUTOCOMPLETE_VALIDATION_MESSAGE
             : null,
-          isError: !currVal.productName,
+          isError: !currVal.value,
         },
       }
     })
   }
 
   return {
-    productName: value.productName,
-    productNameAutocompleteValidation: value.validation,
+    productName: productName.value,
+    productNameAutocompleteValidation: productName.validation,
     changeProductName: handleProductNameChange,
     validateProductName: handleProductNameValidate,
     resetProductNameAutocomplete: resetProductNameAutocomplete,

@@ -2,10 +2,10 @@ import { DatePicker } from "@mui/lab"
 import { TextField } from "@mui/material"
 
 import React from "react"
-import { usePaidOnDate } from "../../hooks/usePaidOnDate"
+import { usePaidOnDatePicker } from "../../hooks/usePaidOnDatePicker"
 
-export function PaidOnDate() {
-  const { paidOnDate, changePaidOnDate } = usePaidOnDate()
+export function PaidOnDatePicker() {
+  const { paidOnDate, changePaidOnDate } = usePaidOnDatePicker()
 
   return (
     <>

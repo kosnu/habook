@@ -1,5 +1,5 @@
 import { ApolloError } from "@apollo/client"
-import { useCreatePaymentMutation } from "../../../graphql/types"
+import { useUpdatePaymentMutation } from "../../../graphql/types"
 import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSnackBar"
 import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
 import { useLoginUser } from "../../common/hooks/useLoginUser"
@@ -8,11 +8,12 @@ import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
 import { useNumberOfProductSelect } from "./useNumberOfProductSelect"
 import { usePaidOnDatePicker } from "./usePaidOnDatePicker"
-import { useProductNameAutocomplete } from "./useProductNameAutocomplete"
+import { usePayment } from "./usePayment"
 import { useTaxSelect } from "./useTaxSelect"
 
-export function useCreatePaymentForm() {
+export function useUpdatePaymentForm() {
   const { userId } = useLoginUser()
+  const { selectedPayment } = usePayment()
   const { paidOnDate, resetPaidOnDatePicker } = usePaidOnDatePicker()
   const {
     categoryId,
@@ -20,49 +21,40 @@ export function useCreatePaymentForm() {
     validateCategory,
     resetCategorySelect,
   } = useCategorySelect()
-  const {
-    productName,
-    productNameAutocompleteValidation,
-    validateProductName,
-    resetProductNameAutocomplete,
-  } = useProductNameAutocomplete()
   const { numberOfProduct, resetNumberOfProductSelect } =
     useNumberOfProductSelect()
   const { taxIncluded, resetTaxSelect } = useTaxSelect()
   const { amount, resetAmountForm } = useAmountTextField()
-  const [createPayment] = useCreatePaymentMutation()
+  const [updatePayment] = useUpdatePaymentMutation()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
 
-  const invalid =
-    categorySelectValidation.isError ||
-    productNameAutocompleteValidation.isError
+  const invalid = categorySelectValidation.isError
 
-  function handleCreateFormValidate() {
+  function handleUpdateFormValidate() {
     validateCategory()
-    validateProductName()
   }
 
-  async function handlePaymentCreate() {
-    if (invalid || !categoryId || !productName) {
+  async function handlePaymentUpdate() {
+    if (invalid || !categoryId || !selectedPayment) {
       openWarningSnackbar("入力が正しくありません")
 
       return
     }
 
     try {
-      await createPayment({
+      await updatePayment({
         variables: {
+          id: selectedPayment.id,
           userId: userId,
           paidOnDate: dateToString(paidOnDate),
           categoryId: categoryId,
-          productName: productName,
           taxIncluded: taxIncluded,
           amount: amount,
           numberOfProduct: numberOfProduct,
         },
       })
-      openSuccessSnackbar("支払いが作成できました")
+      openSuccessSnackbar("支払い内容の更新できました")
       resetForm()
     } catch (e) {
       console.error(e)
@@ -75,7 +67,6 @@ export function useCreatePaymentForm() {
   function resetForm() {
     resetPaidOnDatePicker()
     resetCategorySelect()
-    resetProductNameAutocomplete()
     resetNumberOfProductSelect()
     resetTaxSelect()
     resetAmountForm()
@@ -83,8 +74,8 @@ export function useCreatePaymentForm() {
 
   return {
     invalid: invalid,
-    validateCreateForm: handleCreateFormValidate,
-    createPayment: handlePaymentCreate,
+    validateUpdateForm: handleUpdateFormValidate,
+    updatePayment: handlePaymentUpdate,
     resetForm: resetForm,
   }
 }
