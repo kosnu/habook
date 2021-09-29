@@ -6,7 +6,9 @@ interface ProductNameProps {
   productName: string
 }
 
-export function ReadOnlyProductNameForm({ productName }: ProductNameProps) {
+export function ReadOnlyProductNameTextField({
+  productName,
+}: ProductNameProps) {
   return (
     <>
       <TextField

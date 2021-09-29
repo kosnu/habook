@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material"
 import React from "react"
 import { usePayment } from "../../hooks/usePayment"
-import { ReadOnlyProductNameForm } from "../atoms/ReadOnlyProductNameForm"
+import { ReadOnlyProductNameTextField } from "../atoms/ReadOnlyProductNameTextField"
 import { AmountForm } from "../molecules/AmountForm"
 import { CategorySelect } from "../molecules/CategorySelect"
 import { NumberOfProductSelect } from "../molecules/NumberOfProductSelect"
@@ -21,7 +21,7 @@ export function UpdatePaymentForm() {
         </Grid>
         <Grid item container spacing={2} direction={"row"}>
           <Grid item>
-            <ReadOnlyProductNameForm
+            <ReadOnlyProductNameTextField
               productName={selectedPayment?.product.name ?? ""}
             />
           </Grid>
