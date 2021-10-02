@@ -3,12 +3,14 @@ import { Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
 import { SuccessSnackBar } from "../../../common/components/molecules/SuccessSnackBar"
 import { WarningSnackBar } from "../../../common/components/molecules/WarningSnackBar"
+import { HABookAppBar } from "../../../navigation/components/organisms/HABookAppBar"
 import { theme } from "../../../theme"
 import { CreatePaymentForm } from "../organisms/CreatePaymentForm"
 
 export function NewPaymentTemplate() {
   return (
     <>
+      <HABookAppBar />
       <Container css={wrapperStyle} maxWidth={"md"}>
         <Grid container spacing={4} direction={"column"}>
           <Grid item>

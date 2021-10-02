@@ -4,7 +4,7 @@ import { AccountMenuButton } from "../molecules/AccountMenuButton"
 import { AdditionalMenuButton } from "../molecules/AdditionalMenuButton"
 import { HeaderTitle } from "../molecules/HeaderTitle"
 
-export function Header() {
+export function HABookAppBar() {
   return (
     <>
       <AppBar position={"static"} color={"default"}>
