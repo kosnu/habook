@@ -26,3 +26,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           eslint_flags: './**/*.{ts,tsx}'
+      - name: yarn lint
+        run: yarn lint
