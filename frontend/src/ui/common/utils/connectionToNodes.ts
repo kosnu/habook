@@ -5,7 +5,7 @@ interface Edge<Node extends GeneratedNode> {
 }
 
 interface Connection<Node extends GeneratedNode> {
-  edges: Array<Maybe<Edge<Node>>>
+  edges: Array<Edge<Node> | null | undefined>
 }
 
 export function connectionToNodes<Node extends GeneratedNode>(

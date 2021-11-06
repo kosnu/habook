@@ -348,16 +348,18 @@ export type CategoriesQuery = {
       hasNextPage: boolean
     }
     edges: Array<
-      Maybe<{
-        __typename?: "CategoryEdge"
-        node: {
-          __typename: "Category"
-          id: string
-          name: string
-          enable: boolean
-          createdAt: string
+      | {
+          __typename?: "CategoryEdge"
+          node: {
+            __typename: "Category"
+            id: string
+            name: string
+            enable: boolean
+            createdAt: string
+          }
         }
-      }>
+      | null
+      | undefined
     >
   }
 }
@@ -441,11 +443,13 @@ export type CategoriesSelectQuery = {
       hasNextPage: boolean
     }
     edges: Array<
-      Maybe<{
-        __typename?: "CategoryEdge"
-        cursor: string
-        node: { __typename: "Category"; id: string; name: string }
-      }>
+      | {
+          __typename?: "CategoryEdge"
+          cursor: string
+          node: { __typename: "Category"; id: string; name: string }
+        }
+      | null
+      | undefined
     >
   }
 }
@@ -527,20 +531,22 @@ export type PaymentsQuery = {
       hasNextPage: boolean
     }
     edges: Array<
-      Maybe<{
-        __typename?: "PaymentEdge"
-        node: {
-          __typename: "Payment"
-          id: string
-          paidOn: string
-          taxIncluded: boolean
-          amount: number
-          numberOfProduct: number
-          createdAt: string
-          category: { __typename: "Category"; id: string; name: string }
-          product: { __typename: "Product"; id: string; name: string }
+      | {
+          __typename?: "PaymentEdge"
+          node: {
+            __typename: "Payment"
+            id: string
+            paidOn: string
+            taxIncluded: boolean
+            amount: number
+            numberOfProduct: number
+            createdAt: string
+            category: { __typename: "Category"; id: string; name: string }
+            product: { __typename: "Product"; id: string; name: string }
+          }
         }
-      }>
+      | null
+      | undefined
     >
   }
 }
@@ -562,11 +568,13 @@ export type ProductsAutocompleteQuery = {
       hasNextPage: boolean
     }
     edges: Array<
-      Maybe<{
-        __typename?: "ProductEdge"
-        cursor: string
-        node: { __typename: "Product"; id: string; name: string }
-      }>
+      | {
+          __typename?: "ProductEdge"
+          cursor: string
+          node: { __typename: "Product"; id: string; name: string }
+        }
+      | null
+      | undefined
     >
   }
 }
