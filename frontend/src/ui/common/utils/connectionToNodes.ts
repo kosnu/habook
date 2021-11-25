@@ -1,4 +1,4 @@
-import { Maybe, Node as GeneratedNode } from "../../../graphql/types"
+import { Node as GeneratedNode } from "../../../graphql/types"
 
 interface Edge<Node extends GeneratedNode> {
   node: Node
