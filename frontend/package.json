@@ -34,7 +34,7 @@
     "@graphql-codegen/typescript-graphql-request": "4.3.2",
     "@graphql-codegen/typescript-operations": "2.2.1",
     "@graphql-codegen/typescript-react-apollo": "3.2.2",
-    "@types/react": "17.0.37",
+    "@types/react": "17.0.38",
     "@typescript-eslint/eslint-plugin": "5.8.0",
     "@typescript-eslint/parser": "5.8.0",
     "eslint": "8.5.0",
