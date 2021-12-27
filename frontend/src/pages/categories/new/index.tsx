@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { NewCategoryTemplate } from "../../../ui/categories/components/templates/NewCategoryTemplate"
+import { CreateCategoryPage } from "src/ui/categories/pages/CreateCategoryPage"
 
 export default function New() {
   return (
@@ -9,7 +9,7 @@ export default function New() {
         <title>カテゴリーの作成 | HABook</title>
         <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
-      <NewCategoryTemplate />
+      <CreateCategoryPage />
     </>
   )
 }
