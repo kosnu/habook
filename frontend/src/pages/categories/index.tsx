@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { CategoryListTemplate } from "../../ui/categories/components/templates/CategoryListTemplate"
+import { CategoriesPage } from "src/ui/categories/pages/CategoriesPage"
 
 export default function index() {
   return (
@@ -9,7 +9,7 @@ export default function index() {
         <title>カテゴリー | HABook</title>
         <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
-      <CategoryListTemplate />
+      <CategoriesPage />
     </>
   )
 }
