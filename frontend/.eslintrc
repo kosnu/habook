@@ -15,7 +15,8 @@
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "unused-imports"
   ],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -26,6 +27,19 @@
         "prev": "*",
         "next": "return"
       }
-    ]
+    ],
+    "eqeqeq": [
+      "error",
+      "smart"
+    ],
+    "no-else-return": [
+      "error",
+      {
+        "allowElseIf": false
+      }
+    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "unused-imports/no-unused-imports-ts": "error"
   }
 }
