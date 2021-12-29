@@ -1,25 +1,5 @@
-import { Alert, Snackbar } from "@mui/material"
-import React, { useCallback } from "react"
+import { useCallback } from "react"
 import { atom, useRecoilState } from "recoil"
-
-export function SuccessSnackBar() {
-  const { open, message, closeSuccessSnackbar } = useSuccessSnackbar()
-
-  return (
-    <>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={closeSuccessSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert onClose={closeSuccessSnackbar} severity={"success"}>
-          {message}
-        </Alert>
-      </Snackbar>
-    </>
-  )
-}
 
 interface SuccessSnackBar {
   open: boolean

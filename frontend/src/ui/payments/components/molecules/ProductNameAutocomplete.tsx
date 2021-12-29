@@ -6,10 +6,10 @@ import {
   ProductsAutocompleteQuery,
   ProductsAutocompleteQueryVariables,
   useProductsAutocompleteQuery,
-} from "../../../../graphql/types"
-import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
-import { useLoginUser } from "../../../common/hooks/useLoginUser"
-import { connectionToNodes } from "../../../common/utils/connectionToNodes"
+} from "src/graphql/types"
+import { LoadingCircular } from "src/ui/common/components/LoadingCircular"
+import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
+import { connectionToNodes } from "src/ui/common/utils/connectionToNodes"
 import { useProductNameAutocomplete } from "../../hooks/useProductNameAutocomplete"
 
 export function ProductNameAutocomplete() {

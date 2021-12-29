@@ -1,8 +1,8 @@
 import { css } from "@emotion/react"
 import { Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
-import { SuccessSnackBar } from "../../../common/components/molecules/SuccessSnackBar"
-import { WarningSnackBar } from "../../../common/components/molecules/WarningSnackBar"
+import { SuccessSnackBar } from "src/ui/common/components/SuccessSnackBar"
+import { WarningSnackBar } from "src/ui/common/components/WarningSnackBar"
 import { theme } from "../../../theme"
 import { CreatePaymentForm } from "../organisms/CreatePaymentForm"
 
