@@ -9,8 +9,8 @@ import {
 } from "@mui/material"
 import React from "react"
 import { Categories_CategoryFragment } from "src/graphql/types"
-import { useSuccessSnackbar } from "src/ui/common/components/molecules/SuccessSnackBar"
-import { useWarningSnackbar } from "src/ui/common/components/molecules/WarningSnackBar"
+import { useSuccessSnackbar } from "src/ui/common/components/SuccessSnackBar"
+import { useWarningSnackbar } from "src/ui/common/components/WarningSnackBar"
 import { useDeleteCategory } from "./useDeleteCategory"
 import { useDeleteCategoryConfirmModal } from "./useDeleteCategoryConfirmModal"
 

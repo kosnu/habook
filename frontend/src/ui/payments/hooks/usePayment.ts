@@ -3,10 +3,10 @@ import { atom, useRecoilState } from "recoil"
 import {
   Payments_PaymentFragment,
   useDeletePaymentMutation,
-} from "../../../graphql/types"
-import { useSuccessSnackbar } from "../../common/components/molecules/SuccessSnackBar"
-import { useWarningSnackbar } from "../../common/components/molecules/WarningSnackBar"
-import { useLoginUser } from "../../common/hooks/useLoginUser"
+} from "src/graphql/types"
+import { useSuccessSnackbar } from "src/ui/common/components/SuccessSnackBar"
+import { useWarningSnackbar } from "src/ui/common/components/WarningSnackBar"
+import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
 import { useAmountTextField } from "./useAmountTextField"
 import { useCategorySelect } from "./useCategorySelect"
 import { useNumberOfProductSelect } from "./useNumberOfProductSelect"

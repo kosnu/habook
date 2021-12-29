@@ -8,14 +8,11 @@ import {
   Typography,
 } from "@mui/material"
 import React from "react"
-import {
-  Payments_PaymentFragment,
-  usePaymentsQuery,
-} from "../../../../graphql/types"
-import { LoadingCircular } from "../../../common/components/atoms/LoadingCircular"
-import { SuccessSnackBar } from "../../../common/components/molecules/SuccessSnackBar"
-import { WarningSnackBar } from "../../../common/components/molecules/WarningSnackBar"
-import { useLoginUser } from "../../../common/hooks/useLoginUser"
+import { Payments_PaymentFragment, usePaymentsQuery } from "src/graphql/types"
+import { LoadingCircular } from "src/ui/common/components/LoadingCircular"
+import { SuccessSnackBar } from "src/ui/common/components/SuccessSnackBar"
+import { WarningSnackBar } from "src/ui/common/components/WarningSnackBar"
+import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
 import { usePayment } from "../../hooks/usePayment"
 import { usePaymentFormModal } from "../../hooks/usePaymentFormModal"
 import { usePaymentOperationMenu } from "../../hooks/usePaymentOperationMenu"
