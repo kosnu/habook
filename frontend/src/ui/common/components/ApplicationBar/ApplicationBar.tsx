@@ -1,10 +1,10 @@
 import { AppBar, Grid, Toolbar } from "@mui/material"
 import React from "react"
-import { AccountMenuButton } from "../molecules/AccountMenuButton"
-import { AdditionalMenuButton } from "../molecules/AdditionalMenuButton"
-import { HeaderTitle } from "../molecules/HeaderTitle"
+import { AccountMenuButton } from "./AccountMenuButton"
+import { AdditionalMenuButton } from "./AdditionalMenuButton"
+import { Title } from "./Title"
 
-export function Header() {
+export function ApplicationBar() {
   return (
     <>
       <AppBar position={"static"} color={"default"}>
@@ -15,7 +15,7 @@ export function Header() {
             alignItems={"center"}
           >
             <Grid item>
-              <HeaderTitle />
+              <Title />
             </Grid>
             <Grid item>
               <AdditionalMenuButton />
