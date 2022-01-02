@@ -3,7 +3,7 @@ import Link from "next/link"
 import React from "react"
 import { LogoIcon } from "src/ui/common/components/LogoIcon"
 
-export function HeaderTitle() {
+export function Title() {
   return (
     <>
       <Link href={"/"} passHref>

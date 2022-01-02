@@ -2,23 +2,16 @@ import { AccountCircle } from "@mui/icons-material"
 import { Divider, IconButton, Menu, MenuItem, Typography } from "@mui/material"
 import Link from "next/link"
 import React from "react"
-import { useAccountMenu } from "../../hooks/useAccountMenu"
+import { useAccountMenu } from "./useAccountMenu"
 
 const menuId = "primary-account-menu"
 
 export function AccountMenuButton() {
-  const { anchorEl, openAccountMenu, closeAccountMenu } = useAccountMenu()
+  const { anchorEl, openAccountMenu, closeAccountMenu } = useAccountMenu(menuId)
 
   return (
     <>
-      <IconButton
-        aria-label={"account of current user"}
-        aria-controls={"primary-search-account-menu"}
-        aria-haspopup={"true"}
-        color={"primary"}
-        onClick={openAccountMenu}
-        size={"large"}
-      >
+      <IconButton color={"primary"} onClick={openAccountMenu} size={"large"}>
         <AccountCircle />
       </IconButton>
       <Menu
@@ -31,7 +24,6 @@ export function AccountMenuButton() {
         onClose={closeAccountMenu}
       >
         <MenuItem onClick={closeAccountMenu}>
-          {/*TODO: 支払い一覧画面*/}
           <Link href={"/payments"}>支払い一覧</Link>
         </MenuItem>
         <MenuItem onClick={closeAccountMenu}>

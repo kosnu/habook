@@ -1,17 +1,19 @@
 import React, { useCallback } from "react"
+import { useAnchorElement } from "../../hooks/useAnchorElement"
 
-export function useAdditionalMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+export function useAdditionalMenu(menuId: string) {
+  const { anchorEl, setAnchorElement, resetAnchorElement } =
+    useAnchorElement(menuId)
 
   const handleMenuOpen = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(event.currentTarget)
+      setAnchorElement(event)
     },
-    [setAnchorEl],
+    [setAnchorElement],
   )
   const handleMenuClose = useCallback(() => {
-    setAnchorEl(null)
-  }, [setAnchorEl])
+    resetAnchorElement()
+  }, [resetAnchorElement])
 
   return {
     anchorEl: anchorEl,

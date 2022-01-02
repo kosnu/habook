@@ -5,22 +5,17 @@ import {
 import { Button, Menu, MenuItem } from "@mui/material"
 import Link from "next/link"
 import React from "react"
-import { useAdditionalMenu } from "../../hooks/useAdditionalMenu"
+import { useAdditionalMenu } from "./useAdditionalMenu"
 
 const menuId = "primary-additional-menu"
 
 export function AdditionalMenuButton() {
   const { anchorEl, openAdditionalMenu, closeAdditionalMenu } =
-    useAdditionalMenu()
+    useAdditionalMenu(menuId)
 
   return (
     <>
-      <Button
-        aria-label={"additional-menu-icon"}
-        aria-haspopup={"true"}
-        color={"primary"}
-        onClick={openAdditionalMenu}
-      >
+      <Button color={"primary"} onClick={openAdditionalMenu}>
         <AddIcon />
         <ArrowDropDownIcon />
       </Button>

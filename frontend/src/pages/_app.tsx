@@ -8,7 +8,7 @@ import type { AppProps } from "next/app"
 import React from "react"
 import { RecoilRoot } from "recoil"
 import { client } from "../graphql/apollo"
-import { Header } from "../ui/navigation/components/organisms/Header"
+import { ApplicationBar } from "../ui/common/components/ApplicationBar"
 import { theme } from "../ui/theme"
 import "../ui/theme/styles/globals.css"
 
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={theme}>
             <LocalizationProvider dateAdapter={DateAdapter}>
-              <Header />
+              <ApplicationBar />
               <Component {...pageProps} />
             </LocalizationProvider>
           </ThemeProvider>
