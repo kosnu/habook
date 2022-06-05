@@ -930,7 +930,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../schema/category.graphql", Input: `type Category implements Node {
+	{Name: "../../../schema/category.graphql", Input: `type Category implements Node {
   pk: Int!
   id: ID!
   name: String!
@@ -983,7 +983,7 @@ extend type Mutation {
   deleteCategory(input: DeleteCategory!): Category!
 }
 `, BuiltIn: false},
-	{Name: "../schema/income_history.graphql", Input: `type IncomeHistory {
+	{Name: "../../../schema/income_history.graphql", Input: `type IncomeHistory {
   pk: Int!
   id: ID!
   income: Int!
@@ -1012,7 +1012,7 @@ extend type Mutation {
   createIncomeHistory(input: NewIncomeHistory!): IncomeHistory!
 }
 `, BuiltIn: false},
-	{Name: "../schema/pagination.graphql", Input: `type PageInfo {
+	{Name: "../../../schema/pagination.graphql", Input: `type PageInfo {
   endCursor: String!
   hasNextPage: Boolean!
 }
@@ -1036,7 +1036,7 @@ input PaginationInput {
   after: String
 }
 `, BuiltIn: false},
-	{Name: "../schema/payment.graphql", Input: `type Payment implements Node{
+	{Name: "../../../schema/payment.graphql", Input: `type Payment implements Node{
   pk: Int!
   id: ID!
   taxIncluded: Boolean!
@@ -1102,7 +1102,7 @@ extend type Mutation {
   deletePayment(input: DeletePayment!): Boolean!
 }
 `, BuiltIn: false},
-	{Name: "../schema/product.graphql", Input: `type Product implements Node{
+	{Name: "../../../schema/product.graphql", Input: `type Product implements Node{
   pk: Int!
   id: ID!
   name: String!
@@ -1130,7 +1130,7 @@ extend type Query {
   products(input: SearchProduct, page: PaginationInput!): ProductConnection!
 }
 `, BuiltIn: false},
-	{Name: "../schema/schema.graphql", Input: `type ExpenseHistory {
+	{Name: "../../../schema/schema.graphql", Input: `type ExpenseHistory {
   pk: Int!
   id: ID!
   expense: Int!
@@ -1153,7 +1153,7 @@ type Mutation {
   createExpenseHistory(input: NewExpenseHistory!): ExpenseHistory!
 }
 `, BuiltIn: false},
-	{Name: "../schema/user.graphql", Input: `type User {
+	{Name: "../../../schema/user.graphql", Input: `type User {
   pk: Int!
   id: ID!
   name: String!
