@@ -1,7 +1,8 @@
-import * as Apollo from "@apollo/client"
 import { gql } from "@apollo/client"
+import * as Apollo from "@apollo/client"
 
 export type Maybe<T> = T | null
+export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
@@ -11,7 +12,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>
 }
-const defaultOptions = {}
+const defaultOptions = {} as const
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -173,8 +174,8 @@ export type PageInfo = {
 }
 
 export type PaginationInput = {
-  after?: Maybe<Scalars["String"]>
-  first?: Maybe<Scalars["Int"]>
+  after?: InputMaybe<Scalars["String"]>
+  first?: InputMaybe<Scalars["Int"]>
 }
 
 export type Payment = Node & {
@@ -242,7 +243,7 @@ export type Query = {
 }
 
 export type QueryCategoriesArgs = {
-  input?: Maybe<SearchCategories>
+  input?: InputMaybe<SearchCategories>
   page: PaginationInput
 }
 
@@ -255,7 +256,7 @@ export type QueryExpenseHistoryArgs = {
 }
 
 export type QueryIncomeHistoriesArgs = {
-  input?: Maybe<SearchIncomeHistory>
+  input?: InputMaybe<SearchIncomeHistory>
 }
 
 export type QueryIncomeHistoryArgs = {
@@ -267,7 +268,7 @@ export type QueryPaymentArgs = {
 }
 
 export type QueryPaymentsArgs = {
-  input?: Maybe<SearchPayments>
+  input?: InputMaybe<SearchPayments>
   page: PaginationInput
 }
 
@@ -276,7 +277,7 @@ export type QueryProductArgs = {
 }
 
 export type QueryProductsArgs = {
-  input?: Maybe<SearchProduct>
+  input?: InputMaybe<SearchProduct>
   page: PaginationInput
 }
 
@@ -285,25 +286,25 @@ export type QueryUserArgs = {
 }
 
 export type SearchCategories = {
-  enable?: Maybe<Scalars["Boolean"]>
-  name?: Maybe<Scalars["String"]>
+  enable?: InputMaybe<Scalars["Boolean"]>
+  name?: InputMaybe<Scalars["String"]>
   userId: Scalars["ID"]
 }
 
 export type SearchIncomeHistory = {
-  beginningOfPeriod?: Maybe<Scalars["String"]>
-  endOfPeriod?: Maybe<Scalars["String"]>
+  beginningOfPeriod?: InputMaybe<Scalars["String"]>
+  endOfPeriod?: InputMaybe<Scalars["String"]>
   userId: Scalars["ID"]
 }
 
 export type SearchPayments = {
-  categoryId?: Maybe<Scalars["ID"]>
-  productName?: Maybe<Scalars["String"]>
+  categoryId?: InputMaybe<Scalars["ID"]>
+  productName?: InputMaybe<Scalars["String"]>
   userId: Scalars["ID"]
 }
 
 export type SearchProduct = {
-  productName?: Maybe<Scalars["String"]>
+  productName?: InputMaybe<Scalars["String"]>
   userId: Scalars["ID"]
 }
 
@@ -335,7 +336,7 @@ export type User = {
 
 export type CategoriesQueryVariables = Exact<{
   userId: Scalars["ID"]
-  cursor?: Maybe<Scalars["String"]>
+  cursor?: InputMaybe<Scalars["String"]>
 }>
 
 export type CategoriesQuery = {
@@ -347,20 +348,16 @@ export type CategoriesQuery = {
       endCursor: string
       hasNextPage: boolean
     }
-    edges: Array<
-      | {
-          __typename?: "CategoryEdge"
-          node: {
-            __typename: "Category"
-            id: string
-            name: string
-            enable: boolean
-            createdAt: string
-          }
-        }
-      | null
-      | undefined
-    >
+    edges: Array<{
+      __typename?: "CategoryEdge"
+      node: {
+        __typename: "Category"
+        id: string
+        name: string
+        enable: boolean
+        createdAt: string
+      }
+    } | null>
   }
 }
 
@@ -429,8 +426,8 @@ export type PageInfoFragment = {
 
 export type CategoriesSelectQueryVariables = Exact<{
   userId: Scalars["ID"]
-  cursor?: Maybe<Scalars["String"]>
-  limit?: Maybe<Scalars["Int"]>
+  cursor?: InputMaybe<Scalars["String"]>
+  limit?: InputMaybe<Scalars["Int"]>
 }>
 
 export type CategoriesSelectQuery = {
@@ -442,15 +439,11 @@ export type CategoriesSelectQuery = {
       endCursor: string
       hasNextPage: boolean
     }
-    edges: Array<
-      | {
-          __typename?: "CategoryEdge"
-          cursor: string
-          node: { __typename: "Category"; id: string; name: string }
-        }
-      | null
-      | undefined
-    >
+    edges: Array<{
+      __typename?: "CategoryEdge"
+      cursor: string
+      node: { __typename: "Category"; id: string; name: string }
+    } | null>
   }
 }
 
@@ -515,10 +508,10 @@ export type Payments_ProductFragment = {
 
 export type PaymentsQueryVariables = Exact<{
   userId: Scalars["ID"]
-  categoryId?: Maybe<Scalars["ID"]>
-  productName?: Maybe<Scalars["String"]>
-  cursor?: Maybe<Scalars["String"]>
-  limit?: Maybe<Scalars["Int"]>
+  categoryId?: InputMaybe<Scalars["ID"]>
+  productName?: InputMaybe<Scalars["String"]>
+  cursor?: InputMaybe<Scalars["String"]>
+  limit?: InputMaybe<Scalars["Int"]>
 }>
 
 export type PaymentsQuery = {
@@ -530,32 +523,28 @@ export type PaymentsQuery = {
       endCursor: string
       hasNextPage: boolean
     }
-    edges: Array<
-      | {
-          __typename?: "PaymentEdge"
-          node: {
-            __typename: "Payment"
-            id: string
-            paidOn: string
-            taxIncluded: boolean
-            amount: number
-            numberOfProduct: number
-            createdAt: string
-            category: { __typename: "Category"; id: string; name: string }
-            product: { __typename: "Product"; id: string; name: string }
-          }
-        }
-      | null
-      | undefined
-    >
+    edges: Array<{
+      __typename?: "PaymentEdge"
+      node: {
+        __typename: "Payment"
+        id: string
+        paidOn: string
+        taxIncluded: boolean
+        amount: number
+        numberOfProduct: number
+        createdAt: string
+        category: { __typename: "Category"; id: string; name: string }
+        product: { __typename: "Product"; id: string; name: string }
+      }
+    } | null>
   }
 }
 
 export type ProductsAutocompleteQueryVariables = Exact<{
   userId: Scalars["ID"]
-  productName?: Maybe<Scalars["String"]>
-  cursor?: Maybe<Scalars["String"]>
-  limit?: Maybe<Scalars["Int"]>
+  productName?: InputMaybe<Scalars["String"]>
+  cursor?: InputMaybe<Scalars["String"]>
+  limit?: InputMaybe<Scalars["Int"]>
 }>
 
 export type ProductsAutocompleteQuery = {
@@ -567,15 +556,11 @@ export type ProductsAutocompleteQuery = {
       endCursor: string
       hasNextPage: boolean
     }
-    edges: Array<
-      | {
-          __typename?: "ProductEdge"
-          cursor: string
-          node: { __typename: "Product"; id: string; name: string }
-        }
-      | null
-      | undefined
-    >
+    edges: Array<{
+      __typename?: "ProductEdge"
+      cursor: string
+      node: { __typename: "Product"; id: string; name: string }
+    } | null>
   }
 }
 
