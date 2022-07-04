@@ -19,6 +19,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// CreatePayment is the resolver for the createPayment field.
 func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPayment) (*model.Payment, error) {
 	uuidV4 := uuid.New()
 	paymentId := strings.Replace(uuidV4.String(), "-", "", -1)
@@ -81,6 +82,7 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 	return model.PaymentFromEntity(&record), nil
 }
 
+// UpdatePayment is the resolver for the updatePayment field.
 func (r *mutationResolver) UpdatePayment(ctx context.Context, input model.UpdatePayment) (*model.Payment, error) {
 	var record entity.Payment
 	paymentRecord := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID)
@@ -116,6 +118,7 @@ func (r *mutationResolver) UpdatePayment(ctx context.Context, input model.Update
 	return model.PaymentFromEntity(&record), nil
 }
 
+// DeletePayment is the resolver for the deletePayment field.
 func (r *mutationResolver) DeletePayment(ctx context.Context, input model.DeletePayment) (bool, error) {
 	var record entity.Payment
 	err := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID).Delete(&record).Error
@@ -126,6 +129,7 @@ func (r *mutationResolver) DeletePayment(ctx context.Context, input model.Delete
 	return true, nil
 }
 
+// Product is the resolver for the product field.
 func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*model.Product, error) {
 	record, err := dataloader.For(ctx).ProductById.Load(obj.ProductID)
 	if err != nil {
@@ -134,6 +138,7 @@ func (r *paymentResolver) Product(ctx context.Context, obj *model.Payment) (*mod
 	return record, nil
 }
 
+// Category is the resolver for the category field.
 func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*model.Category, error) {
 	record, err := dataloader.For(ctx).CategoryById.Load(obj.CategoryID)
 	if err != nil {
@@ -142,6 +147,7 @@ func (r *paymentResolver) Category(ctx context.Context, obj *model.Payment) (*mo
 	return record, nil
 }
 
+// User is the resolver for the user field.
 func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.User, error) {
 	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
 	if err != nil {
@@ -150,6 +156,7 @@ func (r *paymentResolver) User(ctx context.Context, obj *model.Payment) (*model.
 	return record, nil
 }
 
+// Payment is the resolver for the payment field.
 func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment, error) {
 	var record entity.Payment
 	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
@@ -159,6 +166,7 @@ func (r *queryResolver) Payment(ctx context.Context, id string) (*model.Payment,
 	return model.PaymentFromEntity(&record), nil
 }
 
+// Payments is the resolver for the payments field.
 func (r *queryResolver) Payments(ctx context.Context, input *model.SearchPayments, page model.PaginationInput) (*model.PaymentConnection, error) {
 	var records []entity.Payment
 	// TODO: Sortを引数に入れる

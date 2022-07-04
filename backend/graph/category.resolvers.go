@@ -18,6 +18,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
+// User is the resolver for the user field.
 func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*model.User, error) {
 	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
 	if err != nil {
@@ -26,6 +27,7 @@ func (r *categoryResolver) User(ctx context.Context, obj *model.Category) (*mode
 	return record, nil
 }
 
+// CreateCategory is the resolver for the createCategory field.
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
 	uuidV4 := uuid.New()
 	id := strings.Replace(uuidV4.String(), "-", "", -1)
@@ -52,6 +54,7 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 	return model.CategoryFromEntity(&record), nil
 }
 
+// UpdateCategory is the resolver for the updateCategory field.
 func (r *mutationResolver) UpdateCategory(ctx context.Context, input model.UpdateCategory) (*model.Category, error) {
 	if len(input.Name) < 2 {
 		graphql.AddError(ctx, gqlerror.Errorf(lib.CategoryNameValidationMessage))
@@ -67,6 +70,7 @@ func (r *mutationResolver) UpdateCategory(ctx context.Context, input model.Updat
 	return model.CategoryFromEntity(&record), nil
 }
 
+// DeleteCategory is the resolver for the deleteCategory field.
 func (r *mutationResolver) DeleteCategory(ctx context.Context, input model.DeleteCategory) (*model.Category, error) {
 	var record entity.Category
 	err := r.DB.Find(&record, "id = ? AND user_id = ?", input.ID, input.UserID).Update("enable", false).Error
@@ -77,6 +81,7 @@ func (r *mutationResolver) DeleteCategory(ctx context.Context, input model.Delet
 	return model.CategoryFromEntity(&record), nil
 }
 
+// Category is the resolver for the category field.
 func (r *queryResolver) Category(ctx context.Context, id string) (*model.Category, error) {
 	var record entity.Category
 	// TODO: 検索項目を増やす
@@ -87,6 +92,7 @@ func (r *queryResolver) Category(ctx context.Context, id string) (*model.Categor
 	return model.CategoryFromEntity(&record), nil
 }
 
+// Categories is the resolver for the categories field.
 func (r *queryResolver) Categories(ctx context.Context, input *model.SearchCategories, page model.PaginationInput) (*model.CategoryConnection, error) {
 	var records []entity.Category
 	// TODO: Sortを引数に入れる

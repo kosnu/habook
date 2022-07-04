@@ -13,6 +13,7 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
+// CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	uuidV4 := uuid.New()
 	id := strings.Replace(uuidV4.String(), "-", "", -1)
@@ -34,6 +35,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	return res, nil
 }
 
+// User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
 	var record entity.User
 	if err := r.DB.Debug().Find(&record, "id = ?", id).Error; err != nil {
@@ -42,6 +44,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 	return model.UserFromEntity(&record), nil
 }
 
+// Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	var records []entity.User
 	if err := r.DB.Find(&records).Error; err != nil {

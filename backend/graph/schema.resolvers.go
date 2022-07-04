@@ -11,14 +11,17 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
+// CreateExpenseHistory is the resolver for the createExpenseHistory field.
 func (r *mutationResolver) CreateExpenseHistory(ctx context.Context, input model.NewExpenseHistory) (*model.ExpenseHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// ExpenseHistory is the resolver for the expenseHistory field.
 func (r *queryResolver) ExpenseHistory(ctx context.Context, id string) (*model.ExpenseHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// ExpenseHistories is the resolver for the expenseHistories field.
 func (r *queryResolver) ExpenseHistories(ctx context.Context) ([]*model.ExpenseHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }

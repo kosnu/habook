@@ -10,6 +10,7 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
+// Product is the resolver for the product field.
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
 	var record entity.Product
 	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
@@ -19,6 +20,7 @@ func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product,
 	return model.ProductFromEntity(&record), nil
 }
 
+// Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context, input *model.SearchProduct, page model.PaginationInput) (*model.ProductConnection, error) {
 	var records []entity.Product
 	// TODO: Sortを引数に入れる
