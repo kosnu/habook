@@ -15,6 +15,7 @@ import (
 	"github.com/kosnu/habook-backend/graph/model"
 )
 
+// User is the resolver for the user field.
 func (r *incomeHistoryResolver) User(ctx context.Context, obj *model.IncomeHistory) (*model.User, error) {
 	record, err := dataloader.For(ctx).UserById.Load(obj.UserID)
 	if err != nil {
@@ -23,6 +24,7 @@ func (r *incomeHistoryResolver) User(ctx context.Context, obj *model.IncomeHisto
 	return record, nil
 }
 
+// CreateIncomeHistory is the resolver for the createIncomeHistory field.
 func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.NewIncomeHistory) (*model.IncomeHistory, error) {
 	uuidV4 := uuid.New()
 	id := strings.Replace(uuidV4.String(), "-", "", -1)
@@ -43,6 +45,7 @@ func (r *mutationResolver) CreateIncomeHistory(ctx context.Context, input model.
 	return model.IncomeHistoryFromEntity(&record), nil
 }
 
+// IncomeHistory is the resolver for the incomeHistory field.
 func (r *queryResolver) IncomeHistory(ctx context.Context, id string) (*model.IncomeHistory, error) {
 	var record entity.IncomeHistory
 	if err := r.DB.Find(&record, "id = ?", id).Error; err != nil {
@@ -52,6 +55,7 @@ func (r *queryResolver) IncomeHistory(ctx context.Context, id string) (*model.In
 	return model.IncomeHistoryFromEntity(&record), nil
 }
 
+// IncomeHistories is the resolver for the incomeHistories field.
 func (r *queryResolver) IncomeHistories(ctx context.Context, input *model.SearchIncomeHistory) ([]*model.IncomeHistory, error) {
 	var records []entity.IncomeHistory
 	// TODO: Sortを引数に入れる

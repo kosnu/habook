@@ -7455,7 +7455,12 @@ func (ec *executionContext) unmarshalInputDeleteCategory(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"id", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "id":
 			var err error
@@ -7486,7 +7491,12 @@ func (ec *executionContext) unmarshalInputDeletePayment(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"id", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "id":
 			var err error
@@ -7517,7 +7527,12 @@ func (ec *executionContext) unmarshalInputNewCategory(ctx context.Context, obj i
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"name", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "name":
 			var err error
@@ -7548,7 +7563,12 @@ func (ec *executionContext) unmarshalInputNewExpenseHistory(ctx context.Context,
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"expense", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "expense":
 			var err error
@@ -7579,7 +7599,12 @@ func (ec *executionContext) unmarshalInputNewIncomeHistory(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"income", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "income":
 			var err error
@@ -7610,7 +7635,12 @@ func (ec *executionContext) unmarshalInputNewPayment(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"taxIncluded", "paidOn", "numberOfProduct", "amount", "productName", "categoryId", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "taxIncluded":
 			var err error
@@ -7681,7 +7711,12 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"name"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "name":
 			var err error
@@ -7704,7 +7739,12 @@ func (ec *executionContext) unmarshalInputPaginationInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"first", "after"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "first":
 			var err error
@@ -7735,7 +7775,12 @@ func (ec *executionContext) unmarshalInputSearchCategories(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"name", "enable", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "name":
 			var err error
@@ -7774,7 +7819,12 @@ func (ec *executionContext) unmarshalInputSearchIncomeHistory(ctx context.Contex
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"userId", "beginningOfPeriod", "endOfPeriod"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "userId":
 			var err error
@@ -7813,7 +7863,12 @@ func (ec *executionContext) unmarshalInputSearchPayments(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"userId", "productName", "categoryId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "userId":
 			var err error
@@ -7852,7 +7907,12 @@ func (ec *executionContext) unmarshalInputSearchProduct(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"userId", "productName"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "userId":
 			var err error
@@ -7883,7 +7943,12 @@ func (ec *executionContext) unmarshalInputUpdateCategory(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"id", "name", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "id":
 			var err error
@@ -7922,7 +7987,12 @@ func (ec *executionContext) unmarshalInputUpdatePayment(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	for k, v := range asMap {
+	fieldsInOrder := [...]string{"id", "taxIncluded", "paidOn", "numberOfProduct", "amount", "categoryId", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
 		switch k {
 		case "id":
 			var err error
