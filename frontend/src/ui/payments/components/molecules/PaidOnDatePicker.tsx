@@ -1,4 +1,5 @@
-import { DatePicker } from "@mui/lab"
+import { DatePicker } from "@mui/x-date-pickers"
+import "@mui/lab"
 import { TextField } from "@mui/material"
 
 import React from "react"

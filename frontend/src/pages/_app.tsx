@@ -1,6 +1,6 @@
 import { ApolloProvider } from "@apollo/client"
-import { LocalizationProvider } from "@mui/lab/"
-import DateAdapter from "@mui/lab/AdapterDateFns"
+import { AdapterDateFns as DateAdapter } from "@mui/x-date-pickers/AdapterDateFns"
+import { LocalizationProvider } from "@mui/x-date-pickers"
 import { StyledEngineProvider } from "@mui/material"
 import { Theme, ThemeProvider } from "@mui/material/styles"
 import "@mui/styles"
