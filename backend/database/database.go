@@ -5,8 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ConnectDatabase() (*gorm.DB, error) {
-	dsn := "habook:habook@tcp(db:3306)/habook?charset=utf8mb4&parseTime=True&loc=Local"
+func ConnectDatabase(dsn string) (*gorm.DB, error) {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
