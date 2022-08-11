@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { PaymentListTemplate } from "../../ui/payments/components/templates/PaymentListTemplate"
+import { PaymentsPage } from "../../ui/payments/pages/PaymentsPage"
 
 export default function index() {
   return (
@@ -9,7 +9,7 @@ export default function index() {
         <title>支払い一覧 | HABook</title>
         <link rel={"icon"} href={"/favicon.ico"} />
       </Head>
-      <PaymentListTemplate />
+      <PaymentsPage />
     </>
   )
 }
