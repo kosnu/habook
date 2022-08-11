@@ -16,7 +16,12 @@ import (
 const defaultPort = "8080"
 
 func main() {
-	db, err := database.ConnectDatabase()
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dsn := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":3306)/habook?charset=utf8mb4&parseTime=True&loc=Local"
+
+	db, err := database.ConnectDatabase(dsn)
 	if err != nil {
 		panic(err)
 	}
