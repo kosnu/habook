@@ -1,6 +1,6 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
-import { PaymentList } from "../../components/organisms/PaymentList"
+import { PaymentList } from "../../parts/PaymentList"
 
 export function PaymentsPage() {
   return (
