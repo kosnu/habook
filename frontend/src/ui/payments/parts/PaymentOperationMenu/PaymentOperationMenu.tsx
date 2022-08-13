@@ -1,9 +1,8 @@
 import { Menu, MenuItem, Typography } from "@mui/material"
 import React from "react"
-import { AnchorElement } from "src/ui/common/hooks/useAnchorElement"
 
 interface PaymentOperationMenuProps {
-  anchorElement: AnchorElement
+  anchorElement: HTMLElement | null | undefined
   onMenuClose: () => void
   onEditButtonClick: () => void
   onDeleteButtonClick: () => void
