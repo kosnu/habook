@@ -23,17 +23,22 @@ export interface CreatePaymentInput {
 }
 
 export function CreatePaymentForm() {
-  const { register, control, setValue, handleSubmit } =
-    useForm<CreatePaymentInput>({
-      defaultValues: {
-        paidOnDate: new Date(),
-        categoryId: "",
-        productName: "",
-        numberOfProduct: 1,
-        consumptionTaxRate: 1.08,
-      },
-      resolver: zodResolver(schema),
-    })
+  const {
+    register,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreatePaymentInput>({
+    defaultValues: {
+      paidOnDate: new Date(),
+      categoryId: "",
+      productName: "",
+      numberOfProduct: 1,
+      consumptionTaxRate: 1.08,
+    },
+    resolver: zodResolver(schema),
+  })
 
   function handleProductAutocompleteChange(inputValue: string) {
     setValue("productName", inputValue, {
@@ -128,7 +133,13 @@ export function CreatePaymentForm() {
             />
           </Grid>
           <Grid item>
-            <AmountTextField textFieldProps={register("amount")} />
+            <AmountTextField
+              textFieldProps={register("amount", {
+                valueAsNumber: true,
+              })}
+              invalid={!!errors.amount}
+              errorMessage={errors.amount?.message}
+            />
           </Grid>
         </Grid>
         <Grid item>

@@ -13,5 +13,10 @@ export const schema = z.object({
     .number()
     .min(1, { message: "個数を入力してください" })
     .max(10, { message: "最大数を超えています" }),
-  amount: z.number().min(1, "金額を入力してください"),
+  amount: z
+    .number({
+      required_error: "金額を入力してください",
+      invalid_type_error: "金額を入力してください",
+    })
+    .nonnegative("0円以上を入力してください"),
 })
