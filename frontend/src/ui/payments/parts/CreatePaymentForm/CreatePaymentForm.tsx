@@ -1,14 +1,18 @@
+import { ApolloError } from "@apollo/client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Create as CreateIcon } from "@mui/icons-material"
 import { Button, Divider, Grid } from "@mui/material"
 import React, { useCallback } from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
+import { useSuccessSnackbar } from "src/ui/common/components/SuccessSnackBar"
+import { useWarningSnackbar } from "src/ui/common/components/WarningSnackBar"
 import { AmountTextField } from "../AmountTextField"
 import { CategorySelect } from "../CategorySelect"
 import { ConsumptionTaxRateSelect } from "../ConsumptionTaxRateSelect"
 import { NumberOfProductSelect } from "../NumberOfProductSelect"
 import { PaidOnDatePicker } from "../PaidOnDatePicker"
 import { ProductAutocomplete } from "../ProductAutocomplete"
+import { useCreatePayment } from "./useCreatePayment"
 import { schema } from "./validationSchema"
 
 type ConsumptionTaxRate = 1.1 | 1.08 | 1
@@ -19,7 +23,16 @@ export interface CreatePaymentInput {
   productName: string
   numberOfProduct: number
   consumptionTaxRate: ConsumptionTaxRate
-  amount: number
+  amount: number | null
+}
+
+const defaultValues: Partial<CreatePaymentInput> = {
+  paidOnDate: new Date(),
+  categoryId: "",
+  productName: "",
+  numberOfProduct: 1,
+  consumptionTaxRate: 1.08,
+  amount: null,
 }
 
 export function CreatePaymentForm() {
@@ -28,17 +41,15 @@ export function CreatePaymentForm() {
     control,
     setValue,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreatePaymentInput>({
-    defaultValues: {
-      paidOnDate: new Date(),
-      categoryId: "",
-      productName: "",
-      numberOfProduct: 1,
-      consumptionTaxRate: 1.08,
-    },
+    defaultValues: defaultValues,
     resolver: zodResolver(schema),
   })
+  const { createPayment } = useCreatePayment()
+  const { openSuccessSnackbar } = useSuccessSnackbar()
+  const { openWarningSnackbar } = useWarningSnackbar()
 
   function handleProductAutocompleteChange(inputValue: string) {
     setValue("productName", inputValue, {
@@ -49,10 +60,21 @@ export function CreatePaymentForm() {
   }
 
   // フォーム送信時の処理
-  const onSubmit: SubmitHandler<CreatePaymentInput> = useCallback((data) => {
-    // バリデーションチェックOK！なときに行う処理を追加
-    console.log(data)
-  }, [])
+  const onSubmit: SubmitHandler<CreatePaymentInput> = useCallback(
+    async (data) => {
+      try {
+        await createPayment(data)
+        openSuccessSnackbar("支払いが作成できました")
+        reset({ ...defaultValues })
+      } catch (e) {
+        console.error(e)
+        if (e instanceof ApolloError) {
+          openWarningSnackbar(e.message)
+        }
+      }
+    },
+    [createPayment, openSuccessSnackbar, openWarningSnackbar, reset],
+  )
 
   return (
     <>

@@ -28,6 +28,7 @@ export function ProductAutocomplete({
   return (
     <>
       <Autocomplete
+        {...autocompleteProps}
         freeSolo
         id={"combo-box-product-name"}
         options={products.map((product) => product.name)}
