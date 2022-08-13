@@ -21,6 +21,11 @@ export function ProductAutocomplete({
 }: ProductAutocompleteProps) {
   const { products, loading, error } = useProducts()
 
+  // TODO: エラー処理
+  if (error) {
+    console.error(error)
+  }
+
   function handleChange(event: React.SyntheticEvent, value: string | null) {
     value && onChange(value)
   }
