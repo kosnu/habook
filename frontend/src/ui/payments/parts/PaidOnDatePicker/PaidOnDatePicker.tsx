@@ -2,11 +2,11 @@ import { TextField } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import React from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { CreatePaymentInput } from "../CreatePaymentForm"
+import { PaymentFormInput } from "../../types"
 
 interface PaidOnDatePickerProps {
   // TODO: `react-hook-form` に依存しない型定義をしたい
-  datePickerProps: ControllerRenderProps<CreatePaymentInput, "paidOnDate">
+  datePickerProps: ControllerRenderProps<PaymentFormInput, "paidOnDate">
   invalid?: boolean
   errorMessage?: string
 }

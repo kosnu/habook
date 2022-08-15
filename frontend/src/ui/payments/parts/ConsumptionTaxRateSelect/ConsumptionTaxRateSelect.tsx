@@ -7,12 +7,12 @@ import {
 } from "@mui/material"
 import React from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { CreatePaymentInput } from "../CreatePaymentForm"
+import { PaymentFormInput } from "../../types"
 
 interface ConsumptionTaxRateSelectProps {
   // TODO: `react-hook-form` に依存しない型定義をしたい
   consumptionTaxRateSelectProps: ControllerRenderProps<
-    CreatePaymentInput,
+    PaymentFormInput,
     "consumptionTaxRate"
   >
   invalid?: boolean

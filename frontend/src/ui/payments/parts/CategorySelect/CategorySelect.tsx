@@ -8,12 +8,12 @@ import {
 } from "@mui/material"
 import React from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { CreatePaymentInput } from "../CreatePaymentForm"
+import { PaymentFormInput } from "../../types"
 import { useCategories } from "./useCategories"
 
 interface CategorySelectProps {
   // TODO: `react-hook-form` に依存しない型定義をしたい
-  selectProps: ControllerRenderProps<CreatePaymentInput, "categoryId">
+  selectProps: ControllerRenderProps<PaymentFormInput, "categoryId">
   invalid?: boolean
   errorMessage?: string
 }
