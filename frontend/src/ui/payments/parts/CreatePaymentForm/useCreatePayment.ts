@@ -1,13 +1,13 @@
 import { useCreatePaymentMutation } from "../../../../graphql/types"
 import { useLoginUser } from "../../../common/hooks/useLoginUser"
 import { dateToString } from "../../../common/utils/formatter"
-import { CreatePaymentInput } from "./CreatePaymentForm"
+import { PaymentFormInput } from "../../types"
 
 export function useCreatePayment() {
   const { userId } = useLoginUser()
   const [createPayment] = useCreatePaymentMutation()
 
-  async function handlePaymentCreate(input: CreatePaymentInput) {
+  async function handlePaymentCreate(input: PaymentFormInput) {
     await createPayment({
       variables: {
         userId: userId,

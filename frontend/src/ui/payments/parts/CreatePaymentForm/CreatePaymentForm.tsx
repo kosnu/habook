@@ -6,6 +6,7 @@ import React, { useCallback } from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { useSuccessSnackbar } from "src/ui/common/components/SuccessSnackBar"
 import { useWarningSnackbar } from "src/ui/common/components/WarningSnackBar"
+import { PaymentFormInput } from "../../types"
 import { AmountTextField } from "../AmountTextField"
 import { CategorySelect } from "../CategorySelect"
 import { ConsumptionTaxRateSelect } from "../ConsumptionTaxRateSelect"
@@ -15,18 +16,7 @@ import { ProductAutocomplete } from "../ProductAutocomplete"
 import { useCreatePayment } from "./useCreatePayment"
 import { schema } from "./validationSchema"
 
-type ConsumptionTaxRate = 1.1 | 1.08 | 1
-
-export interface CreatePaymentInput {
-  paidOnDate: Date
-  categoryId: string
-  productName: string
-  numberOfProduct: number
-  consumptionTaxRate: ConsumptionTaxRate
-  amount: number | null
-}
-
-const defaultValues: Partial<CreatePaymentInput> = {
+const defaultValues: Partial<PaymentFormInput> = {
   paidOnDate: new Date(),
   categoryId: "",
   productName: "",
@@ -43,7 +33,7 @@ export function CreatePaymentForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreatePaymentInput>({
+  } = useForm<PaymentFormInput>({
     defaultValues: defaultValues,
     resolver: zodResolver(schema),
   })
@@ -60,7 +50,7 @@ export function CreatePaymentForm() {
   }
 
   // フォーム送信時の処理
-  const onSubmit: SubmitHandler<CreatePaymentInput> = useCallback(
+  const onSubmit: SubmitHandler<PaymentFormInput> = useCallback(
     async (data) => {
       try {
         await createPayment(data)
