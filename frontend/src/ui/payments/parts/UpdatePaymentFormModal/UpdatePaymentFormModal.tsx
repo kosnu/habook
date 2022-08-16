@@ -5,36 +5,42 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material"
-import React from "react"
+import React, { useCallback } from "react"
+import { Payment } from "../../types"
+import { UpdatePaymentForm } from "../UpdatePaymentForm"
 
 interface UpdatePaymentFormModalProps {
   open: boolean
+  payment: Payment
   onClose: () => void
 }
 
 export function UpdatePaymentFormModal({
   open,
+  payment,
   onClose,
 }: UpdatePaymentFormModalProps) {
-  function handleClose() {
+  const handleClose = useCallback(() => {
     onClose()
-  }
+  }, [onClose])
 
-  async function handleUpdateButtonClick() {
+  const handleUpdateButtonClick = useCallback(async () => {
     // await updatePayment()
     onClose()
-  }
+  }, [onClose])
 
   return (
     <>
       <Dialog
-        onClose={handleClose}
         open={open}
+        onClose={handleClose}
         maxWidth={"md"}
         PaperProps={{ style: { width: "640px" } }}
       >
         <DialogTitle>支払いの編集</DialogTitle>
-        <DialogContent>{/*<UpdatePaymentForm />*/}</DialogContent>
+        <DialogContent>
+          <UpdatePaymentForm payment={payment} />
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color={"primary"}>
             キャンセル

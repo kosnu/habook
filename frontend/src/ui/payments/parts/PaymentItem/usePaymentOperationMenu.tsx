@@ -1,29 +1,28 @@
 import React, { useCallback, useState } from "react"
-import { Payments_PaymentFragment } from "src/graphql/types"
+import { Payment } from "../../types"
 import { PaymentOperationMenu } from "../PaymentOperationMenu"
+import { useUpdatePaymentFormModal } from "./useUpdatePaymentFormModal"
 
-export function usePaymentOperationMenu() {
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>()
-  const [payment, setPayment] = useState<Payments_PaymentFragment | null>()
+export function usePaymentOperationMenu(payment: Payment) {
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
+  const { openUpdatePaymentFormModal, renderUpdatePaymentFormModal } =
+    useUpdatePaymentFormModal()
 
-  function handleMenuOpen(
-    event: React.MouseEvent<HTMLButtonElement>,
-    payment: Payments_PaymentFragment,
-  ) {
-    setAnchorElement(event.currentTarget)
-    setPayment(payment)
-  }
+  const handleMenuOpen = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorElement(event.currentTarget)
+    },
+    [],
+  )
 
   const handleMenuClose = useCallback(() => {
     setAnchorElement(null)
-    setPayment(null)
   }, [])
 
   const handleEditButtonClick = useCallback(() => {
-    // TODO: 支払い編集モーダルを開く処理
-    console.log("payment", payment)
+    openUpdatePaymentFormModal()
     handleMenuClose()
-  }, [payment, handleMenuClose])
+  }, [openUpdatePaymentFormModal, handleMenuClose])
 
   const handleDeleteButtonClick = useCallback(() => {
     // TODO: 支払いを削除する処理
@@ -40,6 +39,7 @@ export function usePaymentOperationMenu() {
           onEditButtonClick={handleEditButtonClick}
           onDeleteButtonClick={handleDeleteButtonClick}
         />
+        {renderUpdatePaymentFormModal(payment)}
       </>
     )
   }, [
@@ -47,6 +47,8 @@ export function usePaymentOperationMenu() {
     handleMenuClose,
     handleEditButtonClick,
     handleDeleteButtonClick,
+    renderUpdatePaymentFormModal,
+    payment,
   ])
 
   return {
