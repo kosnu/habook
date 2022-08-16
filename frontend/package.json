@@ -34,7 +34,7 @@
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "7.34.1",
+    "react-hook-form": "7.34.2",
     "react-infinite-scroll-component": "6.1.0",
     "recoil": "0.7.5",
     "zod": "3.18.0"
