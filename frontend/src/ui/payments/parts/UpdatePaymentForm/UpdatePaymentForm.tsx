@@ -1,7 +1,8 @@
 import { ApolloError } from "@apollo/client"
 import { css } from "@emotion/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Grid, TextField } from "@mui/material"
+import { Create as CreateIcon } from "@mui/icons-material"
+import { Button, Divider, Grid, TextField } from "@mui/material"
 import React, { useCallback } from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { useSuccessSnackbar } from "../../../common/components/SuccessSnackBar"
@@ -13,15 +14,21 @@ import { ConsumptionTaxRateSelect } from "../ConsumptionTaxRateSelect"
 import { schema } from "../CreatePaymentForm/validationSchema"
 import { NumberOfProductSelect } from "../NumberOfProductSelect"
 import { PaidOnDatePicker } from "../PaidOnDatePicker"
+import { useUpdatePayment } from "../PaymentItem/useUpdatePayment"
 
 interface UpdatePaymentFormInput {
   payment: Payment
+  onModalClose: () => void
 }
 
-export function UpdatePaymentForm({ payment }: UpdatePaymentFormInput) {
-  const defaultValues: Omit<PaymentFormInput, "productName"> = {
+export function UpdatePaymentForm({
+  payment,
+  onModalClose,
+}: UpdatePaymentFormInput) {
+  const defaultValues: PaymentFormInput = {
     paidOnDate: new Date(payment.paidOn),
     categoryId: payment.category.id,
+    productName: payment.product.name,
     numberOfProduct: payment.numberOfProduct,
     consumptionTaxRate: 1.08,
     amount: payment.amount,
@@ -30,22 +37,26 @@ export function UpdatePaymentForm({ payment }: UpdatePaymentFormInput) {
     register,
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<PaymentFormInput>({
     defaultValues: defaultValues,
     resolver: zodResolver(schema),
   })
+  const { updatePayment } = useUpdatePayment()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
+
+  const handleModalClose = useCallback(() => {
+    onModalClose()
+  }, [onModalClose])
 
   // フォーム送信時の処理
   const onSubmit: SubmitHandler<PaymentFormInput> = useCallback(
     async (data) => {
       try {
-        console.log(data)
+        await updatePayment(payment.id, data)
         openSuccessSnackbar("支払いの変更ができました")
-        reset({ ...defaultValues })
+        onModalClose()
       } catch (e) {
         console.error(e)
         if (e instanceof ApolloError) {
@@ -53,7 +64,13 @@ export function UpdatePaymentForm({ payment }: UpdatePaymentFormInput) {
         }
       }
     },
-    [openSuccessSnackbar, openWarningSnackbar, reset],
+    [
+      updatePayment,
+      openSuccessSnackbar,
+      openWarningSnackbar,
+      payment,
+      onModalClose,
+    ],
   )
 
   return (
@@ -94,15 +111,13 @@ export function UpdatePaymentForm({ payment }: UpdatePaymentFormInput) {
         <Grid item container spacing={2}>
           <Grid item>
             <TextField
+              disabled
               variant={"standard"}
               css={css`
                 width: 400px;
               `}
               label={"商品名"}
               defaultValue={payment.product.name}
-              InputProps={{
-                readOnly: true,
-              }}
             />
           </Grid>
           <Grid item>
@@ -141,6 +156,32 @@ export function UpdatePaymentForm({ payment }: UpdatePaymentFormInput) {
               invalid={!!errors.amount}
               errorMessage={errors.amount?.message}
             />
+          </Grid>
+          <Grid item>
+            <Divider variant={"fullWidth"} />
+          </Grid>
+          <Grid
+            container
+            item
+            spacing={2}
+            direction={"row"}
+            justifyContent={"end"}
+          >
+            <Grid item>
+              <Button onClick={handleModalClose} color={"primary"}>
+                キャンセル
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant={"contained"}
+                color={"primary"}
+                startIcon={<CreateIcon />}
+                onClick={handleSubmit(onSubmit)}
+              >
+                支払いを更新する
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

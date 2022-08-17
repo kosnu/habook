@@ -1,10 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material"
+import { Dialog, DialogContent, DialogTitle } from "@mui/material"
 import React, { useCallback } from "react"
 import { Payment } from "../../types"
 import { UpdatePaymentForm } from "../UpdatePaymentForm"
@@ -24,11 +18,6 @@ export function UpdatePaymentFormModal({
     onClose()
   }, [onClose])
 
-  const handleUpdateButtonClick = useCallback(async () => {
-    // await updatePayment()
-    onClose()
-  }, [onClose])
-
   return (
     <>
       <Dialog
@@ -39,21 +28,8 @@ export function UpdatePaymentFormModal({
       >
         <DialogTitle>支払いの編集</DialogTitle>
         <DialogContent>
-          <UpdatePaymentForm payment={payment} />
+          <UpdatePaymentForm payment={payment} onModalClose={handleClose} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color={"primary"}>
-            キャンセル
-          </Button>
-          <Button
-            color={"primary"}
-            variant={"contained"}
-            // disabled={invalid}
-            onClick={handleUpdateButtonClick}
-          >
-            支払いを更新する
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   )
