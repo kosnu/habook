@@ -13,18 +13,11 @@ import { SuccessSnackBar } from "src/ui/common/components/SuccessSnackBar"
 import { WarningSnackBar } from "src/ui/common/components/WarningSnackBar"
 import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
 import { PaymentItem } from "../PaymentItem"
-import { UpdatePaymentFormModal } from "../UpdatePaymentFormModal"
 import { usePayments } from "./usePayments"
-import { useUpdatePaymentFormModal } from "./useUpdatePaymentFormModal"
 
 export function PaymentList() {
   const { userId } = useLoginUser()
   const { payments, loading, error } = usePayments(userId)
-  const { open, closeModal } = useUpdatePaymentFormModal()
-
-  function handleUpdatePaymentFormModalClose() {
-    closeModal()
-  }
 
   // TODO: エラーが発生したときの実装をする
   if (error) return <Typography>Error</Typography>
@@ -53,10 +46,6 @@ export function PaymentList() {
       <SuccessSnackBar />
       <WarningSnackBar />
       <LoadingCircular loading={loading} />
-      <UpdatePaymentFormModal
-        open={open}
-        onClose={handleUpdatePaymentFormModalClose}
-      />
     </>
   )
 }
