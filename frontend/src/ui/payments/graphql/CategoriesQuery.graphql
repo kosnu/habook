@@ -19,8 +19,9 @@ query categoriesSelect(
         edges {
             cursor
             node {
-                ...Payments_Category
-            }
+                __typename
+                id
+                name            }
         }
     }
 }

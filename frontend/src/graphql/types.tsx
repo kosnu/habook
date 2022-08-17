@@ -482,30 +482,6 @@ export type DeletePaymentMutation = {
   deletePayment: boolean
 }
 
-export type Payments_PaymentFragment = {
-  __typename: "Payment"
-  id: string
-  paidOn: string
-  taxIncluded: boolean
-  amount: number
-  numberOfProduct: number
-  createdAt: string
-  category: { __typename: "Category"; id: string; name: string }
-  product: { __typename: "Product"; id: string; name: string }
-}
-
-export type Payments_CategoryFragment = {
-  __typename: "Category"
-  id: string
-  name: string
-}
-
-export type Payments_ProductFragment = {
-  __typename: "Product"
-  id: string
-  name: string
-}
-
 export type PaymentsQueryVariables = Exact<{
   userId: Scalars["ID"]
   categoryId?: InputMaybe<Scalars["ID"]>
@@ -604,39 +580,6 @@ export const PageInfoFragmentDoc = gql`
     endCursor
     hasNextPage
   }
-`
-export const Payments_CategoryFragmentDoc = gql`
-  fragment Payments_Category on Category {
-    __typename
-    id
-    name
-  }
-`
-export const Payments_ProductFragmentDoc = gql`
-  fragment Payments_Product on Product {
-    __typename
-    id
-    name
-  }
-`
-export const Payments_PaymentFragmentDoc = gql`
-  fragment Payments_Payment on Payment {
-    __typename
-    id
-    category {
-      ...Payments_Category
-    }
-    product {
-      ...Payments_Product
-    }
-    paidOn
-    taxIncluded
-    amount
-    numberOfProduct
-    createdAt
-  }
-  ${Payments_CategoryFragmentDoc}
-  ${Payments_ProductFragmentDoc}
 `
 export const CategoriesDocument = gql`
   query categories($userId: ID!, $cursor: String) {
@@ -886,13 +829,14 @@ export const CategoriesSelectDocument = gql`
       edges {
         cursor
         node {
-          ...Payments_Category
+          __typename
+          id
+          name
         }
       }
     }
   }
   ${PageInfoFragmentDoc}
-  ${Payments_CategoryFragmentDoc}
 `
 
 /**
@@ -972,10 +916,25 @@ export const CreatePaymentDocument = gql`
         productName: $productName
       }
     ) {
-      ...Payments_Payment
+      __typename
+      id
+      category {
+        __typename
+        id
+        name
+      }
+      product {
+        __typename
+        id
+        name
+      }
+      paidOn
+      taxIncluded
+      amount
+      numberOfProduct
+      createdAt
     }
   }
-  ${Payments_PaymentFragmentDoc}
 `
 export type CreatePaymentMutationFn = Apollo.MutationFunction<
   CreatePaymentMutation,
@@ -1100,13 +1059,28 @@ export const PaymentsDocument = gql`
       }
       edges {
         node {
-          ...Payments_Payment
+          __typename
+          id
+          category {
+            __typename
+            id
+            name
+          }
+          product {
+            __typename
+            id
+            name
+          }
+          paidOn
+          taxIncluded
+          amount
+          numberOfProduct
+          createdAt
         }
       }
     }
   }
   ${PageInfoFragmentDoc}
-  ${Payments_PaymentFragmentDoc}
 `
 
 /**
@@ -1179,13 +1153,14 @@ export const ProductsAutocompleteDocument = gql`
       edges {
         cursor
         node {
-          ...Payments_Product
+          __typename
+          id
+          name
         }
       }
     }
   }
   ${PageInfoFragmentDoc}
-  ${Payments_ProductFragmentDoc}
 `
 
 /**
@@ -1266,10 +1241,25 @@ export const UpdatePaymentDocument = gql`
         amount: $amount
       }
     ) {
-      ...Payments_Payment
+      __typename
+      id
+      category {
+        __typename
+        id
+        name
+      }
+      product {
+        __typename
+        id
+        name
+      }
+      paidOn
+      taxIncluded
+      amount
+      numberOfProduct
+      createdAt
     }
   }
-  ${Payments_PaymentFragmentDoc}
 `
 export type UpdatePaymentMutationFn = Apollo.MutationFunction<
   UpdatePaymentMutation,
