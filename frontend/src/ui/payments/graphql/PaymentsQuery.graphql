@@ -21,7 +21,23 @@ query payments(
         }
         edges {
             node {
-                ...Payments_Payment
+                __typename
+                id
+                category {
+                    __typename
+                    id
+                    name
+                }
+                product {
+                    __typename
+                    id
+                    name
+                }
+                paidOn
+                taxIncluded
+                amount
+                numberOfProduct
+                createdAt
             }
         }
     }
