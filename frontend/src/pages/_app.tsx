@@ -7,9 +7,9 @@ import "@mui/styles"
 import type { AppProps } from "next/app"
 import React from "react"
 import { RecoilRoot } from "recoil"
-import { client } from "../graphql/apollo"
-import { ApplicationBar } from "../ui/common/components/ApplicationBar"
-import { theme } from "../ui/theme"
+import { client } from "~/graphql/apollo"
+import { ApplicationBar } from "~/ui/common/components/ApplicationBar"
+import { theme } from "~/ui/theme"
 import "../ui/theme/styles/globals.css"
 
 declare module "@mui/styles" {

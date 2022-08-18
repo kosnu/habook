@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React from "react"
-import { CategoriesPage } from "src/ui/categories/pages/CategoriesPage"
+import { CategoriesPage } from "~/ui/categories/pages/CategoriesPage"
 
 export default function index() {
   return (
