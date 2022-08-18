@@ -1,6 +1,6 @@
 import { useProductsAutocompleteQuery } from "src/graphql/types"
-import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
-import { connectionToNodes } from "../../../common/utils/connectionToNodes"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { connectionToNodes } from "~/ui/common/utils/connectionToNodes"
 
 export function useProducts() {
   const { userId } = useLoginUser()

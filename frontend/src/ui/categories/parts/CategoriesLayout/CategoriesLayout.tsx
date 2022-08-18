@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Categories_CategoryFragment } from "src/graphql/types"
+import { Categories_CategoryFragment } from "~/graphql/types"
 import { CategoryList } from "../CategoryList"
 import { CategoryOperationMenu } from "../CategoryOperationMenu"
 import { DeleteCategoryConfirmModal } from "../DeleteCategoryConfirmModal"

@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil"
-import { useCreateCategoryMutation } from "src/graphql/types"
-import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
+import { useCreateCategoryMutation } from "~/graphql/types"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { createCategoryNameInputAtom } from "./useCategoryName"
 
 export function useCreateCategory() {

@@ -2,8 +2,8 @@ import {
   CategoriesQuery,
   CategoriesQueryVariables,
   useCategoriesQuery,
-} from "src/graphql/types"
-import { connectionToNodes } from "src/ui/common/utils/connectionToNodes"
+} from "~/graphql/types"
+import { connectionToNodes } from "~/ui/common/utils/connectionToNodes"
 
 export function useCategories(userId: string) {
   const { data, fetchMore, loading, error } = useCategoriesQuery({

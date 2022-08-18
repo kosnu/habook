@@ -6,7 +6,7 @@ import {
   ListItemText,
 } from "@mui/material"
 import React from "react"
-import { Categories_CategoryFragment } from "../../../../graphql/types"
+import { Categories_CategoryFragment } from "~/graphql/types"
 import { useCategoryOperationMenu } from "../CategoryOperationMenu/useCategoryOperationMenu"
 
 interface CategoryItemProps {

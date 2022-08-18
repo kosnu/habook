@@ -8,10 +8,10 @@ import {
   Typography,
 } from "@mui/material"
 import React from "react"
-import { LoadingCircular } from "src/ui/common/components/LoadingCircular"
-import { SuccessSnackBar } from "src/ui/common/components/SuccessSnackBar"
-import { WarningSnackBar } from "src/ui/common/components/WarningSnackBar"
-import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
+import { LoadingCircular } from "~/ui/common/components/LoadingCircular"
+import { SuccessSnackBar } from "~/ui/common/components/SuccessSnackBar"
+import { WarningSnackBar } from "~/ui/common/components/WarningSnackBar"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { PaymentItem } from "../PaymentItem"
 import { usePayments } from "./usePayments"
 

@@ -7,9 +7,9 @@ import {
   DialogTitle,
 } from "@mui/material"
 import React from "react"
-import { Categories_CategoryFragment } from "src/graphql/types"
-import { useSuccessSnackbar } from "src/ui/common/components/SuccessSnackBar"
-import { useWarningSnackbar } from "src/ui/common/components/WarningSnackBar"
+import { Categories_CategoryFragment } from "~/graphql/types"
+import { useSuccessSnackbar } from "~/ui/common/components/SuccessSnackBar"
+import { useWarningSnackbar } from "~/ui/common/components/WarningSnackBar"
 import { UpdateCategoryForm } from "../UpdateCategoryForm"
 import { useUpdateCategory } from "./useUpdateCategory"
 import { useCategoryFormModal } from "./useUpdateCategoryModal"

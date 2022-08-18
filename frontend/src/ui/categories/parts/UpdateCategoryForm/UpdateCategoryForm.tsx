@@ -1,5 +1,5 @@
 import React from "react"
-import { Categories_CategoryFragment } from "src/graphql/types"
+import { Categories_CategoryFragment } from "~/graphql/types"
 import { CategoryNameInput } from "../CategoryNameInput"
 import { useCategoryName } from "./useCategoryName"
 

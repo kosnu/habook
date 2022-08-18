@@ -2,8 +2,8 @@ import {
   Categories_CategoryFragment,
   CategoriesDocument,
   useDeleteCategoryMutation,
-} from "src/graphql/types"
-import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
+} from "~/graphql/types"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 
 export function useDeleteCategory(
   category: Categories_CategoryFragment | null,

@@ -6,7 +6,7 @@ import {
   useRecoilState,
   useSetRecoilState,
 } from "recoil"
-import { Categories_CategoryFragment } from "src/graphql/types"
+import { Categories_CategoryFragment } from "~/graphql/types"
 
 interface CategoryNameInputAtom {
   categoryName: string
