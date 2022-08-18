@@ -14,7 +14,7 @@ import { NumberOfProductSelect } from "../NumberOfProductSelect"
 import { PaidOnDatePicker } from "../PaidOnDatePicker"
 import { ProductAutocomplete } from "../ProductAutocomplete"
 import { useCreatePayment } from "./useCreatePayment"
-import { schema } from "./validationSchema"
+import { schema } from "~/ui/payments/validationSchema"
 
 const defaultValues: Partial<PaymentFormInput> = {
   paidOnDate: new Date(),
