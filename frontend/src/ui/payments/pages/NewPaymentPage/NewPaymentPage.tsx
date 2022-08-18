@@ -1,7 +1,7 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
-import { SuccessSnackBar } from "src/ui/common/components/SuccessSnackBar"
-import { WarningSnackBar } from "src/ui/common/components/WarningSnackBar"
+import { SuccessSnackBar } from "~/ui/common/components/SuccessSnackBar"
+import { WarningSnackBar } from "~/ui/common/components/WarningSnackBar"
 import { CreatePaymentForm } from "../../parts/CreatePaymentForm"
 
 export function NewPaymentPage() {

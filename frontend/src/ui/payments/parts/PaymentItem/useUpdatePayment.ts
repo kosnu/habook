@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useUpdatePaymentMutation } from "src/graphql/types"
-import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
-import { dateToString } from "src/ui/common/utils/formatter"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { dateToString } from "~/ui/common/utils/formatter"
 import { PaymentFormInput } from "../../types"
 
 export function useUpdatePayment() {

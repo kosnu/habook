@@ -3,8 +3,8 @@ import {
   Categories_CategoryFragment,
   CategoriesDocument,
   useUpdateCategoryMutation,
-} from "src/graphql/types"
-import { useLoginUser } from "src/ui/common/hooks/useLoginUser"
+} from "~/graphql/types"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { updateCategoryNameInputSelector } from "../UpdateCategoryForm/useCategoryName"
 
 export function useUpdateCategory(

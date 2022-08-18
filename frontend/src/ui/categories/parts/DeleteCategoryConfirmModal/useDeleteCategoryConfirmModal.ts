@@ -1,4 +1,4 @@
-import { useBool } from "src/ui/common/hooks/useBool"
+import { useBool } from "~/ui/common/hooks/useBool"
 
 const deleteCategoryConfirmModalKey = "delete-category-confirm-modal-key"
 
