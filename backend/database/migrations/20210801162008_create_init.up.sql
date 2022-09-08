@@ -1,7 +1,6 @@
 CREATE TABLE payments (
     pk                INT UNSIGNED NOT NULL AUTO_INCREMENT,
     id                VARCHAR(256) NOT NULL,
-    tax_included      BOOLEAN      NOT NULL,
     paid_on           DATETIME     NOT NULL,
     number_of_product INT UNSIGNED NOT NULL,
     amount            INT UNSIGNED NOT NULL,
