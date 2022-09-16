@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/99designs/gqlgen v0.17.16
 	github.com/google/uuid v1.3.0
-	github.com/vektah/gqlparser/v2 v2.5.0
+	github.com/vektah/gqlparser/v2 v2.5.1
 	gorm.io/driver/mysql v1.3.6
 	gorm.io/gorm v1.23.8
 )
