@@ -3,6 +3,7 @@ services:
     build: ./backend/
     volumes:
       - ./backend:/go/src/app
+      - ./schema:/go/src/schema
     depends_on:
       - db
     ports:
