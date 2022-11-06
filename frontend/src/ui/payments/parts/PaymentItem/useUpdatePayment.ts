@@ -17,7 +17,6 @@ export function useUpdatePayment() {
           paidOnDate: dateToString(input.paidOnDate),
           categoryId: input.categoryId,
           numberOfProduct: input.numberOfProduct,
-          taxIncluded: true,
           amount: Number(input.amount),
         },
       })

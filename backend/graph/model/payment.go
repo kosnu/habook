@@ -10,7 +10,6 @@ import (
 type Payment struct {
 	Pk              int    `json:"pk"`
 	ID              string `json:"id"`
-	TaxIncluded     bool   `json:"taxIncluded"`
 	PaidOn          string `json:"paidOn"`
 	NumberOfProduct int    `json:"numberOfProduct"`
 	Amount          int    `json:"amount"`
@@ -38,7 +37,6 @@ type PaymentEdge struct {
 func (PaymentEdge) IsEdge() {}
 
 type NewPayment struct {
-	TaxIncluded     bool   `json:"taxIncluded"`
 	PaidOn          string `json:"paidOn"`
 	NumberOfProduct int    `json:"numberOfProduct"`
 	Amount          int    `json:"amount"`
@@ -54,7 +52,6 @@ type DeletePayment struct {
 
 type UpdatePayment struct {
 	ID              string `json:"id"`
-	TaxIncluded     bool   `json:"taxIncluded"`
 	PaidOn          string `json:"paidOn"`
 	NumberOfProduct int    `json:"numberOfProduct"`
 	Amount          int    `json:"amount"`
@@ -72,7 +69,6 @@ func PaymentFromEntity(entity *entity.Payment) *Payment {
 	return &Payment{
 		Pk:              int(entity.Pk),
 		ID:              entity.Id,
-		TaxIncluded:     entity.TaxIncluded,
 		PaidOn:          lib.TimeToString(entity.PaidOn),
 		NumberOfProduct: entity.NumberOfProduct,
 		Amount:          entity.Amount,

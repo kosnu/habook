@@ -111,7 +111,6 @@ type ComplexityRoot struct {
 		PaidOn          func(childComplexity int) int
 		Pk              func(childComplexity int) int
 		Product         func(childComplexity int) int
-		TaxIncluded     func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
 		User            func(childComplexity int) int
 	}
@@ -559,13 +558,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Payment.Product(childComplexity), true
-
-	case "Payment.taxIncluded":
-		if e.complexity.Payment.TaxIncluded == nil {
-			break
-		}
-
-		return e.complexity.Payment.TaxIncluded(childComplexity), true
 
 	case "Payment.updatedAt":
 		if e.complexity.Payment.UpdatedAt == nil {
@@ -1039,7 +1031,6 @@ input PaginationInput {
 	{Name: "../../../schema/payment.graphql", Input: `type Payment implements Node{
   pk: Int!
   id: ID!
-  taxIncluded: Boolean!
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
@@ -1061,7 +1052,6 @@ type PaymentConnection implements Connection {
 }
 
 input NewPayment {
-  taxIncluded: Boolean!
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
@@ -1072,7 +1062,6 @@ input NewPayment {
 
 input UpdatePayment {
   id: ID!
-  taxIncluded: Boolean!
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
@@ -3023,8 +3012,6 @@ func (ec *executionContext) fieldContext_Mutation_createPayment(ctx context.Cont
 				return ec.fieldContext_Payment_pk(ctx, field)
 			case "id":
 				return ec.fieldContext_Payment_id(ctx, field)
-			case "taxIncluded":
-				return ec.fieldContext_Payment_taxIncluded(ctx, field)
 			case "paidOn":
 				return ec.fieldContext_Payment_paidOn(ctx, field)
 			case "numberOfProduct":
@@ -3102,8 +3089,6 @@ func (ec *executionContext) fieldContext_Mutation_updatePayment(ctx context.Cont
 				return ec.fieldContext_Payment_pk(ctx, field)
 			case "id":
 				return ec.fieldContext_Payment_id(ctx, field)
-			case "taxIncluded":
-				return ec.fieldContext_Payment_taxIncluded(ctx, field)
 			case "paidOn":
 				return ec.fieldContext_Payment_paidOn(ctx, field)
 			case "numberOfProduct":
@@ -3433,50 +3418,6 @@ func (ec *executionContext) fieldContext_Payment_id(ctx context.Context, field g
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Payment_taxIncluded(ctx context.Context, field graphql.CollectedField, obj *model.Payment) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Payment_taxIncluded(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TaxIncluded, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Payment_taxIncluded(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Payment",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4063,8 +4004,6 @@ func (ec *executionContext) fieldContext_PaymentEdge_node(ctx context.Context, f
 				return ec.fieldContext_Payment_pk(ctx, field)
 			case "id":
 				return ec.fieldContext_Payment_id(ctx, field)
-			case "taxIncluded":
-				return ec.fieldContext_Payment_taxIncluded(ctx, field)
 			case "paidOn":
 				return ec.fieldContext_Payment_paidOn(ctx, field)
 			case "numberOfProduct":
@@ -4936,8 +4875,6 @@ func (ec *executionContext) fieldContext_Query_payment(ctx context.Context, fiel
 				return ec.fieldContext_Payment_pk(ctx, field)
 			case "id":
 				return ec.fieldContext_Payment_id(ctx, field)
-			case "taxIncluded":
-				return ec.fieldContext_Payment_taxIncluded(ctx, field)
 			case "paidOn":
 				return ec.fieldContext_Payment_paidOn(ctx, field)
 			case "numberOfProduct":
@@ -7635,21 +7572,13 @@ func (ec *executionContext) unmarshalInputNewPayment(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"taxIncluded", "paidOn", "numberOfProduct", "amount", "productName", "categoryId", "userId"}
+	fieldsInOrder := [...]string{"paidOn", "numberOfProduct", "amount", "productName", "categoryId", "userId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "taxIncluded":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taxIncluded"))
-			it.TaxIncluded, err = ec.unmarshalNBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "paidOn":
 			var err error
 
@@ -7987,7 +7916,7 @@ func (ec *executionContext) unmarshalInputUpdatePayment(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "taxIncluded", "paidOn", "numberOfProduct", "amount", "categoryId", "userId"}
+	fieldsInOrder := [...]string{"id", "paidOn", "numberOfProduct", "amount", "categoryId", "userId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7999,14 +7928,6 @@ func (ec *executionContext) unmarshalInputUpdatePayment(ctx context.Context, obj
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			it.ID, err = ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "taxIncluded":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("taxIncluded"))
-			it.TaxIncluded, err = ec.unmarshalNBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8612,13 +8533,6 @@ func (ec *executionContext) _Payment(ctx context.Context, sel ast.SelectionSet, 
 		case "id":
 
 			out.Values[i] = ec._Payment_id(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
-		case "taxIncluded":
-
-			out.Values[i] = ec._Payment_taxIncluded(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)

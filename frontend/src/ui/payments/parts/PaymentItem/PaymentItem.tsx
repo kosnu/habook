@@ -28,7 +28,6 @@ export function PaymentItem({ payment }: PaymentItemProps) {
         </TableCell>
         <TableCell align={"right"}>{payment.category.name}</TableCell>
         <TableCell align={"right"}>
-          {payment.taxIncluded ? "（税込）" : "（税抜）"}
           {payment.amount.toLocaleString("ja-JP", {
             style: "currency",
             currency: "JPY",

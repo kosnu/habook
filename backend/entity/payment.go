@@ -5,7 +5,6 @@ import "time"
 type Payment struct {
 	Pk              uint `gorm:"primaryKey"`
 	Id              string
-	TaxIncluded     bool
 	PaidOn          time.Time
 	NumberOfProduct int
 	Amount          int
