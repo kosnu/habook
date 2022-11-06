@@ -58,7 +58,6 @@ func (r *mutationResolver) CreatePayment(ctx context.Context, input model.NewPay
 
 		record = entity.Payment{
 			Id:              paymentId,
-			TaxIncluded:     input.TaxIncluded,
 			PaidOn:          paidOn,
 			NumberOfProduct: input.NumberOfProduct,
 			Amount:          input.Amount,
@@ -103,8 +102,7 @@ func (r *mutationResolver) UpdatePayment(ctx context.Context, input model.Update
 		return &model.Payment{}, nil
 	}
 
-	err = paymentRecord.Select("TaxIncluded", "PaidOn", "NumberOfProduct", "Amount", "CategoryID").Updates(entity.Payment{
-		TaxIncluded:     input.TaxIncluded,
+	err = paymentRecord.Select("PaidOn", "NumberOfProduct", "Amount", "CategoryID").Updates(entity.Payment{
 		PaidOn:          paidOn,
 		NumberOfProduct: input.NumberOfProduct,
 		Amount:          input.Amount,

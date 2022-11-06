@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client"
 import * as Apollo from "@apollo/client"
-
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -155,7 +154,6 @@ export type NewPayment = {
   numberOfProduct: Scalars["Int"]
   paidOn: Scalars["String"]
   productName: Scalars["String"]
-  taxIncluded: Scalars["Boolean"]
   userId: Scalars["ID"]
 }
 
@@ -188,7 +186,6 @@ export type Payment = Node & {
   paidOn: Scalars["String"]
   pk: Scalars["Int"]
   product: Product
-  taxIncluded: Scalars["Boolean"]
   updatedAt: Scalars["String"]
   user: User
 }
@@ -320,7 +317,6 @@ export type UpdatePayment = {
   id: Scalars["ID"]
   numberOfProduct: Scalars["Int"]
   paidOn: Scalars["String"]
-  taxIncluded: Scalars["Boolean"]
   userId: Scalars["ID"]
 }
 
@@ -451,7 +447,6 @@ export type CreatePaymentMutationVariables = Exact<{
   userId: Scalars["ID"]
   categoryId: Scalars["ID"]
   paidOnDate: Scalars["String"]
-  taxIncluded: Scalars["Boolean"]
   numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
   productName: Scalars["String"]
@@ -463,7 +458,6 @@ export type CreatePaymentMutation = {
     __typename: "Payment"
     id: string
     paidOn: string
-    taxIncluded: boolean
     amount: number
     numberOfProduct: number
     createdAt: string
@@ -505,7 +499,6 @@ export type PaymentsQuery = {
         __typename: "Payment"
         id: string
         paidOn: string
-        taxIncluded: boolean
         amount: number
         numberOfProduct: number
         createdAt: string
@@ -545,7 +538,6 @@ export type UpdatePaymentMutationVariables = Exact<{
   userId: Scalars["ID"]
   categoryId: Scalars["ID"]
   paidOnDate: Scalars["String"]
-  taxIncluded: Scalars["Boolean"]
   numberOfProduct: Scalars["Int"]
   amount: Scalars["Int"]
 }>
@@ -556,7 +548,6 @@ export type UpdatePaymentMutation = {
     __typename: "Payment"
     id: string
     paidOn: string
-    taxIncluded: boolean
     amount: number
     numberOfProduct: number
     createdAt: string
@@ -631,7 +622,6 @@ export function useCategoriesQuery(
     options,
   )
 }
-
 export function useCategoriesLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     CategoriesQuery,
@@ -645,7 +635,6 @@ export function useCategoriesLazyQuery(
     options,
   )
 }
-
 export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>
 export type CategoriesLazyQueryHookResult = ReturnType<
   typeof useCategoriesLazyQuery
@@ -698,7 +687,6 @@ export function useCreateCategoryMutation(
     CreateCategoryMutationVariables
   >(CreateCategoryDocument, options)
 }
-
 export type CreateCategoryMutationHookResult = ReturnType<
   typeof useCreateCategoryMutation
 >
@@ -752,7 +740,6 @@ export function useDeleteCategoryMutation(
     DeleteCategoryMutationVariables
   >(DeleteCategoryDocument, options)
 }
-
 export type DeleteCategoryMutationHookResult = ReturnType<
   typeof useDeleteCategoryMutation
 >
@@ -807,7 +794,6 @@ export function useUpdateCategoryMutation(
     UpdateCategoryMutationVariables
   >(UpdateCategoryDocument, options)
 }
-
 export type UpdateCategoryMutationHookResult = ReturnType<
   typeof useUpdateCategoryMutation
 >
@@ -870,7 +856,6 @@ export function useCategoriesSelectQuery(
     options,
   )
 }
-
 export function useCategoriesSelectLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     CategoriesSelectQuery,
@@ -884,7 +869,6 @@ export function useCategoriesSelectLazyQuery(
     CategoriesSelectQueryVariables
   >(CategoriesSelectDocument, options)
 }
-
 export type CategoriesSelectQueryHookResult = ReturnType<
   typeof useCategoriesSelectQuery
 >
@@ -900,7 +884,6 @@ export const CreatePaymentDocument = gql`
     $userId: ID!
     $categoryId: ID!
     $paidOnDate: String!
-    $taxIncluded: Boolean!
     $numberOfProduct: Int!
     $amount: Int!
     $productName: String!
@@ -910,7 +893,6 @@ export const CreatePaymentDocument = gql`
         userId: $userId
         categoryId: $categoryId
         paidOn: $paidOnDate
-        taxIncluded: $taxIncluded
         numberOfProduct: $numberOfProduct
         amount: $amount
         productName: $productName
@@ -929,7 +911,6 @@ export const CreatePaymentDocument = gql`
         name
       }
       paidOn
-      taxIncluded
       amount
       numberOfProduct
       createdAt
@@ -957,7 +938,6 @@ export type CreatePaymentMutationFn = Apollo.MutationFunction<
  *      userId: // value for 'userId'
  *      categoryId: // value for 'categoryId'
  *      paidOnDate: // value for 'paidOnDate'
- *      taxIncluded: // value for 'taxIncluded'
  *      numberOfProduct: // value for 'numberOfProduct'
  *      amount: // value for 'amount'
  *      productName: // value for 'productName'
@@ -977,7 +957,6 @@ export function useCreatePaymentMutation(
     CreatePaymentMutationVariables
   >(CreatePaymentDocument, options)
 }
-
 export type CreatePaymentMutationHookResult = ReturnType<
   typeof useCreatePaymentMutation
 >
@@ -1028,7 +1007,6 @@ export function useDeletePaymentMutation(
     DeletePaymentMutationVariables
   >(DeletePaymentDocument, options)
 }
-
 export type DeletePaymentMutationHookResult = ReturnType<
   typeof useDeletePaymentMutation
 >
@@ -1072,7 +1050,6 @@ export const PaymentsDocument = gql`
             name
           }
           paidOn
-          taxIncluded
           amount
           numberOfProduct
           createdAt
@@ -1113,7 +1090,6 @@ export function usePaymentsQuery(
     options,
   )
 }
-
 export function usePaymentsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     PaymentsQuery,
@@ -1127,7 +1103,6 @@ export function usePaymentsLazyQuery(
     options,
   )
 }
-
 export type PaymentsQueryHookResult = ReturnType<typeof usePaymentsQuery>
 export type PaymentsLazyQueryHookResult = ReturnType<
   typeof usePaymentsLazyQuery
@@ -1195,7 +1170,6 @@ export function useProductsAutocompleteQuery(
     ProductsAutocompleteQueryVariables
   >(ProductsAutocompleteDocument, options)
 }
-
 export function useProductsAutocompleteLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     ProductsAutocompleteQuery,
@@ -1209,7 +1183,6 @@ export function useProductsAutocompleteLazyQuery(
     ProductsAutocompleteQueryVariables
   >(ProductsAutocompleteDocument, options)
 }
-
 export type ProductsAutocompleteQueryHookResult = ReturnType<
   typeof useProductsAutocompleteQuery
 >
@@ -1226,7 +1199,6 @@ export const UpdatePaymentDocument = gql`
     $userId: ID!
     $categoryId: ID!
     $paidOnDate: String!
-    $taxIncluded: Boolean!
     $numberOfProduct: Int!
     $amount: Int!
   ) {
@@ -1236,7 +1208,6 @@ export const UpdatePaymentDocument = gql`
         userId: $userId
         categoryId: $categoryId
         paidOn: $paidOnDate
-        taxIncluded: $taxIncluded
         numberOfProduct: $numberOfProduct
         amount: $amount
       }
@@ -1254,7 +1225,6 @@ export const UpdatePaymentDocument = gql`
         name
       }
       paidOn
-      taxIncluded
       amount
       numberOfProduct
       createdAt
@@ -1283,7 +1253,6 @@ export type UpdatePaymentMutationFn = Apollo.MutationFunction<
  *      userId: // value for 'userId'
  *      categoryId: // value for 'categoryId'
  *      paidOnDate: // value for 'paidOnDate'
- *      taxIncluded: // value for 'taxIncluded'
  *      numberOfProduct: // value for 'numberOfProduct'
  *      amount: // value for 'amount'
  *   },
@@ -1302,7 +1271,6 @@ export function useUpdatePaymentMutation(
     UpdatePaymentMutationVariables
   >(UpdatePaymentDocument, options)
 }
-
 export type UpdatePaymentMutationHookResult = ReturnType<
   typeof useUpdatePaymentMutation
 >

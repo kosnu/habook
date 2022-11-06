@@ -15,7 +15,6 @@ export function useCreatePayment() {
         categoryId: input.categoryId,
         productName: input.productName,
         numberOfProduct: input.numberOfProduct,
-        taxIncluded: true,
         amount: Number(input.amount),
       },
     })

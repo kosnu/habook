@@ -34,7 +34,6 @@ query payments(
                     name
                 }
                 paidOn
-                taxIncluded
                 amount
                 numberOfProduct
                 createdAt

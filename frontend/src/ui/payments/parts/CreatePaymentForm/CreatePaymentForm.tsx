@@ -32,6 +32,7 @@ export function CreatePaymentForm() {
     setValue,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<PaymentFormInput>({
     defaultValues: defaultValues,
@@ -40,6 +41,8 @@ export function CreatePaymentForm() {
   const { createPayment } = useCreatePayment()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
+
+  console.log("RealTime FormData", watch())
 
   function handleProductAutocompleteChange(inputValue: string) {
     setValue("productName", inputValue, {

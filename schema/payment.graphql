@@ -1,7 +1,6 @@
 type Payment implements Node{
   pk: Int!
   id: ID!
-  taxIncluded: Boolean!
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
@@ -23,7 +22,6 @@ type PaymentConnection implements Connection {
 }
 
 input NewPayment {
-  taxIncluded: Boolean!
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
@@ -34,7 +32,6 @@ input NewPayment {
 
 input UpdatePayment {
   id: ID!
-  taxIncluded: Boolean!
   paidOn: String!
   numberOfProduct: Int!
   amount: Int!
