@@ -1,43 +1,41 @@
 import { ApolloError } from "@apollo/client"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Create as CreateIcon } from "@mui/icons-material"
-import { Button, Divider, Grid } from "@mui/material"
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Grid,
+  TextField,
+} from "@mui/material"
 import React from "react"
+import { useForm } from "react-hook-form"
+import { FormSchema, formSchema, defaultValues } from "../../form"
 import { useSuccessSnackbar } from "~/ui/common/components/SuccessSnackBar"
 import { useWarningSnackbar } from "~/ui/common/components/WarningSnackBar"
-import { CategoryNameInput } from "../CategoryNameInput"
-import { useCategoryName } from "./useCategoryName"
 import { useCreateCategory } from "./useCreateCategory"
 
 export function CreateCategoryForm() {
   const {
-    categoryName,
-    invalid,
-    validationMessage,
-    changeCategoryName,
-    validateCategoryName,
-  } = useCategoryName()
-  const { isInvalid, createCategory } = useCreateCategory()
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    defaultValues: defaultValues,
+  })
+
+  const { createCategory, loading } = useCreateCategory()
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
 
-  function handleCategoryNameChange(input: string) {
-    changeCategoryName(input)
-  }
-
-  function handleCategoryNameBlur() {
-    validateCategoryName()
-  }
-
-  async function handleCreateButtonClick() {
-    if (isInvalid) {
-      openWarningSnackbar("入力が正しくありません")
-
-      return
-    }
-
+  async function handleValid(formData: FormSchema) {
     try {
-      await createCategory()
+      await createCategory(formData.categoryName)
       openSuccessSnackbar("カテゴリーの作成に成功しました")
+      reset()
     } catch (e) {
       console.error(e)
 
@@ -49,31 +47,46 @@ export function CreateCategoryForm() {
 
   return (
     <>
-      <Grid container spacing={4} direction={"column"}>
-        <Grid item>
-          <CategoryNameInput
-            name={categoryName}
-            error={invalid}
-            helperText={validationMessage}
-            onChange={handleCategoryNameChange}
-            onBlur={handleCategoryNameBlur}
-          />
+      <Box component={"form"} onSubmit={handleSubmit(handleValid)}>
+        <Grid container spacing={4} direction={"column"}>
+          <Grid item>
+            <TextField
+              {...register("categoryName")}
+              id={"category-name-input"}
+              label={"カテゴリー名"}
+              variant={"standard"}
+              fullWidth
+              error={Boolean(errors.categoryName)}
+              helperText={errors.categoryName?.message}
+            />
+          </Grid>
+          <Grid item>
+            <Divider variant={"fullWidth"} />
+          </Grid>
+          <Grid item>
+            {loading ? (
+              <Button
+                disabled
+                variant={"contained"}
+                color={"primary"}
+                startIcon={<CircularProgress size={"1rem"} />}
+              >
+                カテゴリーを作成しています
+              </Button>
+            ) : (
+              <Button
+                type={"submit"}
+                variant={"contained"}
+                color={"primary"}
+                startIcon={<CreateIcon />}
+                disabled={!isValid}
+              >
+                カテゴリーを作成する
+              </Button>
+            )}
+          </Grid>
         </Grid>
-        <Grid item>
-          <Divider variant={"fullWidth"} />
-        </Grid>
-        <Grid item>
-          <Button
-            variant={"contained"}
-            color={"primary"}
-            startIcon={<CreateIcon />}
-            disabled={invalid}
-            onClick={handleCreateButtonClick}
-          >
-            カテゴリーの作成を確定する
-          </Button>
-        </Grid>
-      </Grid>
+      </Box>
     </>
   )
 }

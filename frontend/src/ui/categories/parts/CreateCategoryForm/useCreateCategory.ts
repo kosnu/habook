@@ -1,26 +1,21 @@
-import { useRecoilValue } from "recoil"
 import { useCreateCategoryMutation } from "~/graphql/types"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
-import { createCategoryNameInputAtom } from "./useCategoryName"
 
 export function useCreateCategory() {
   const { userId } = useLoginUser()
-  const categoryNameState = useRecoilValue(createCategoryNameInputAtom)
-  const [createCategoryMutation] = useCreateCategoryMutation()
+  const [createCategoryMutation, { loading }] = useCreateCategoryMutation()
 
-  const isInvalid = categoryNameState.validation.invalid
-
-  async function createCategory() {
+  async function createCategory(categoryName: string) {
     await createCategoryMutation({
       variables: {
         userId: userId,
-        categoryName: categoryNameState.categoryName,
+        categoryName: categoryName,
       },
     })
   }
 
   return {
-    isInvalid: isInvalid,
     createCategory: createCategory,
+    loading: loading,
   }
 }
