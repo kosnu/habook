@@ -1,37 +1,22 @@
-import { useRecoilValue } from "recoil"
-import {
-  Categories_CategoryFragment,
-  CategoriesDocument,
-  useUpdateCategoryMutation,
-} from "~/graphql/types"
+import { useUpdateCategoryMutation } from "~/graphql/types"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
-import { updateCategoryNameInputSelector } from "../UpdateCategoryForm/useCategoryName"
 
-export function useUpdateCategory(
-  category: Categories_CategoryFragment | null,
-) {
+export function useUpdateCategory() {
   const { userId } = useLoginUser()
-  const categoryNameState = useRecoilValue(
-    updateCategoryNameInputSelector(category),
-  )
-  const [updateCategoryMutation] = useUpdateCategoryMutation({
-    refetchQueries: [CategoriesDocument],
-  })
+  const [updateCategoryMutation, { loading }] = useUpdateCategoryMutation()
 
-  const isInvalid = categoryNameState.validation.invalid
-
-  async function updateCategory() {
+  async function updateCategory(categoryName: string, categoryId: string) {
     await updateCategoryMutation({
       variables: {
         userId: userId,
-        id: category?.id ?? "",
-        name: categoryNameState.categoryName,
+        id: categoryId,
+        name: categoryName,
       },
     })
   }
 
   return {
-    isInvalid: isInvalid,
     updateCategory: updateCategory,
+    loading: loading,
   }
 }
