@@ -44,7 +44,7 @@ export function UpdateCategoryForm({
   const handleValid = useCallback(
     async (formData: FormSchema) => {
       try {
-        await updateCategory(formData.categoryName, category.id)
+        await updateCategory(formData.categoryName, formData.categoryId)
         openSuccessSnackbar("カテゴリーの更新に成功しました")
       } catch (e) {
         console.error(e)
@@ -55,7 +55,7 @@ export function UpdateCategoryForm({
       }
       onModalClose()
     },
-    [onModalClose],
+    [updateCategory, onModalClose, openSuccessSnackbar, openWarningSnackbar],
   )
 
   const handleModalClose = useCallback(() => {
