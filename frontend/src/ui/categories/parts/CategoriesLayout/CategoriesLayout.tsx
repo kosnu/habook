@@ -17,8 +17,12 @@ export function CategoriesLayout() {
     <>
       <CategoryList onCategoryMenuClick={handleCategoryMenuClick} />
       <CategoryOperationMenu />
-      <UpdateCategoryModal category={selectCategory} />
-      <DeleteCategoryConfirmModal category={selectCategory} />
+      {selectCategory && (
+        <>
+          <UpdateCategoryModal category={selectCategory} />
+          <DeleteCategoryConfirmModal category={selectCategory} />
+        </>
+      )}
     </>
   )
 }
