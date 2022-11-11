@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.20
 	github.com/google/uuid v1.3.0
 	github.com/vektah/gqlparser/v2 v2.5.1
-	gorm.io/driver/mysql v1.4.3
+	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.1
 )
 
