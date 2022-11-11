@@ -42,8 +42,6 @@ export function CreatePaymentForm() {
   const { openSuccessSnackbar } = useSuccessSnackbar()
   const { openWarningSnackbar } = useWarningSnackbar()
 
-  console.log("RealTime FormData", watch())
-
   function handleProductAutocompleteChange(inputValue: string) {
     setValue("productName", inputValue, {
       shouldValidate: true,
