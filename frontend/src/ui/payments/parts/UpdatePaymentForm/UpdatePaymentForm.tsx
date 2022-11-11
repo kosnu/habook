@@ -5,8 +5,7 @@ import { Create as CreateIcon } from "@mui/icons-material"
 import { Button, Divider, Grid, TextField } from "@mui/material"
 import React, { useCallback } from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import { useSuccessSnackbar } from "~/ui/common/components/SuccessSnackBar"
-import { useWarningSnackbar } from "~/ui/common/components/WarningSnackBar"
+import { useSnackbar } from "~/ui/common/hooks/SnackBar"
 import { Payment, PaymentFormInput } from "../../types"
 import { AmountTextField } from "../AmountTextField"
 import { CategorySelect } from "../CategorySelect"
@@ -43,8 +42,7 @@ export function UpdatePaymentForm({
     resolver: zodResolver(schema),
   })
   const { updatePayment } = useUpdatePayment()
-  const { openSuccessSnackbar } = useSuccessSnackbar()
-  const { openWarningSnackbar } = useWarningSnackbar()
+  const { openSnackBar, SnackBar } = useSnackbar()
 
   const handleModalClose = useCallback(() => {
     onModalClose()
@@ -55,22 +53,21 @@ export function UpdatePaymentForm({
     async (data) => {
       try {
         await updatePayment(payment.id, data)
-        openSuccessSnackbar("支払いの変更ができました")
-        onModalClose()
+        openSnackBar({
+          message: "支払いの変更ができました",
+          severity: "success",
+        })
       } catch (e) {
         console.error(e)
         if (e instanceof ApolloError) {
-          openWarningSnackbar(e.message)
+          openSnackBar({
+            message: "支払いの変更に失敗しました",
+            severity: "warning",
+          })
         }
       }
     },
-    [
-      updatePayment,
-      openSuccessSnackbar,
-      openWarningSnackbar,
-      payment,
-      onModalClose,
-    ],
+    [updatePayment, openSnackBar, payment],
   )
 
   return (
@@ -185,6 +182,7 @@ export function UpdatePaymentForm({
           </Grid>
         </Grid>
       </Grid>
+      <SnackBar />
     </>
   )
 }
