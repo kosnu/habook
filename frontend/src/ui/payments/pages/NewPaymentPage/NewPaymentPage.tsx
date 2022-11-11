@@ -1,7 +1,5 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
-import { SuccessSnackBar } from "~/ui/common/components/SuccessSnackBar"
-import { WarningSnackBar } from "~/ui/common/components/WarningSnackBar"
 import { CreatePaymentForm } from "../../parts/CreatePaymentForm"
 
 export function NewPaymentPage() {
@@ -20,8 +18,6 @@ export function NewPaymentPage() {
           </Grid>
         </Box>
       </Container>
-      <SuccessSnackBar />
-      <WarningSnackBar />
     </>
   )
 }
