@@ -1,7 +1,6 @@
 import { ApolloError } from "@apollo/client"
 import React, { useCallback, useState } from "react"
-import { useSuccessSnackbar } from "~/ui/common/components/SuccessSnackBar"
-import { useWarningSnackbar } from "~/ui/common/components/WarningSnackBar"
+import { useSnackbar } from "~/ui/payments/hooks/useSnackbar"
 import { Payment } from "../../types"
 import { PaymentOperationMenu } from "../PaymentOperationMenu"
 import { useDeletePayment } from "./useDeletePayment"
@@ -12,8 +11,7 @@ export function usePaymentOperationMenu(payment: Payment) {
   const { openUpdatePaymentFormModal, renderUpdatePaymentFormModal } =
     useUpdatePaymentFormModal()
   const { deletePayment } = useDeletePayment()
-  const { openSuccessSnackbar } = useSuccessSnackbar()
-  const { openWarningSnackbar } = useWarningSnackbar()
+  const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   const handleMenuOpen = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,19 +32,19 @@ export function usePaymentOperationMenu(payment: Payment) {
   const handleDeleteButtonClick = useCallback(async () => {
     try {
       await deletePayment(payment.id)
-      openSuccessSnackbar("支払いの削除ができました")
+      openSuccessSnackBar("支払いの削除ができました")
       handleMenuClose()
     } catch (e) {
       console.error(e)
       if (e instanceof ApolloError) {
-        openWarningSnackbar(e.message)
+        openWarningSnackBar(e.message)
       }
     }
   }, [
     deletePayment,
     payment,
-    openSuccessSnackbar,
-    openWarningSnackbar,
+    openSuccessSnackBar,
+    openWarningSnackBar,
     handleMenuClose,
   ])
 

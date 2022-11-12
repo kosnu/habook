@@ -1,10 +1,11 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
-import { SuccessSnackBar } from "~/ui/common/components/SuccessSnackBar"
-import { WarningSnackBar } from "~/ui/common/components/WarningSnackBar"
+import { useSnackbar } from "../../hooks/useSnackbar"
 import { CreateCategoryForm } from "../../parts/CreateCategoryForm"
 
 export function CreateCategoryPage() {
+  const { SnackBar } = useSnackbar()
+
   return (
     <>
       <Container maxWidth={"md"}>
@@ -20,8 +21,7 @@ export function CreateCategoryPage() {
           </Grid>
         </Box>
       </Container>
-      <SuccessSnackBar />
-      <WarningSnackBar />
+      <SnackBar />
     </>
   )
 }

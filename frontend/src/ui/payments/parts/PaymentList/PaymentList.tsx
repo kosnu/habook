@@ -9,8 +9,6 @@ import {
 } from "@mui/material"
 import React from "react"
 import { LoadingCircular } from "~/ui/common/components/LoadingCircular"
-import { SuccessSnackBar } from "~/ui/common/components/SuccessSnackBar"
-import { WarningSnackBar } from "~/ui/common/components/WarningSnackBar"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { PaymentItem } from "../PaymentItem"
 import { usePayments } from "./usePayments"
@@ -43,8 +41,6 @@ export function PaymentList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <SuccessSnackBar />
-      <WarningSnackBar />
       <LoadingCircular loading={loading} />
     </>
   )
