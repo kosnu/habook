@@ -12,7 +12,7 @@ import {
 import React, { useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { Categories_CategoryFragment } from "~/graphql/types"
-import { useSnackbar } from "~/ui/common/hooks/SnackBar"
+import { useSnackbar } from "../../hooks/useSnackbar"
 import { formSchema, FormSchema } from "../../updateForm"
 import { useUpdateCategory } from "../UpdateCategoryModal/useUpdateCategory"
 
@@ -37,28 +37,22 @@ export function UpdateCategoryForm({
     },
   })
   const { updateCategory, loading } = useUpdateCategory()
-  const { openSnackBar, SnackBar } = useSnackbar()
+  const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   const handleValid = useCallback(
     async (formData: FormSchema) => {
       try {
         await updateCategory(formData.categoryName, formData.categoryId)
-        openSnackBar({
-          message: "カテゴリーの更新に成功しました",
-          severity: "success",
-        })
+        openSuccessSnackBar("カテゴリーの更新に成功しました")
       } catch (e) {
         console.error(e)
 
         if (e instanceof ApolloError) {
-          openSnackBar({
-            message: "カテゴリーの更新に失敗しました",
-            severity: "warning",
-          })
+          openWarningSnackBar("カテゴリーの更新に失敗しました")
         }
       }
     },
-    [updateCategory, openSnackBar],
+    [updateCategory, openSuccessSnackBar, openWarningSnackBar],
   )
 
   const handleModalClose = useCallback(() => {
@@ -120,7 +114,6 @@ export function UpdateCategoryForm({
           </Grid>
         </Grid>
       </Box>
-      <SnackBar />
     </>
   )
 }

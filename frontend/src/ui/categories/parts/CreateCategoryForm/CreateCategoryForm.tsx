@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import React from "react"
 import { useForm } from "react-hook-form"
-import { useSnackbar } from "~/ui/common/hooks/SnackBar"
+import { useSnackbar } from "../../hooks/useSnackbar"
 import { FormSchema, formSchema, defaultValues } from "../../form"
 import { useCreateCategory } from "./useCreateCategory"
 
@@ -27,24 +27,18 @@ export function CreateCategoryForm() {
   })
 
   const { createCategory, loading } = useCreateCategory()
-  const { openSnackBar, SnackBar } = useSnackbar()
+  const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   async function handleValid(formData: FormSchema) {
     try {
       await createCategory(formData.categoryName)
-      openSnackBar({
-        message: "カテゴリーの作成に成功しました",
-        severity: "success",
-      })
+      openSuccessSnackBar("カテゴリーの作成に成功しました")
       reset()
     } catch (e) {
       console.error(e)
 
       if (e instanceof ApolloError) {
-        openSnackBar({
-          message: "カテゴリーの作成に失敗しました",
-          severity: "warning",
-        })
+        openWarningSnackBar("カテゴリーの作成に失敗しました")
       }
     }
   }
@@ -91,7 +85,6 @@ export function CreateCategoryForm() {
           </Grid>
         </Grid>
       </Box>
-      <SnackBar />
     </>
   )
 }

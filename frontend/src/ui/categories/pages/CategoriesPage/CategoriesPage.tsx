@@ -1,8 +1,11 @@
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
+import { useSnackbar } from "../../hooks/useSnackbar"
 import { CategoriesLayout } from "../../parts/CategoriesLayout"
 
 export function CategoriesPage() {
+  const { SnackBar } = useSnackbar()
+
   return (
     <>
       <Container maxWidth={"md"}>
@@ -18,6 +21,7 @@ export function CategoriesPage() {
           </Grid>
         </Box>
       </Container>
+      <SnackBar />
     </>
   )
 }

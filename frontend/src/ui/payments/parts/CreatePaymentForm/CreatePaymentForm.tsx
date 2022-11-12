@@ -4,7 +4,7 @@ import { Create as CreateIcon } from "@mui/icons-material"
 import { Button, Divider, Grid } from "@mui/material"
 import React, { useCallback } from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import { useSnackbar } from "~/ui/common/hooks/SnackBar"
+import { useSnackbar } from "~/ui/payments/hooks/useSnackbar"
 import { PaymentFormInput } from "../../types"
 import { AmountTextField } from "../AmountTextField"
 import { CategorySelect } from "../CategorySelect"
@@ -37,7 +37,7 @@ export function CreatePaymentForm() {
     resolver: zodResolver(schema),
   })
   const { createPayment } = useCreatePayment()
-  const { openSnackBar, SnackBar } = useSnackbar()
+  const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   function handleProductAutocompleteChange(inputValue: string) {
     setValue("productName", inputValue, {
@@ -52,19 +52,16 @@ export function CreatePaymentForm() {
     async (data) => {
       try {
         await createPayment(data)
-        openSnackBar({ message: "支払いが作成できました", severity: "success" })
+        openSuccessSnackBar("支払いが作成できました")
         reset({ ...defaultValues })
       } catch (e) {
         console.error(e)
         if (e instanceof ApolloError) {
-          openSnackBar({
-            message: "支払いが作成に失敗しました",
-            severity: "warning",
-          })
+          openWarningSnackBar("支払いが作成に失敗しました")
         }
       }
     },
-    [createPayment, openSnackBar, reset],
+    [createPayment, openSuccessSnackBar, openWarningSnackBar, reset],
   )
 
   return (
@@ -169,7 +166,6 @@ export function CreatePaymentForm() {
           </Button>
         </Grid>
       </Grid>
-      <SnackBar />
     </>
   )
 }

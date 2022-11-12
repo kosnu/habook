@@ -9,8 +9,7 @@ import {
 } from "@mui/material"
 import React from "react"
 import { Categories_CategoryFragment } from "~/graphql/types"
-import { useSuccessSnackbar } from "~/ui/common/components/SuccessSnackBar"
-import { useWarningSnackbar } from "~/ui/common/components/WarningSnackBar"
+import { useSnackbar } from "../../hooks/useSnackbar"
 import { useDeleteCategory } from "./useDeleteCategory"
 import { useDeleteCategoryConfirmModal } from "./useDeleteCategoryConfirmModal"
 
@@ -23,8 +22,7 @@ export function DeleteCategoryConfirmModal({
 }: DeleteCategoryConfirmModalProps) {
   const { open, closeModal } = useDeleteCategoryConfirmModal()
   const { deleteCategory } = useDeleteCategory(category)
-  const { openSuccessSnackbar } = useSuccessSnackbar()
-  const { openWarningSnackbar } = useWarningSnackbar()
+  const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   function handleClose() {
     closeModal()
@@ -33,12 +31,12 @@ export function DeleteCategoryConfirmModal({
   async function handleDeleteButtonClick() {
     try {
       await deleteCategory()
-      openSuccessSnackbar("カテゴリーの削除に成功しました")
+      openSuccessSnackBar("カテゴリーの削除に成功しました")
     } catch (e) {
       console.error(e)
 
       if (e instanceof ApolloError) {
-        openWarningSnackbar("カテゴリーの削除に失敗しました")
+        openWarningSnackBar("カテゴリーの削除に失敗しました")
       }
     }
     closeModal()
