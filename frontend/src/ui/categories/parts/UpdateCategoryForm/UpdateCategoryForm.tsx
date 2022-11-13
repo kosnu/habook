@@ -11,13 +11,13 @@ import {
 } from "@mui/material"
 import React, { useCallback } from "react"
 import { useForm } from "react-hook-form"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import { formSchema, FormSchema } from "../../updateForm"
 import { useUpdateCategory } from "../UpdateCategoryModal/useUpdateCategory"
 
 interface UpdateCategoryFormProps {
-  category: Categories_CategoryFragment
+  category: Category
   onModalClose: () => void
 }
 

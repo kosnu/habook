@@ -1,7 +1,7 @@
 import { List } from "@mui/material"
 import React from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import { Category } from "../../types"
 import { LoadingCircular } from "~/ui/common/components/LoadingCircular"
 import { ErrorMessage } from "~/ui/common/components/ErrorMessage"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
@@ -9,7 +9,7 @@ import { CategoryItem } from "../CategoryItem"
 import { useCategories } from "./useCategories"
 
 interface CategoryListProps {
-  onCategoryMenuClick: (category: Categories_CategoryFragment) => void
+  onCategoryMenuClick: (category: Category) => void
 }
 
 export function CategoryList({ onCategoryMenuClick }: CategoryListProps) {
@@ -25,7 +25,7 @@ export function CategoryList({ onCategoryMenuClick }: CategoryListProps) {
     await fetchMore()
   }
 
-  function handleMenuButtonClick(category: Categories_CategoryFragment) {
+  function handleMenuButtonClick(category: Category) {
     onCategoryMenuClick(category)
   }
 

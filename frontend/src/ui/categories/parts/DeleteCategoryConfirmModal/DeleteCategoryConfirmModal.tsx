@@ -8,13 +8,13 @@ import {
   Typography,
 } from "@mui/material"
 import React from "react"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import { useDeleteCategory } from "./useDeleteCategory"
 import { useDeleteCategoryConfirmModal } from "./useDeleteCategoryConfirmModal"
 
 interface DeleteCategoryConfirmModalProps {
-  category: Categories_CategoryFragment | null
+  category: Category | null
 }
 
 export function DeleteCategoryConfirmModal({

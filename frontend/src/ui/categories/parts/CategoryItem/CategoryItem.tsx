@@ -6,12 +6,12 @@ import {
   ListItemText,
 } from "@mui/material"
 import React from "react"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import { Category } from "../../types"
 import { useCategoryOperationMenu } from "../CategoryOperationMenu/useCategoryOperationMenu"
 
 interface CategoryItemProps {
-  category: Categories_CategoryFragment
-  onMenuButtonClick: (category: Categories_CategoryFragment) => void
+  category: Category
+  onMenuButtonClick: (category: Category) => void
 }
 
 export function CategoryItem({

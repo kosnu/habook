@@ -1,15 +1,14 @@
 import React, { useState } from "react"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import { Category } from "../../types"
 import { CategoryList } from "../CategoryList"
 import { CategoryOperationMenu } from "../CategoryOperationMenu"
 import { DeleteCategoryConfirmModal } from "../DeleteCategoryConfirmModal"
 import { UpdateCategoryModal } from "../UpdateCategoryModal"
 
 export function CategoriesLayout() {
-  const [selectCategory, setSelectCategory] =
-    useState<Categories_CategoryFragment | null>(null)
+  const [selectCategory, setSelectCategory] = useState<Category | null>(null)
 
-  function handleCategoryMenuClick(category: Categories_CategoryFragment) {
+  function handleCategoryMenuClick(category: Category) {
     setSelectCategory(category)
   }
 

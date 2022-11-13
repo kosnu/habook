@@ -1,11 +1,11 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material"
 import React from "react"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import { Category } from "../../types"
 import { UpdateCategoryForm } from "../UpdateCategoryForm"
 import { useCategoryFormModal } from "./useUpdateCategoryModal"
 
 interface UpdateCategoryModalProps {
-  category: Categories_CategoryFragment
+  category: Category
 }
 
 export function UpdateCategoryModal({ category }: UpdateCategoryModalProps) {
