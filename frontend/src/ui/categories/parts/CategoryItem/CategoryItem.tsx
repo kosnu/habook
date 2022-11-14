@@ -5,13 +5,13 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from "@mui/material"
-import React from "react"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import React, { useCallback } from "react"
+import { Category } from "../../types"
 import { useCategoryOperationMenu } from "../CategoryOperationMenu/useCategoryOperationMenu"
 
 interface CategoryItemProps {
-  category: Categories_CategoryFragment
-  onMenuButtonClick: (category: Categories_CategoryFragment) => void
+  category: Category
+  onMenuButtonClick: (category: Category) => void
 }
 
 export function CategoryItem({
@@ -20,10 +20,13 @@ export function CategoryItem({
 }: CategoryItemProps) {
   const { openMenu } = useCategoryOperationMenu()
 
-  function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
-    openMenu(event)
-    onMenuButtonClick(category)
-  }
+  const handleMenuButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      openMenu(event)
+      onMenuButtonClick(category)
+    },
+    [category, onMenuButtonClick, openMenu],
+  )
 
   return (
     <>

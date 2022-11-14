@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Typography } from "@mui/material"
-import React from "react"
+import React, { useCallback } from "react"
 import { useDeleteCategoryConfirmModal } from "../DeleteCategoryConfirmModal"
 import { useCategoryFormModal } from "../UpdateCategoryModal/useUpdateCategoryModal"
 import { useCategoryOperationMenu } from "./useCategoryOperationMenu"
@@ -10,19 +10,19 @@ export function CategoryOperationMenu() {
   const { openModal: openDeleteCategoryConfirmModal } =
     useDeleteCategoryConfirmModal()
 
-  function handleClose() {
+  const handleClose = useCallback(() => {
     closeMenu()
-  }
+  }, [closeMenu])
 
-  function handleEditButtonClick() {
+  const handleEditButtonClick = useCallback(() => {
     openUpdateCategoryModal()
     closeMenu()
-  }
+  }, [closeMenu, openUpdateCategoryModal])
 
-  function handleDeleteButtonClick() {
+  const handleDeleteButtonClick = useCallback(() => {
     openDeleteCategoryConfirmModal()
     closeMenu()
-  }
+  }, [closeMenu, openDeleteCategoryConfirmModal])
 
   return (
     <>

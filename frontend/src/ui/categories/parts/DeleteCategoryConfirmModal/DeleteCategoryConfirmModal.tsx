@@ -7,14 +7,14 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material"
-import React from "react"
-import { Categories_CategoryFragment } from "~/graphql/types"
+import React, { useCallback } from "react"
+import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import { useDeleteCategory } from "./useDeleteCategory"
 import { useDeleteCategoryConfirmModal } from "./useDeleteCategoryConfirmModal"
 
 interface DeleteCategoryConfirmModalProps {
-  category: Categories_CategoryFragment | null
+  category: Category | null
 }
 
 export function DeleteCategoryConfirmModal({
@@ -24,11 +24,11 @@ export function DeleteCategoryConfirmModal({
   const { deleteCategory } = useDeleteCategory(category)
   const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
-  function handleClose() {
+  const handleClose = useCallback(() => {
     closeModal()
-  }
+  }, [closeModal])
 
-  async function handleDeleteButtonClick() {
+  const handleDeleteButtonClick = useCallback(async () => {
     try {
       await deleteCategory()
       openSuccessSnackBar("カテゴリーの削除に成功しました")
@@ -40,7 +40,7 @@ export function DeleteCategoryConfirmModal({
       }
     }
     closeModal()
-  }
+  }, [closeModal, deleteCategory, openSuccessSnackBar, openWarningSnackBar])
 
   return (
     <>

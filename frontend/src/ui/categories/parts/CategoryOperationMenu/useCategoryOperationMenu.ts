@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { useAnchorElement } from "~/ui/common/hooks/useAnchorElement"
 
 export function useCategoryOperationMenu() {
@@ -6,13 +6,16 @@ export function useCategoryOperationMenu() {
     "category-operation-menu",
   )
 
-  function openMenu(event: React.MouseEvent<HTMLButtonElement>) {
-    setAnchorElement(event)
-  }
+  const openMenu = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorElement(event)
+    },
+    [setAnchorElement],
+  )
 
-  function closeMenu() {
+  const closeMenu = useCallback(() => {
     resetAnchorElement()
-  }
+  }, [resetAnchorElement])
 
   return { menuAnchorEl: anchorEl, openMenu: openMenu, closeMenu: closeMenu }
 }
