@@ -5,7 +5,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from "@mui/material"
-import React from "react"
+import React, { useCallback } from "react"
 import { Category } from "../../types"
 import { useCategoryOperationMenu } from "../CategoryOperationMenu/useCategoryOperationMenu"
 
@@ -20,10 +20,13 @@ export function CategoryItem({
 }: CategoryItemProps) {
   const { openMenu } = useCategoryOperationMenu()
 
-  function handleMenuButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
-    openMenu(event)
-    onMenuButtonClick(category)
-  }
+  const handleMenuButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      openMenu(event)
+      onMenuButtonClick(category)
+    },
+    [category, onMenuButtonClick, openMenu],
+  )
 
   return (
     <>

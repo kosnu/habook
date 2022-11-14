@@ -1,3 +1,4 @@
+import { useCallback } from "react"
 import { useBool } from "~/ui/common/hooks/useBool"
 
 const deleteCategoryConfirmModalKey = "delete-category-confirm-modal-key"
@@ -7,13 +8,13 @@ export function useDeleteCategoryConfirmModal() {
     deleteCategoryConfirmModalKey,
   )
 
-  function openModal() {
+  const openModal = useCallback(() => {
     changeTrue()
-  }
+  }, [changeTrue])
 
-  function closeModal() {
+  const closeModal = useCallback(() => {
     changeFalse()
-  }
+  }, [changeFalse])
 
   return { open: bool, openModal: openModal, closeModal: closeModal }
 }

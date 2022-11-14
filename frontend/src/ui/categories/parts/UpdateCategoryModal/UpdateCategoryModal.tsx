@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material"
-import React from "react"
+import React, { useCallback } from "react"
 import { Category } from "../../types"
 import { UpdateCategoryForm } from "../UpdateCategoryForm"
 import { useCategoryFormModal } from "./useUpdateCategoryModal"
@@ -11,9 +11,9 @@ interface UpdateCategoryModalProps {
 export function UpdateCategoryModal({ category }: UpdateCategoryModalProps) {
   const { open, closeModal } = useCategoryFormModal()
 
-  function handleClose() {
+  const handleClose = useCallback(() => {
     closeModal()
-  }
+  }, [closeModal])
 
   return (
     <>

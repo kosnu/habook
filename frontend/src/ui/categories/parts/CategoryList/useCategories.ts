@@ -1,3 +1,4 @@
+import { useCallback } from "react"
 import {
   CategoriesQuery,
   CategoriesQueryVariables,
@@ -13,7 +14,7 @@ export function useCategories(userId: string) {
   const pageInfo = data?.categories.pageInfo
   const categories = connectionToNodes(data?.categories)
 
-  async function fetchMoreCategories() {
+  const fetchMoreCategories = useCallback(async () => {
     try {
       await fetchMore<CategoriesQuery, CategoriesQueryVariables>({
         variables: {
@@ -23,7 +24,7 @@ export function useCategories(userId: string) {
     } catch (e) {
       console.error(e)
     }
-  }
+  }, [fetchMore, pageInfo?.endCursor])
 
   return {
     loading: loading,

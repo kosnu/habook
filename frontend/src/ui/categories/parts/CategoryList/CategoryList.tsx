@@ -1,5 +1,5 @@
 import { List } from "@mui/material"
-import React from "react"
+import React, { useCallback } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Category } from "../../types"
 import { LoadingCircular } from "~/ui/common/components/LoadingCircular"
@@ -17,16 +17,19 @@ export function CategoryList({ onCategoryMenuClick }: CategoryListProps) {
   const { loading, error, categories, pageInfo, fetchMore } =
     useCategories(userId)
 
+  const handleMoreFetch = useCallback(async () => {
+    await fetchMore()
+  }, [fetchMore])
+
+  const handleMenuButtonClick = useCallback(
+    (category: Category) => {
+      onCategoryMenuClick(category)
+    },
+    [onCategoryMenuClick],
+  )
+
   if (error) {
     return <ErrorMessage message={error.message} />
-  }
-
-  async function handleMoreFetch() {
-    await fetchMore()
-  }
-
-  function handleMenuButtonClick(category: Category) {
-    onCategoryMenuClick(category)
   }
 
   return (
