@@ -1,25 +1,24 @@
 import { useCallback } from "react"
-import { CategoriesDocument, useDeleteCategoryMutation } from "~/graphql/types"
+import { useDeleteCategoryMutation } from "~/graphql/types"
 import { Category } from "../../types"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 
-export function useDeleteCategory(category: Category | null) {
-  const { userId } = useLoginUser()
-  const [deleteCategoryMutation] = useDeleteCategoryMutation({
-    refetchQueries: [CategoriesDocument],
-  })
+export function useDeleteCategory() {
+  const [deleteCategoryMutation, { loading }] = useDeleteCategoryMutation()
 
-  const deleteCategory = useCallback(async () => {
-    category &&
-      (await deleteCategoryMutation({
+  const deleteCategory = useCallback(
+    async (category: Category, userId: string) => {
+      await deleteCategoryMutation({
         variables: {
           userId: userId,
           id: category.id,
         },
-      }))
-  }, [category, deleteCategoryMutation, userId])
+      })
+    },
+    [deleteCategoryMutation],
+  )
 
   return {
     deleteCategory: deleteCategory,
+    loading: loading,
   }
 }
