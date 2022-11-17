@@ -1,6 +1,8 @@
 import { ApolloError } from "@apollo/client"
+import { Delete as DeleteIcon } from "@mui/icons-material"
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,20 +10,22 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useCallback } from "react"
+import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import { useDeleteCategory } from "./useDeleteCategory"
 import { useDeleteCategoryConfirmModal } from "./useDeleteCategoryConfirmModal"
 
 interface DeleteCategoryConfirmModalProps {
-  category: Category | null
+  category: Category
 }
 
 export function DeleteCategoryConfirmModal({
   category,
 }: DeleteCategoryConfirmModalProps) {
+  const { userId } = useLoginUser()
   const { open, closeModal } = useDeleteCategoryConfirmModal()
-  const { deleteCategory } = useDeleteCategory(category)
+  const { deleteCategory, loading } = useDeleteCategory()
   const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   const handleClose = useCallback(() => {
@@ -30,7 +34,7 @@ export function DeleteCategoryConfirmModal({
 
   const handleDeleteButtonClick = useCallback(async () => {
     try {
-      await deleteCategory()
+      await deleteCategory(category, userId)
       openSuccessSnackBar("カテゴリーの削除に成功しました")
     } catch (e) {
       console.error(e)
@@ -40,7 +44,14 @@ export function DeleteCategoryConfirmModal({
       }
     }
     closeModal()
-  }, [closeModal, deleteCategory, openSuccessSnackBar, openWarningSnackBar])
+  }, [
+    category,
+    closeModal,
+    deleteCategory,
+    openSuccessSnackBar,
+    openWarningSnackBar,
+    userId,
+  ])
 
   return (
     <>
@@ -53,13 +64,24 @@ export function DeleteCategoryConfirmModal({
           <Button color={"inherit"} onClick={handleClose}>
             キャンセル
           </Button>
-          <Button
-            color={"error"}
-            variant={"outlined"}
-            onClick={handleDeleteButtonClick}
-          >
-            カテゴリーを削除する
-          </Button>
+          {loading ? (
+            <Button
+              disabled
+              variant={"contained"}
+              startIcon={<CircularProgress size={"1rem"} />}
+            >
+              カテゴリーを削除しています
+            </Button>
+          ) : (
+            <Button
+              color={"error"}
+              variant={"outlined"}
+              startIcon={<DeleteIcon />}
+              onClick={handleDeleteButtonClick}
+            >
+              カテゴリーを削除する
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </>
