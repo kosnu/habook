@@ -1,6 +1,8 @@
 import { ApolloError } from "@apollo/client"
+import { Delete as DeleteIcon } from "@mui/icons-material"
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -23,7 +25,7 @@ export function DeleteCategoryConfirmModal({
 }: DeleteCategoryConfirmModalProps) {
   const { userId } = useLoginUser()
   const { open, closeModal } = useDeleteCategoryConfirmModal()
-  const { deleteCategory } = useDeleteCategory()
+  const { deleteCategory, loading } = useDeleteCategory()
   const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
   const handleClose = useCallback(() => {
@@ -62,13 +64,24 @@ export function DeleteCategoryConfirmModal({
           <Button color={"inherit"} onClick={handleClose}>
             キャンセル
           </Button>
-          <Button
-            color={"error"}
-            variant={"outlined"}
-            onClick={handleDeleteButtonClick}
-          >
-            カテゴリーを削除する
-          </Button>
+          {loading ? (
+            <Button
+              disabled
+              variant={"contained"}
+              startIcon={<CircularProgress size={"1rem"} />}
+            >
+              カテゴリーを削除しています
+            </Button>
+          ) : (
+            <Button
+              color={"error"}
+              variant={"outlined"}
+              startIcon={<DeleteIcon />}
+              onClick={handleDeleteButtonClick}
+            >
+              カテゴリーを削除する
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </>
