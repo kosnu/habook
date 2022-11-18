@@ -6,7 +6,11 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { LoadingButton } from "~/ui/common/components/LoadingButton"
 import { useSnackbar } from "../../hooks/useSnackbar"
-import { FormSchema, formSchema, defaultValues } from "../../form"
+import {
+  FormSchema,
+  formSchema,
+  defaultValues,
+} from "../../validations/createCategory"
 import { useCreateCategory } from "./useCreateCategory"
 
 export function CreateCategoryForm() {
