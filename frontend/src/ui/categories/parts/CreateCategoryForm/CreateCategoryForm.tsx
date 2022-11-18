@@ -1,16 +1,10 @@
 import { ApolloError } from "@apollo/client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Create as CreateIcon } from "@mui/icons-material"
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Divider,
-  Grid,
-  TextField,
-} from "@mui/material"
+import { Box, Button, Divider, Grid, TextField } from "@mui/material"
 import React from "react"
 import { useForm } from "react-hook-form"
+import { LoadingButton } from "~/ui/common/components/LoadingButton"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import { FormSchema, formSchema, defaultValues } from "../../form"
 import { useCreateCategory } from "./useCreateCategory"
@@ -63,14 +57,7 @@ export function CreateCategoryForm() {
           </Grid>
           <Grid item>
             {loading ? (
-              <Button
-                disabled
-                variant={"contained"}
-                color={"primary"}
-                startIcon={<CircularProgress size={"1rem"} />}
-              >
-                カテゴリーを作成しています
-              </Button>
+              <LoadingButton>カテゴリーを作成しています</LoadingButton>
             ) : (
               <Button
                 type={"submit"}

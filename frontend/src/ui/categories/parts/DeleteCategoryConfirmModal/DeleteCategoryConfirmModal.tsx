@@ -2,7 +2,6 @@ import { ApolloError } from "@apollo/client"
 import { Delete as DeleteIcon } from "@mui/icons-material"
 import {
   Button,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,6 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useCallback } from "react"
+import { LoadingButton } from "~/ui/common/components/LoadingButton"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
@@ -65,13 +65,7 @@ export function DeleteCategoryConfirmModal({
             キャンセル
           </Button>
           {loading ? (
-            <Button
-              disabled
-              variant={"contained"}
-              startIcon={<CircularProgress size={"1rem"} />}
-            >
-              カテゴリーを削除しています
-            </Button>
+            <LoadingButton>カテゴリーを削除しています</LoadingButton>
           ) : (
             <Button
               color={"error"}
