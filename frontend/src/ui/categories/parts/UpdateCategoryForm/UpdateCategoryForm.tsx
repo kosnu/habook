@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { LoadingButton } from "~/ui/common/components/LoadingButton"
 import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
-import { formSchema, FormSchema } from "../../updateForm"
+import { formSchema, FormSchema } from "../../validations/updateCategory"
 import { useUpdateCategory } from "../UpdateCategoryModal/useUpdateCategory"
 
 interface UpdateCategoryFormProps {
