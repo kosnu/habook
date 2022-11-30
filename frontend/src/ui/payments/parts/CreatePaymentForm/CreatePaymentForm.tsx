@@ -39,13 +39,19 @@ export function CreatePaymentForm() {
   const { createPayment } = useCreatePayment()
   const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
-  function handleProductAutocompleteChange(inputValue: string) {
-    setValue("productName", inputValue, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    })
-  }
+  const handleProductAutocompleteChange = useCallback(
+    (productName: string) => {
+      setValue("productName", productName)
+    },
+    [setValue],
+  )
+
+  const handleProductAutocompleteInputChange = useCallback(
+    (inputValue: string) => {
+      setValue("productName", inputValue)
+    },
+    [setValue],
+  )
 
   // フォーム送信時の処理
   const onSubmit: SubmitHandler<PaymentFormInput> = useCallback(
@@ -109,6 +115,7 @@ export function CreatePaymentForm() {
                   autocompleteProps={field}
                   invalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
+                  onInputChange={handleProductAutocompleteInputChange}
                   onChange={handleProductAutocompleteChange}
                 />
               )}

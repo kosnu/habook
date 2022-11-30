@@ -1,4 +1,5 @@
 import { InMemoryCache } from "@apollo/client"
+import { relayStylePagination } from "@apollo/client/utilities"
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -8,14 +9,8 @@ export const cache = new InMemoryCache({
           keyArgs: false,
           merge,
         },
-        products: {
-          keyArgs: false,
-          merge,
-        },
-        payments: {
-          keyArgs: false,
-          merge,
-        },
+        products: relayStylePagination(),
+        payments: relayStylePagination(),
       },
     },
   },
