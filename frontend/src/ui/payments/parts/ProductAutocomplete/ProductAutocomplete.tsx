@@ -1,8 +1,8 @@
 import { css } from "@emotion/react"
 import { Autocomplete, CircularProgress, TextField } from "@mui/material"
-import React from "react"
+import React, { useCallback } from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { PaymentFormInput } from "../../types"
+import { PaymentFormInput, Product } from "../../types"
 import { useProducts } from "./useProducts"
 
 interface ProductAutocompleteProps {
@@ -10,13 +10,15 @@ interface ProductAutocompleteProps {
   autocompleteProps: ControllerRenderProps<PaymentFormInput, "productName">
   invalid?: boolean
   errorMessage?: string
-  onChange: (inputvalue: string) => void
+  onInputChange: (inputValue: string) => void
+  onChange: (productName: string) => void
 }
 
 export function ProductAutocomplete({
   autocompleteProps,
   invalid,
   errorMessage,
+  onInputChange,
   onChange,
 }: ProductAutocompleteProps) {
   const { products, loading, error } = useProducts()
@@ -26,9 +28,21 @@ export function ProductAutocomplete({
     console.error(error)
   }
 
-  function handleChange(event: React.SyntheticEvent, value: string | null) {
-    value && onChange(value)
-  }
+  const handleInputChange = useCallback(
+    (_event: React.SyntheticEvent, value: string) => {
+      onInputChange(value)
+    },
+    [onInputChange],
+  )
+
+  const handleChange = useCallback(
+    (_event: React.SyntheticEvent, value: string | Product | null) => {
+      if (typeof value !== "string" && value) {
+        onChange(value.name)
+      }
+    },
+    [onChange],
+  )
 
   return (
     <>
@@ -36,8 +50,17 @@ export function ProductAutocomplete({
         {...autocompleteProps}
         freeSolo
         id={"combo-box-product-name"}
-        options={products.map((product) => product.name)}
+        options={products}
         loading={loading}
+        getOptionLabel={(option) =>
+          typeof option === "string" ? option : option.name
+        }
+        isOptionEqualToValue={(option, value) => {
+          if (typeof option === "string") return false
+
+          return option.id === value.id
+        }}
+        onInputChange={handleInputChange}
         onChange={handleChange}
         renderInput={(params) => (
           <TextField

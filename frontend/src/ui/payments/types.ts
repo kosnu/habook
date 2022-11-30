@@ -13,3 +13,4 @@ export interface PaymentFormInput {
 }
 
 export type Payment = NodeType<PaymentsQuery["payments"]>
+export type Product = Payment["product"]
