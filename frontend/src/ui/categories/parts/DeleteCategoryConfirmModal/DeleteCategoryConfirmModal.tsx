@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useCallback } from "react"
-import { LoadingButton } from "~/ui/common/components/LoadingButton"
+import { LoadingButton } from "~/ui/common/components"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"

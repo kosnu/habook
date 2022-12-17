@@ -4,7 +4,7 @@ import { Create as CreateIcon } from "@mui/icons-material"
 import { Box, Button, Divider, Grid, TextField } from "@mui/material"
 import React from "react"
 import { useForm } from "react-hook-form"
-import { LoadingButton } from "~/ui/common/components/LoadingButton"
+import { LoadingButton } from "~/ui/common/components"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import {
   FormSchema,

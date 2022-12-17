@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material"
 import React from "react"
-import { LoadingCircular } from "~/ui/common/components/LoadingCircular"
+import { LoadingCircular } from "~/ui/common/components"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { PaymentItem } from "../PaymentItem"
 import { usePayments } from "./usePayments"
