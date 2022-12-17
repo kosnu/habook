@@ -1,4 +1,4 @@
-import { useProductsAutocompleteQuery } from "src/graphql/types"
+import { useProductsAutocompleteQuery } from "~/graphql/types"
 import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
 import { connectionToNodes } from "~/ui/common/utils/connectionToNodes"
 
@@ -9,6 +9,10 @@ export function useProducts() {
   })
 
   const products = connectionToNodes(data?.products)
+
+  if (error) {
+    console.error("ProductsAutocompleteQuery", error)
+  }
 
   return {
     products: products,

@@ -39,7 +39,6 @@ export function ControlledTextField<
     <>
       <TextField
         variant={"standard"}
-        sx={{ minWidth: "200px" }}
         error={!!fieldState.error}
         helperText={fieldState.error?.message}
         {...textFieldProps}

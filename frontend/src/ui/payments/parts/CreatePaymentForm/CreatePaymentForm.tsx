@@ -1,41 +1,26 @@
 import { ApolloError } from "@apollo/client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Create as CreateIcon } from "@mui/icons-material"
-import { Button, Divider, Grid } from "@mui/material"
+import { Button, Divider, Grid, InputAdornment, MenuItem } from "@mui/material"
 import React, { useCallback } from "react"
-import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import { useSnackbar } from "~/ui/payments/hooks/useSnackbar"
-import { PaymentFormInput } from "../../types"
-import { AmountTextField } from "../AmountTextField"
-import { CategorySelect } from "../CategorySelect"
-import { ConsumptionTaxRateSelect } from "../ConsumptionTaxRateSelect"
-import { NumberOfProductSelect } from "../NumberOfProductSelect"
-import { PaidOnDatePicker } from "../PaidOnDatePicker"
-import { ProductAutocomplete } from "../ProductAutocomplete"
+import { useForm } from "react-hook-form"
+import {
+  ControlledAutocomplete,
+  ControlledDatePicker,
+  ControlledSelect,
+  ControlledTextField,
+} from "~/ui/common/components"
+import { useSnackbar, useCategories, useProducts } from "../../hooks"
 import { useCreatePayment } from "./useCreatePayment"
-import { schema } from "~/ui/payments/validationSchema"
-
-const defaultValues: Partial<PaymentFormInput> = {
-  paidOnDate: new Date(),
-  categoryId: "",
-  productName: "",
-  numberOfProduct: 1,
-  consumptionTaxRate: 1.08,
-  amount: null,
-}
+import { defaultValues, FormSchema, formSchema } from "./form"
 
 export function CreatePaymentForm() {
-  const {
-    register,
-    control,
-    setValue,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<PaymentFormInput>({
+  const { control, setValue, handleSubmit, reset } = useForm<FormSchema>({
     defaultValues: defaultValues,
-    resolver: zodResolver(schema),
+    resolver: zodResolver(formSchema),
   })
+  const { categories } = useCategories()
+  const { products, loading: loadingProducts } = useProducts()
   const { createPayment } = useCreatePayment()
   const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
@@ -53,13 +38,12 @@ export function CreatePaymentForm() {
     [setValue],
   )
 
-  // フォーム送信時の処理
-  const onSubmit: SubmitHandler<PaymentFormInput> = useCallback(
-    async (data) => {
+  const handleValid = useCallback(
+    async (data: FormSchema) => {
       try {
         await createPayment(data)
         openSuccessSnackBar("支払いが作成できました")
-        reset({ ...defaultValues })
+        reset()
       } catch (e) {
         console.error(e)
         if (e instanceof ApolloError) {
@@ -77,85 +61,99 @@ export function CreatePaymentForm() {
         spacing={4}
         direction={"column"}
         component={"form"}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleValid)}
       >
         <Grid item>
-          <Controller
-            name="paidOnDate"
+          <ControlledDatePicker
             control={control}
-            render={({ field, fieldState }) => (
-              <PaidOnDatePicker
-                datePickerProps={field}
-                invalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              />
-            )}
+            name={"paidOnDate"}
+            label={"支払日"}
+            inputProps={{ variant: "standard" }}
           />
         </Grid>
         <Grid item>
-          <Controller
-            name="categoryId"
+          <ControlledSelect
             control={control}
-            render={({ field, fieldState }) => (
-              <CategorySelect
-                selectProps={field}
-                invalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              />
-            )}
-          />
+            name={"categoryId"}
+            label={"カテゴリー"}
+            sx={{ minWidth: "200px" }}
+          >
+            <MenuItem value={""}>
+              {categories.length >= 0 ? "未選択" : "選択肢がありません"}
+            </MenuItem>
+            {categories.map((category) => {
+              return (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              )
+            })}
+          </ControlledSelect>
         </Grid>
         <Grid item container spacing={2}>
           <Grid item>
-            <Controller
-              name="productName"
+            <ControlledAutocomplete
               control={control}
-              render={({ field, fieldState }) => (
-                <ProductAutocomplete
-                  autocompleteProps={field}
-                  invalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                  onInputChange={handleProductAutocompleteInputChange}
-                  onChange={handleProductAutocompleteChange}
-                />
-              )}
+              name={"productName"}
+              label={"商品名"}
+              freeSolo
+              options={products}
+              loading={loadingProducts}
+              getOptionLabel={(option) =>
+                typeof option === "string" ? option : option.name
+              }
+              isOptionEqualToValue={(option, value) => {
+                if (typeof option === "string") return false
+
+                return option.id === value.id
+              }}
+              inputProps={{ variant: "standard", sx: { minWidth: "400px" } }}
+              onChange={(value) => {
+                if (typeof value === "string" || !value) return
+
+                handleProductAutocompleteChange(value.name)
+              }}
+              onInputChange={(inputValue: string) => {
+                handleProductAutocompleteInputChange(inputValue)
+              }}
             />
           </Grid>
           <Grid item>
-            <Controller
-              name="numberOfProduct"
+            <ControlledTextField
               control={control}
-              render={({ field, fieldState }) => (
-                <NumberOfProductSelect
-                  selectProps={field}
-                  invalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                />
-              )}
+              name={"numberOfProduct"}
+              label={"個数"}
+              sx={{ width: "64px" }}
+              type={"number"}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             />
           </Grid>
         </Grid>
         <Grid item container spacing={2} direction={"row"}>
           <Grid item>
-            <Controller
-              name="consumptionTaxRate"
+            <ControlledSelect
               control={control}
-              render={({ field, fieldState }) => (
-                <ConsumptionTaxRateSelect
-                  consumptionTaxRateSelectProps={field}
-                  invalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                />
-              )}
-            />
+              name={"consumptionTaxRate"}
+              sx={{ minWidth: "120px" }}
+            >
+              <MenuItem value={1.1}>税率(10%)</MenuItem>
+              <MenuItem value={1.08}>税率(8%)</MenuItem>
+              <MenuItem value={1}>税込</MenuItem>
+            </ControlledSelect>
           </Grid>
           <Grid item>
-            <AmountTextField
-              textFieldProps={register("amount", {
-                valueAsNumber: true,
-              })}
-              invalid={!!errors.amount}
-              errorMessage={errors.amount?.message}
+            <ControlledTextField
+              control={control}
+              name={"amount"}
+              label={"支払い金額"}
+              sx={{ minWidth: "200px" }}
+              type={"number"}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position={"start"}>¥</InputAdornment>
+                ),
+              }}
             />
           </Grid>
         </Grid>
@@ -164,10 +162,10 @@ export function CreatePaymentForm() {
         </Grid>
         <Grid item>
           <Button
+            type={"submit"}
             variant={"contained"}
             color={"primary"}
             startIcon={<CreateIcon />}
-            onClick={handleSubmit(onSubmit)}
           >
             支払いの入力を確定する
           </Button>
