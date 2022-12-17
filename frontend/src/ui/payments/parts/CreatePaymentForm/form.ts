@@ -1,6 +1,6 @@
 import * as z from "zod"
 
-export const schema = z.object({
+export const formSchema = z.object({
   paidOnDate: z.date({ required_error: "購入日を選択してください" }),
   categoryId: z
     .string({
@@ -9,10 +9,12 @@ export const schema = z.object({
     })
     .min(1, "カテゴリーを選択してください"),
   productName: z.string().min(1, { message: "商品名を入力してください" }),
-  numberOfProduct: z
-    .number()
-    .min(1, { message: "個数を入力してください" })
-    .max(10, { message: "最大数を超えています" }),
+  consumptionTaxRate: z.union([
+    z.literal(1.0),
+    z.literal(1.08),
+    z.literal(1.1),
+  ]),
+  numberOfProduct: z.number().min(1, { message: "個数を入力してください" }),
   amount: z
     .number({
       required_error: "金額を入力してください",
@@ -20,3 +22,14 @@ export const schema = z.object({
     })
     .nonnegative("0円以上を入力してください"),
 })
+
+export type FormSchema = z.infer<typeof formSchema>
+
+export const defaultValues: Partial<FormSchema> = {
+  paidOnDate: new Date(),
+  categoryId: "",
+  productName: "",
+  numberOfProduct: 1,
+  consumptionTaxRate: 1.08,
+  amount: 0,
+}
