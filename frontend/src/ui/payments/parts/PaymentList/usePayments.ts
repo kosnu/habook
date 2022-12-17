@@ -1,5 +1,5 @@
 import { usePaymentsQuery } from "~/graphql/types"
-import { connectionToNodes } from "~/ui/common/utils/connectionToNodes"
+import { connectionToNodes } from "~/ui/common/utils"
 
 export function usePayments(userId: string) {
   const { data, loading, error, refetch } = usePaymentsQuery({

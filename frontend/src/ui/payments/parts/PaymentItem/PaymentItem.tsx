@@ -1,7 +1,7 @@
 import { MoreVert as MoreVertIcon } from "@mui/icons-material"
 import { IconButton, TableCell, TableRow } from "@mui/material"
 import React, { useCallback } from "react"
-import { dateFormatter } from "~/ui/common/utils/formatter"
+import { dateFormatter } from "~/ui/common/utils"
 import { Payment } from "../../types"
 import { usePaymentOperationMenu } from "./usePaymentOperationMenu"
 

@@ -1,6 +1,6 @@
 import { useCategoriesQuery } from "~/graphql/types"
 import { useLoginUser } from "~/ui/common/hooks"
-import { connectionToNodes } from "~/ui/common/utils/connectionToNodes"
+import { connectionToNodes } from "~/ui/common/utils"
 
 export function useCategories() {
   const { userId } = useLoginUser()
