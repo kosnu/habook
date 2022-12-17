@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { useAnchorElement } from "~/ui/common/hooks/useAnchorElement"
+import { useAnchorElement } from "~/ui/common/hooks"
 
 export function useCategoryOperationMenu() {
   const { anchorEl, setAnchorElement, resetAnchorElement } = useAnchorElement(

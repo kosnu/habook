@@ -1,5 +1,5 @@
 import { useCategoriesQuery } from "~/graphql/types"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 import { connectionToNodes } from "~/ui/common/utils/connectionToNodes"
 
 export function useCategories() {

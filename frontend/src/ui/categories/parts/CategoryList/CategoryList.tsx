@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Category } from "../../types"
 import { LoadingCircular, ErrorMessage } from "~/ui/common/components"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 import { CategoryItem } from "../CategoryItem"
 import { useCategories } from "./useCategories"
 

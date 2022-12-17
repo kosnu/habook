@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useUpdateCategoryMutation } from "~/graphql/types"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 
 export function useUpdateCategory() {
   const { userId } = useLoginUser()

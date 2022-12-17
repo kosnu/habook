@@ -1,5 +1,5 @@
 import { useCreatePaymentMutation } from "~/graphql/types"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 import { dateToString } from "~/ui/common/utils/formatter"
 import { PaymentFormInput } from "../../types"
 

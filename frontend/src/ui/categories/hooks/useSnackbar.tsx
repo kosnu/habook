@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { useSnackbar as useCommonSnackbar } from "~/ui/common/hooks/SnackBar"
+import { useSnackbar as useCommonSnackbar } from "~/ui/common/hooks"
 
 interface UseSnackbarReturn {
   SnackBar: () => JSX.Element

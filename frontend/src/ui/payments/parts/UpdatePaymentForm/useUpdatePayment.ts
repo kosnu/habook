@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useUpdatePaymentMutation } from "~/graphql/types"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 import { dateToString } from "~/ui/common/utils/formatter"
 
 export function useUpdatePayment() {

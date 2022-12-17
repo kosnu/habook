@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { useAnchorElement } from "~/ui/common/hooks/useAnchorElement"
+import { useAnchorElement } from "~/ui/common/hooks"
 
 export function useAccountMenu(menuId: string) {
   const { anchorEl, setAnchorElement, resetAnchorElement } =

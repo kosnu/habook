@@ -10,7 +10,7 @@ import {
 } from "@mui/material"
 import React, { useCallback } from "react"
 import { LoadingButton } from "~/ui/common/components"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
 import { useDeleteCategory } from "./useDeleteCategory"
