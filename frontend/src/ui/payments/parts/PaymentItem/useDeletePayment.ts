@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useDeletePaymentMutation } from "~/graphql/types"
-import { useLoginUser } from "~/ui/common/hooks/useLoginUser"
+import { useLoginUser } from "~/ui/common/hooks"
 
 export function useDeletePayment() {
   const { userId } = useLoginUser()

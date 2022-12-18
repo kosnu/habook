@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { useBool } from "~/ui/common/hooks/useBool"
+import { useBool } from "~/ui/common/hooks"
 
 const deleteCategoryConfirmModalKey = "delete-category-confirm-modal-key"
 

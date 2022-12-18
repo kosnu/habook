@@ -1,5 +1,5 @@
 import { PaymentsQuery } from "~/graphql/types"
-import { NodeType } from "~/ui/common/utils/connectionToNodes"
+import { NodeType } from "~/ui/common/utils"
 
 export type ConsumptionTaxRate = 1.1 | 1.08 | 1
 
