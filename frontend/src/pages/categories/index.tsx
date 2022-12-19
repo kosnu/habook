@@ -1,5 +1,5 @@
-import Head from "next/head"
 import React from "react"
+import Head from "next/head"
 import { CategoriesPage } from "~/ui/categories/pages/CategoriesPage"
 
 export default function index() {

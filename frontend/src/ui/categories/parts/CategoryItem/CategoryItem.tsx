@@ -1,3 +1,4 @@
+import React, { useCallback } from "react"
 import { MoreVert as MoreVertIcon } from "@mui/icons-material"
 import {
   IconButton,
@@ -5,7 +6,6 @@ import {
   ListItemSecondaryAction,
   ListItemText,
 } from "@mui/material"
-import React, { useCallback } from "react"
 import { Category } from "../../types"
 import { useCategoryOperationMenu } from "../CategoryOperationMenu/useCategoryOperationMenu"
 

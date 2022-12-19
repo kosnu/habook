@@ -1,5 +1,5 @@
-import Head from "next/head"
 import React from "react"
+import Head from "next/head"
 import { CreateCategoryPage } from "~/ui/categories/pages/CreateCategoryPage"
 
 export default function New() {

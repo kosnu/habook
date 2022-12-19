@@ -1,5 +1,5 @@
-import Head from "next/head"
 import React from "react"
+import Head from "next/head"
 import { PaymentsPage } from "~/ui/payments/pages/PaymentsPage"
 
 export default function index() {

@@ -1,5 +1,5 @@
-import { Card, CardContent, Grid, Typography } from "@mui/material"
 import React from "react"
+import { Card, CardContent, Grid, Typography } from "@mui/material"
 
 interface TotalIncomeProps {
   income: number

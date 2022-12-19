@@ -1,6 +1,6 @@
+import React from "react"
 import { Grid, Typography } from "@mui/material"
 import Link from "next/link"
-import React from "react"
 import { LogoIcon } from "~/ui/common/components"
 
 export function Title() {
