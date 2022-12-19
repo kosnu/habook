@@ -1,7 +1,6 @@
-import { TextFieldProps, TextField } from "@mui/material"
 import React, { ChangeEvent, useCallback } from "react"
-import { Control, useController } from "react-hook-form"
-import { FieldPath, FieldValues } from "react-hook-form/dist/types"
+import { TextFieldProps, TextField } from "@mui/material"
+import { Control, useController, FieldValues, FieldPath } from "react-hook-form"
 
 type ControlledTextFieldProps<
   TFieldValues extends FieldValues,

@@ -1,3 +1,4 @@
+import React, { ReactNode, useId } from "react"
 import {
   FormControl,
   FormHelperText,
@@ -6,9 +7,7 @@ import {
   SelectProps,
 } from "@mui/material"
 import { FormControlProps } from "@mui/material/FormControl/FormControl"
-import React, { ReactNode, useId } from "react"
-import { Control, useController } from "react-hook-form"
-import { FieldPath, FieldValues } from "react-hook-form/dist/types"
+import { Control, useController, FieldPath, FieldValues } from "react-hook-form"
 
 interface ControlledSelectProps<
   TFieldValues extends FieldValues,

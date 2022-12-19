@@ -1,9 +1,9 @@
-import { List } from "@mui/material"
 import React, { useCallback } from "react"
+import { List } from "@mui/material"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { Category } from "../../types"
 import { LoadingCircular, ErrorMessage } from "~/ui/common/components"
 import { useLoginUser } from "~/ui/common/hooks"
+import { Category } from "../../types"
 import { CategoryItem } from "../CategoryItem"
 import { useCategories } from "./useCategories"
 

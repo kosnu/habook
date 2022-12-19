@@ -1,5 +1,5 @@
-import { Box, Container } from "@mui/material"
 import React from "react"
+import { Box, Container } from "@mui/material"
 import { DashboardLayout } from "../../parts/DashboardLayout"
 
 export function DashboardPage() {

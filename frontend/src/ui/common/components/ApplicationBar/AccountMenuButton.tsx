@@ -1,7 +1,7 @@
+import React from "react"
 import { AccountCircle } from "@mui/icons-material"
 import { Divider, IconButton, Menu, MenuItem, Typography } from "@mui/material"
 import Link from "next/link"
-import React from "react"
 import { useAccountMenu } from "./useAccountMenu"
 
 const menuId = "primary-account-menu"

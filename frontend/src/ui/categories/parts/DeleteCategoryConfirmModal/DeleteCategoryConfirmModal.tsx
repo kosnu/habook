@@ -1,3 +1,4 @@
+import React, { useCallback } from "react"
 import { ApolloError } from "@apollo/client"
 import { Delete as DeleteIcon } from "@mui/icons-material"
 import {
@@ -8,7 +9,6 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material"
-import React, { useCallback } from "react"
 import { LoadingButton } from "~/ui/common/components"
 import { useLoginUser } from "~/ui/common/hooks"
 import { Category } from "../../types"

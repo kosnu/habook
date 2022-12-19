@@ -1,3 +1,4 @@
+import React, { ReactNode, useCallback } from "react"
 import { AutocompleteValue } from "@mui/base/AutocompleteUnstyled/useAutocomplete"
 import {
   Autocomplete,
@@ -5,9 +6,7 @@ import {
   TextField,
   TextFieldProps,
 } from "@mui/material"
-import React, { ReactNode, useCallback } from "react"
-import { Control, useController } from "react-hook-form"
-import { FieldPath, FieldValues } from "react-hook-form/dist/types"
+import { Control, useController, FieldPath, FieldValues } from "react-hook-form"
 
 interface ControlledAutocompleteProps<
   T,
