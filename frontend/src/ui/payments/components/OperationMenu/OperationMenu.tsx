@@ -1,19 +1,19 @@
 import React from "react"
 import { Menu, MenuItem, Typography } from "@mui/material"
 
-interface PaymentOperationMenuProps {
+interface OperationMenuProps {
   anchorElement: HTMLElement | null | undefined
   onMenuClose: () => void
   onEditButtonClick: () => void
   onDeleteButtonClick: () => void
 }
 
-export function PaymentOperationMenu({
+export function OperationMenu({
   anchorElement,
   onMenuClose,
   onEditButtonClick,
   onDeleteButtonClick,
-}: PaymentOperationMenuProps) {
+}: OperationMenuProps) {
   return (
     <>
       <Menu

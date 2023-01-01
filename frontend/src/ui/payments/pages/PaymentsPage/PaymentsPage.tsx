@@ -1,7 +1,7 @@
 import React from "react"
-import { Box, Container, Divider, Grid, Typography } from "@mui/material"
+import { Box, Container, Divider, Stack, Typography } from "@mui/material"
 import { useSnackbar } from "../../hooks/useSnackbar"
-import { PaymentList } from "../../parts/PaymentList"
+import { PaymentList } from "../../components/PaymentList"
 
 export function PaymentsPage() {
   const { SnackBar } = useSnackbar()
@@ -10,15 +10,14 @@ export function PaymentsPage() {
     <>
       <Container maxWidth={"md"}>
         <Box padding={3}>
-          <Grid container spacing={4} direction={"column"}>
-            <Grid item>
+          <Stack spacing={4} divider={<Divider flexItem />}>
+            <Box>
               <Typography variant={"h5"}>支払い一覧</Typography>
-              <Divider variant={"fullWidth"} />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <PaymentList />
-          </Grid>
+            </Box>
+            <Box>
+              <PaymentList />
+            </Box>
+          </Stack>
         </Box>
       </Container>
       <SnackBar />

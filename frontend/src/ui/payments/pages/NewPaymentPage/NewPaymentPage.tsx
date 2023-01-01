@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import { useSnackbar } from "../../hooks/useSnackbar"
-import { CreatePaymentForm } from "../../parts/CreatePaymentForm"
+import { CreateForm } from "../../components/CreateForm"
 
 export function NewPaymentPage() {
   const { SnackBar } = useSnackbar()
@@ -16,7 +16,7 @@ export function NewPaymentPage() {
               <Divider variant={"fullWidth"} />
             </Grid>
             <Grid item>
-              <CreatePaymentForm />
+              <CreateForm />
             </Grid>
           </Grid>
         </Box>

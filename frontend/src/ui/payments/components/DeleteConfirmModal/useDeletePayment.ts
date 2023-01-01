@@ -4,19 +4,19 @@ import { useLoginUser } from "~/ui/common/hooks"
 
 export function useDeletePayment() {
   const { userId } = useLoginUser()
-  const [deletePayment] = useDeletePaymentMutation()
+  const [deletePaymentMutation] = useDeletePaymentMutation()
 
-  const handleDeletePayment = useCallback(
+  const deletePayment = useCallback(
     async (paymentId: string) => {
-      await deletePayment({
+      await deletePaymentMutation({
         variables: { id: paymentId, userId: userId },
         refetchQueries: "active",
       })
     },
-    [deletePayment, userId],
+    [deletePaymentMutation, userId],
   )
 
   return {
-    deletePayment: handleDeletePayment,
+    deletePayment: deletePayment,
   }
 }

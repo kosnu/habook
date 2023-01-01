@@ -3,21 +3,20 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material"
 import { IconButton, TableCell, TableRow } from "@mui/material"
 import { dateFormatter } from "~/ui/common/utils"
 import { Payment } from "../../types"
-import { usePaymentOperationMenu } from "./usePaymentOperationMenu"
+import { useOperationMenu } from "../OperationMenu"
 
 interface PaymentItemProps {
   payment: Payment
 }
 
 export function PaymentItem({ payment }: PaymentItemProps) {
-  const { openPaymentOperationMenu, renderPaymentOperationMenu } =
-    usePaymentOperationMenu(payment)
+  const { open, OperationMenu } = useOperationMenu(payment)
 
   const handleMenuButtonClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      openPaymentOperationMenu(event)
+      open(event)
     },
-    [openPaymentOperationMenu],
+    [open],
   )
 
   return (
@@ -46,7 +45,7 @@ export function PaymentItem({ payment }: PaymentItemProps) {
           </IconButton>
         </TableCell>
       </TableRow>
-      {renderPaymentOperationMenu()}
+      <OperationMenu />
     </>
   )
 }
