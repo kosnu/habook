@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
 import { useSnackbar } from "../../hooks/useSnackbar"
-import { PaymentList } from "../../parts/PaymentList"
+import { PaymentList } from "../../components/PaymentList"
 
 export function PaymentsPage() {
   const { SnackBar } = useSnackbar()

@@ -5,9 +5,9 @@ import { dateToString } from "~/ui/common/utils"
 
 export function useUpdatePayment() {
   const { userId } = useLoginUser()
-  const [updatePayment] = useUpdatePaymentMutation()
+  const [updatePaymentMutation] = useUpdatePaymentMutation()
 
-  const handleUpdatePayment = useCallback(
+  const updatePayment = useCallback(
     async (
       paymentId: string,
       paidOnDate: Date,
@@ -15,7 +15,7 @@ export function useUpdatePayment() {
       numberOfProduct: number,
       amount: number,
     ) => {
-      await updatePayment({
+      await updatePaymentMutation({
         variables: {
           userId: userId,
           id: paymentId,
@@ -26,10 +26,10 @@ export function useUpdatePayment() {
         },
       })
     },
-    [updatePayment, userId],
+    [updatePaymentMutation, userId],
   )
 
   return {
-    updatePayment: handleUpdatePayment,
+    updatePayment: updatePayment,
   }
 }

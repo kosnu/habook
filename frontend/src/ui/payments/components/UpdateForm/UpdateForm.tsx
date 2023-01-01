@@ -5,53 +5,62 @@ import { Create as CreateIcon } from "@mui/icons-material"
 import { Button, Divider, Grid, InputAdornment, MenuItem } from "@mui/material"
 import { useForm } from "react-hook-form"
 import {
-  ControlledAutocomplete,
   ControlledDatePicker,
   ControlledSelect,
   ControlledTextField,
 } from "~/ui/common/components"
-import { useSnackbar, useCategories, useProducts } from "../../hooks"
-import { defaultValues, FormSchema, formSchema } from "./form"
-import { useCreatePayment } from "./useCreatePayment"
+import { useSnackbar, useCategories } from "../../hooks"
+import { Payment } from "../../types"
+import { FormSchema, formSchema } from "./form"
+import { useUpdatePayment } from "./useUpdatePayment"
 
-export function CreatePaymentForm() {
-  const { control, setValue, handleSubmit, reset } = useForm<FormSchema>({
+interface UpdateFormProps {
+  payment: Payment
+  onModalClose: () => void
+}
+
+export function UpdateForm({ payment, onModalClose }: UpdateFormProps) {
+  const defaultValues: FormSchema = {
+    paymentId: payment.id,
+    paidOnDate: new Date(payment.paidOn),
+    categoryId: payment.category.id,
+    productName: payment.product.name,
+    numberOfProduct: payment.numberOfProduct,
+    amount: payment.amount,
+  }
+  const { control, handleSubmit } = useForm<FormSchema>({
     defaultValues: defaultValues,
     resolver: zodResolver(formSchema),
   })
   const { categories } = useCategories()
-  const { products, loading: loadingProducts } = useProducts()
-  const { createPayment } = useCreatePayment()
+  const { updatePayment } = useUpdatePayment()
   const { openSuccessSnackBar, openWarningSnackBar } = useSnackbar()
 
-  const handleProductAutocompleteChange = useCallback(
-    (productName: string) => {
-      setValue("productName", productName)
-    },
-    [setValue],
-  )
+  const handleModalClose = useCallback(() => {
+    onModalClose()
+  }, [onModalClose])
 
-  const handleProductAutocompleteInputChange = useCallback(
-    (inputValue: string) => {
-      setValue("productName", inputValue)
-    },
-    [setValue],
-  )
-
+  // フォーム送信時の処理
   const handleValid = useCallback(
     async (data: FormSchema) => {
       try {
-        await createPayment(data)
-        openSuccessSnackBar("支払いが作成できました")
-        reset()
+        await updatePayment(
+          data.paymentId,
+          data.paidOnDate,
+          data.categoryId,
+          data.numberOfProduct,
+          data.amount,
+        )
+        openSuccessSnackBar("支払いの変更ができました")
+        onModalClose()
       } catch (e) {
         console.error(e)
         if (e instanceof ApolloError) {
-          openWarningSnackBar("支払いが作成に失敗しました")
+          openWarningSnackBar("支払いの変更に失敗しました")
         }
       }
     },
-    [createPayment, openSuccessSnackBar, openWarningSnackBar, reset],
+    [updatePayment, openSuccessSnackBar, onModalClose, openWarningSnackBar],
   )
 
   return (
@@ -92,30 +101,12 @@ export function CreatePaymentForm() {
         </Grid>
         <Grid item container spacing={2}>
           <Grid item>
-            <ControlledAutocomplete
+            <ControlledTextField
               control={control}
               name={"productName"}
               label={"商品名"}
-              freeSolo
-              options={products}
-              loading={loadingProducts}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option.name
-              }
-              isOptionEqualToValue={(option, value) => {
-                if (typeof option === "string") return false
-
-                return option.id === value.id
-              }}
-              inputProps={{ variant: "standard", sx: { minWidth: "400px" } }}
-              onChange={(value) => {
-                if (typeof value === "string" || !value) return
-
-                handleProductAutocompleteChange(value.name)
-              }}
-              onInputChange={(inputValue: string) => {
-                handleProductAutocompleteInputChange(inputValue)
-              }}
+              disabled
+              sx={{ width: "400px" }}
             />
           </Grid>
           <Grid item>
@@ -131,17 +122,6 @@ export function CreatePaymentForm() {
         </Grid>
         <Grid item container spacing={2} direction={"row"}>
           <Grid item>
-            <ControlledSelect
-              control={control}
-              name={"consumptionTaxRate"}
-              sx={{ minWidth: "120px" }}
-            >
-              <MenuItem value={1.1}>税率(10%)</MenuItem>
-              <MenuItem value={1.08}>税率(8%)</MenuItem>
-              <MenuItem value={1}>税込</MenuItem>
-            </ControlledSelect>
-          </Grid>
-          <Grid item>
             <ControlledTextField
               control={control}
               name={"amount"}
@@ -156,19 +136,32 @@ export function CreatePaymentForm() {
               }}
             />
           </Grid>
-        </Grid>
-        <Grid item>
-          <Divider variant={"fullWidth"} />
-        </Grid>
-        <Grid item>
-          <Button
-            type={"submit"}
-            variant={"contained"}
-            color={"primary"}
-            startIcon={<CreateIcon />}
+          <Grid item>
+            <Divider variant={"fullWidth"} />
+          </Grid>
+          <Grid
+            container
+            item
+            spacing={2}
+            direction={"row"}
+            justifyContent={"end"}
           >
-            支払いの入力を確定する
-          </Button>
+            <Grid item>
+              <Button onClick={handleModalClose} color={"primary"}>
+                キャンセル
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                type={"submit"}
+                variant={"contained"}
+                color={"primary"}
+                startIcon={<CreateIcon />}
+              >
+                支払いを更新する
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>
