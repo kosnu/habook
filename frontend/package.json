@@ -27,7 +27,7 @@
     "@mui/lab": "5.0.0-alpha.116",
     "@mui/material": "5.11.5",
     "@mui/styles": "5.11.2",
-    "@mui/x-date-pickers": "5.0.14",
+    "@mui/x-date-pickers": "5.0.15",
     "date-fns": "2.29.3",
     "graphql": "16.6.0",
     "immer": "9.0.18",
