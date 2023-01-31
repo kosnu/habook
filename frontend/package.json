@@ -18,7 +18,7 @@
     "format": "prettier --write '{**/*,*}.{js,ts,jsx,tsx}'"
   },
   "dependencies": {
-    "@apollo/client": "3.7.5",
+    "@apollo/client": "3.7.6",
     "@date-io/date-fns": "2.16.0",
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
