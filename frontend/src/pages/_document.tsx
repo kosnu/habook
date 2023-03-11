@@ -1,5 +1,5 @@
 import React from "react"
-import ServerStyleSheets from "@mui/styles/ServerStyleSheets"
+import { ServerStyleSheets } from "@mui/styles"
 import Document, { Head, Html, Main, NextScript } from "next/document"
 import { theme } from "~/ui/theme"
 

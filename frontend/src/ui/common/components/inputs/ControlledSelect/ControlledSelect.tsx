@@ -5,8 +5,8 @@ import {
   InputLabel,
   Select,
   SelectProps,
+  FormControlProps,
 } from "@mui/material"
-import { FormControlProps } from "@mui/material/FormControl/FormControl"
 import { Control, useController, FieldPath, FieldValues } from "react-hook-form"
 
 interface ControlledSelectProps<

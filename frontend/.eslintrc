@@ -70,6 +70,12 @@
         ],
         "pathGroupsExcludedImportTypes": ["react"]
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@mui/*/*/*"]
+      }
     ]
   }
 }
