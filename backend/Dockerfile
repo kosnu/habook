@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.20
 
 ENV ROOT=/go/src/app
 WORKDIR ${ROOT}
