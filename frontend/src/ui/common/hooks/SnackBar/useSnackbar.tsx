@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { AlertColor } from "@mui/material"
-import produce from "immer"
+import { produce } from "immer"
 import { atomFamily, useRecoilState } from "recoil"
 import { SnackBar as SnackBarComponent } from "./SnackBar"
 
