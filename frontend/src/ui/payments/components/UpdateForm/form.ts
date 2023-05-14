@@ -2,7 +2,10 @@ import * as z from "zod"
 
 export const formSchema = z.object({
   paymentId: z.string(),
-  paidOnDate: z.date({ required_error: "購入日を選択してください" }),
+  paidOnDate: z.date({
+    required_error: "購入日を選択してください",
+    invalid_type_error: "購入日を入力してください",
+  }),
   categoryId: z
     .string({
       required_error: "カテゴリーを選択してください",
