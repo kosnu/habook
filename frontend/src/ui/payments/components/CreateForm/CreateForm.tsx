@@ -74,7 +74,12 @@ export function CreateForm() {
             control={control}
             name={"paidOnDate"}
             label={"支払日"}
-            inputProps={{ variant: "standard" }}
+            slotProps={{
+              textField: {
+                variant: "standard",
+              },
+              field: { readOnly: true },
+            }}
           />
         </Grid>
         <Grid item>

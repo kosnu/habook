@@ -1,33 +1,19 @@
 import React from "react"
-import { TextField, TextFieldProps } from "@mui/material"
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers"
 import { Control, useController, FieldPath, FieldValues } from "react-hook-form"
 
 interface ControlledDatePickerProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
-  TInputDate = Date,
-  TDate = TInputDate,
-> extends Omit<
-    DatePickerProps<TInputDate, TDate>,
-    "value" | "onChange" | "renderInput"
-  > {
+> extends Omit<DatePickerProps<Date>, "value" | "onChange" | "renderInput"> {
   name: TName
   control: Control<TFieldValues>
-  inputProps?: TextFieldProps
 }
 
 export function ControlledDatePicker<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
-  TInputDate = Date,
-  TDate = TInputDate,
->({
-  name,
-  control,
-  inputProps,
-  ...props
-}: ControlledDatePickerProps<TFieldValues, TName, TInputDate, TDate>) {
+>({ name, control, ...props }: ControlledDatePickerProps<TFieldValues, TName>) {
   const { field, fieldState } = useController({
     control: control,
     name: name,
@@ -36,18 +22,17 @@ export function ControlledDatePicker<
   return (
     <>
       <DatePicker
-        mask={"____/__/__"}
-        inputFormat={"yyyy/MM/dd"}
+        format={"yyyy/MM/dd"}
         {...props}
         {...field}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            error={!!fieldState.error}
-            helperText={fieldState.error?.message}
-            {...inputProps}
-          />
-        )}
+        slotProps={{
+          ...props.slotProps,
+          textField: {
+            error: !!fieldState.error,
+            helperText: fieldState.error?.message,
+            ...props.slotProps?.textField,
+          },
+        }}
       />
     </>
   )
