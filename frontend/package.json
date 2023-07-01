@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "18.16.0"
+    "node": "18.16.1"
   },
   "scripts": {
     "dev": "next dev",
@@ -41,7 +41,7 @@
     "@graphql-codegen/typescript-graphql-request": "5.0.0",
     "@graphql-codegen/typescript-operations": "4.0.1",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
-    "@types/node": "18.16.18",
+    "@types/node": "18.16.19",
     "@types/react": "18.2.14",
     "@typescript-eslint/eslint-plugin": "5.60.1",
     "@typescript-eslint/parser": "5.60.1",
