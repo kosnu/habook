@@ -1348,17 +1348,6 @@
   resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.2.4.tgz#b6fade19323b754c5c6de679a38f068fd50b9328"
   integrity sha512-LBcwa8rN84bKF+f5sDyku42w1NTxaPgPyYKODsh01U1fVstTClbUoSA96oyRBnSNyEiAVjKm6Gwx9vjR+xyqHA==
 
-"@mui/utils@^5.13.6":
-  version "5.13.6"
-  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.13.6.tgz#aa29d75de59577585b9f23891b03592d40459ed7"
-  integrity sha512-ggNlxl5NPSbp+kNcQLmSig6WVB0Id+4gOxhx644987v4fsji+CSXc+MFYLocFB/x4oHtzCUlSzbVHlJfP/fXoQ==
-  dependencies:
-    "@babel/runtime" "^7.22.5"
-    "@types/prop-types" "^15.7.5"
-    "@types/react-is" "^18.2.0"
-    prop-types "^15.8.1"
-    react-is "^18.2.0"
-
 "@mui/utils@^5.13.7":
   version "5.13.7"
   resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.13.7.tgz#7e6a8336e05eb2642667a5c02eb605351e27ec20"
@@ -1381,13 +1370,13 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@6.10.0":
-  version "6.10.0"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-6.10.0.tgz#d7c1a17b92311119aa8dd7dc56f43423362122d2"
-  integrity sha512-tp0i65JqZarIRyyTyQy5OjOPgjJv5cO7oQAbOrAePIHn7UEYPXe3k4ISiUzEAjBBXy1HhwQxGRJslVp4BXe3MA==
+"@mui/x-date-pickers@6.10.1":
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-6.10.1.tgz#a2a2767c82ad6cc070498ad1c6532fa655cf632d"
+  integrity sha512-806zxZkLgK2FYTptzy+x880RVDkHi9TcjMq9fTQwqx9DujEZ/YuGIu0wE97mhzNeqdTO02gnH96yHSo3EWu2VQ==
   dependencies:
-    "@babel/runtime" "^7.22.5"
-    "@mui/utils" "^5.13.6"
+    "@babel/runtime" "^7.22.6"
+    "@mui/utils" "^5.13.7"
     "@types/react-transition-group" "^4.4.6"
     clsx "^1.2.1"
     prop-types "^15.8.1"
@@ -1581,13 +1570,6 @@
   version "15.7.5"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
-
-"@types/react-is@^18.2.0":
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-18.2.0.tgz#2f5137853a46017b3d56447940fb3eb92bbf24a5"
-  integrity sha512-1vz2yObaQkLL7YFe/pme2cpvDsCwI1WXIfL+5eLz0MI9gFG24Re16RzUsI8t9XZn9ZWvgLNDrJBmrqXJO7GNQQ==
-  dependencies:
-    "@types/react" "*"
 
 "@types/react-is@^18.2.1":
   version "18.2.1"
