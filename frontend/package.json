@@ -33,7 +33,7 @@
     "react-hook-form": "7.45.4",
     "react-infinite-scroll-component": "6.1.0",
     "recoil": "0.7.7",
-    "zod": "3.21.4"
+    "zod": "3.22.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",
