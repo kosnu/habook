@@ -14,19 +14,19 @@ stop:
 	docker compose down
 
 gqlgen:
-	docker compose exec app go run github.com/99designs/gqlgen generate
+	docker compose run --rm  app go run github.com/99designs/gqlgen generate
 
 dataloaden:
-	docker compose exec app go run github.com/vektah/dataloaden ${MODEL_NAME}Loader string *github.com/kosnu/habook-backend/graph/mode.${MODEL_NAME}
+	docker compose run --rm  app go run github.com/vektah/dataloaden ${MODEL_NAME}Loader string *github.com/kosnu/habook-backend/graph/mode.${MODEL_NAME}
 
 create-migration:
-	docker compose exec app migrate create -ext sql -dir database/migrations ${NAME}
+	docker compose run --rm  app migrate create -ext sql -dir database/migrations ${NAME}
 
 migrate-up:
-	docker compose exec app migrate -database ${DB_CONN} -path database/migrations up
+	docker compose run --rm app migrate -database ${DB_CONN} -path database/migrations up
 
 migrate-down:
-	docker compose exec app migrate -database ${DB_CONN} -path database/migrations down 1
+	docker compose run --rm  app migrate -database ${DB_CONN} -path database/migrations down 1
 
 migrate-force:
-	docker compose exec app migrate -database ${DB_CONN} -path database/migrations force ${VERSION}
+	docker compose run --rm  app migrate -database ${DB_CONN} -path database/migrations force ${VERSION}
