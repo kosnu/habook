@@ -11,24 +11,33 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>
 }
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never }
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never
+    }
 const defaultOptions = {} as const
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string
-  String: string
-  Boolean: boolean
-  Int: number
-  Float: number
+  ID: { input: string; output: string }
+  String: { input: string; output: string }
+  Boolean: { input: boolean; output: boolean }
+  Int: { input: number; output: number }
+  Float: { input: number; output: number }
 }
 
 export type Category = Node & {
   __typename?: "Category"
-  createdAt: Scalars["String"]
-  enable: Scalars["Boolean"]
-  id: Scalars["ID"]
-  name: Scalars["String"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  createdAt: Scalars["String"]["output"]
+  enable: Scalars["Boolean"]["output"]
+  id: Scalars["ID"]["output"]
+  name: Scalars["String"]["output"]
+  pk: Scalars["Int"]["output"]
+  updatedAt: Scalars["String"]["output"]
   user: User
 }
 
@@ -40,7 +49,7 @@ export type CategoryConnection = Connection & {
 
 export type CategoryEdge = Edge & {
   __typename?: "CategoryEdge"
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: Category
 }
 
@@ -50,37 +59,37 @@ export type Connection = {
 }
 
 export type DeleteCategory = {
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
+  id: Scalars["ID"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type DeletePayment = {
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
+  id: Scalars["ID"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type Edge = {
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: Node
 }
 
 export type ExpenseHistory = {
   __typename?: "ExpenseHistory"
-  createdAt: Scalars["String"]
-  expense: Scalars["Int"]
-  id: Scalars["ID"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  createdAt: Scalars["String"]["output"]
+  expense: Scalars["Int"]["output"]
+  id: Scalars["ID"]["output"]
+  pk: Scalars["Int"]["output"]
+  updatedAt: Scalars["String"]["output"]
   user: User
 }
 
 export type IncomeHistory = {
   __typename?: "IncomeHistory"
-  createdAt: Scalars["String"]
-  id: Scalars["ID"]
-  income: Scalars["Int"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  createdAt: Scalars["String"]["output"]
+  id: Scalars["ID"]["output"]
+  income: Scalars["Int"]["output"]
+  pk: Scalars["Int"]["output"]
+  updatedAt: Scalars["String"]["output"]
   user: User
 }
 
@@ -92,7 +101,7 @@ export type Mutation = {
   createPayment: Payment
   createUser: User
   deleteCategory: Category
-  deletePayment: Scalars["Boolean"]
+  deletePayment: Scalars["Boolean"]["output"]
   updateCategory: Category
   updatePayment: Payment
 }
@@ -134,59 +143,59 @@ export type MutationUpdatePaymentArgs = {
 }
 
 export type NewCategory = {
-  name: Scalars["String"]
-  userId: Scalars["ID"]
+  name: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type NewExpenseHistory = {
-  expense: Scalars["Int"]
-  userId: Scalars["ID"]
+  expense: Scalars["Int"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type NewIncomeHistory = {
-  income: Scalars["Int"]
-  userId: Scalars["ID"]
+  income: Scalars["Int"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type NewPayment = {
-  amount: Scalars["Int"]
-  categoryId: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
-  productName: Scalars["String"]
-  userId: Scalars["ID"]
+  amount: Scalars["Int"]["input"]
+  categoryId: Scalars["ID"]["input"]
+  numberOfProduct: Scalars["Int"]["input"]
+  paidOn: Scalars["String"]["input"]
+  productName: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type NewUser = {
-  name: Scalars["String"]
+  name: Scalars["String"]["input"]
 }
 
 export type Node = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["output"]
 }
 
 export type PageInfo = {
   __typename?: "PageInfo"
-  endCursor: Scalars["String"]
-  hasNextPage: Scalars["Boolean"]
+  endCursor: Scalars["String"]["output"]
+  hasNextPage: Scalars["Boolean"]["output"]
 }
 
 export type PaginationInput = {
-  after?: InputMaybe<Scalars["String"]>
-  first?: InputMaybe<Scalars["Int"]>
+  after?: InputMaybe<Scalars["String"]["input"]>
+  first?: InputMaybe<Scalars["Int"]["input"]>
 }
 
 export type Payment = Node & {
   __typename?: "Payment"
-  amount: Scalars["Int"]
+  amount: Scalars["Int"]["output"]
   category: Category
-  createdAt: Scalars["String"]
-  id: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
-  pk: Scalars["Int"]
+  createdAt: Scalars["String"]["output"]
+  id: Scalars["ID"]["output"]
+  numberOfProduct: Scalars["Int"]["output"]
+  paidOn: Scalars["String"]["output"]
+  pk: Scalars["Int"]["output"]
   product: Product
-  updatedAt: Scalars["String"]
+  updatedAt: Scalars["String"]["output"]
   user: User
 }
 
@@ -198,17 +207,17 @@ export type PaymentConnection = Connection & {
 
 export type PaymentEdge = Edge & {
   __typename?: "PaymentEdge"
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: Payment
 }
 
 export type Product = Node & {
   __typename?: "Product"
-  createdAt: Scalars["String"]
-  id: Scalars["ID"]
-  name: Scalars["String"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  createdAt: Scalars["String"]["output"]
+  id: Scalars["ID"]["output"]
+  name: Scalars["String"]["output"]
+  pk: Scalars["Int"]["output"]
+  updatedAt: Scalars["String"]["output"]
 }
 
 export type ProductConnection = Connection & {
@@ -219,7 +228,7 @@ export type ProductConnection = Connection & {
 
 export type ProductEdge = Edge & {
   __typename?: "ProductEdge"
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: Product
 }
 
@@ -245,11 +254,11 @@ export type QueryCategoriesArgs = {
 }
 
 export type QueryCategoryArgs = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }
 
 export type QueryExpenseHistoryArgs = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }
 
 export type QueryIncomeHistoriesArgs = {
@@ -257,11 +266,11 @@ export type QueryIncomeHistoriesArgs = {
 }
 
 export type QueryIncomeHistoryArgs = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }
 
 export type QueryPaymentArgs = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }
 
 export type QueryPaymentsArgs = {
@@ -270,7 +279,7 @@ export type QueryPaymentsArgs = {
 }
 
 export type QueryProductArgs = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }
 
 export type QueryProductsArgs = {
@@ -279,60 +288,60 @@ export type QueryProductsArgs = {
 }
 
 export type QueryUserArgs = {
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }
 
 export type SearchCategories = {
-  enable?: InputMaybe<Scalars["Boolean"]>
-  name?: InputMaybe<Scalars["String"]>
-  userId: Scalars["ID"]
+  enable?: InputMaybe<Scalars["Boolean"]["input"]>
+  name?: InputMaybe<Scalars["String"]["input"]>
+  userId: Scalars["ID"]["input"]
 }
 
 export type SearchIncomeHistory = {
-  beginningOfPeriod?: InputMaybe<Scalars["String"]>
-  endOfPeriod?: InputMaybe<Scalars["String"]>
-  userId: Scalars["ID"]
+  beginningOfPeriod?: InputMaybe<Scalars["String"]["input"]>
+  endOfPeriod?: InputMaybe<Scalars["String"]["input"]>
+  userId: Scalars["ID"]["input"]
 }
 
 export type SearchPayments = {
-  categoryId?: InputMaybe<Scalars["ID"]>
-  productName?: InputMaybe<Scalars["String"]>
-  userId: Scalars["ID"]
+  categoryId?: InputMaybe<Scalars["ID"]["input"]>
+  productName?: InputMaybe<Scalars["String"]["input"]>
+  userId: Scalars["ID"]["input"]
 }
 
 export type SearchProduct = {
-  productName?: InputMaybe<Scalars["String"]>
-  userId: Scalars["ID"]
+  productName?: InputMaybe<Scalars["String"]["input"]>
+  userId: Scalars["ID"]["input"]
 }
 
 export type UpdateCategory = {
-  id: Scalars["ID"]
-  name: Scalars["String"]
-  userId: Scalars["ID"]
+  id: Scalars["ID"]["input"]
+  name: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type UpdatePayment = {
-  amount: Scalars["Int"]
-  categoryId: Scalars["ID"]
-  id: Scalars["ID"]
-  numberOfProduct: Scalars["Int"]
-  paidOn: Scalars["String"]
-  userId: Scalars["ID"]
+  amount: Scalars["Int"]["input"]
+  categoryId: Scalars["ID"]["input"]
+  id: Scalars["ID"]["input"]
+  numberOfProduct: Scalars["Int"]["input"]
+  paidOn: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
 }
 
 export type User = {
   __typename?: "User"
-  createdAt: Scalars["String"]
-  enable: Scalars["Boolean"]
-  id: Scalars["ID"]
-  name: Scalars["String"]
-  pk: Scalars["Int"]
-  updatedAt: Scalars["String"]
+  createdAt: Scalars["String"]["output"]
+  enable: Scalars["Boolean"]["output"]
+  id: Scalars["ID"]["output"]
+  name: Scalars["String"]["output"]
+  pk: Scalars["Int"]["output"]
+  updatedAt: Scalars["String"]["output"]
 }
 
 export type CategoriesQueryVariables = Exact<{
-  userId: Scalars["ID"]
-  cursor?: InputMaybe<Scalars["String"]>
+  userId: Scalars["ID"]["input"]
+  cursor?: InputMaybe<Scalars["String"]["input"]>
 }>
 
 export type CategoriesQuery = {
@@ -366,8 +375,8 @@ export type Categories_CategoryFragment = {
 }
 
 export type CreateCategoryMutationVariables = Exact<{
-  userId: Scalars["ID"]
-  categoryName: Scalars["String"]
+  userId: Scalars["ID"]["input"]
+  categoryName: Scalars["String"]["input"]
 }>
 
 export type CreateCategoryMutation = {
@@ -382,8 +391,8 @@ export type CreateCategoryMutation = {
 }
 
 export type DeleteCategoryMutationVariables = Exact<{
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
+  id: Scalars["ID"]["input"]
+  userId: Scalars["ID"]["input"]
 }>
 
 export type DeleteCategoryMutation = {
@@ -398,9 +407,9 @@ export type DeleteCategoryMutation = {
 }
 
 export type UpdateCategoryMutationVariables = Exact<{
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
-  name: Scalars["String"]
+  id: Scalars["ID"]["input"]
+  userId: Scalars["ID"]["input"]
+  name: Scalars["String"]["input"]
 }>
 
 export type UpdateCategoryMutation = {
@@ -421,9 +430,9 @@ export type PageInfoFragment = {
 }
 
 export type CategoriesSelectQueryVariables = Exact<{
-  userId: Scalars["ID"]
-  cursor?: InputMaybe<Scalars["String"]>
-  limit?: InputMaybe<Scalars["Int"]>
+  userId: Scalars["ID"]["input"]
+  cursor?: InputMaybe<Scalars["String"]["input"]>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
 }>
 
 export type CategoriesSelectQuery = {
@@ -444,12 +453,12 @@ export type CategoriesSelectQuery = {
 }
 
 export type CreatePaymentMutationVariables = Exact<{
-  userId: Scalars["ID"]
-  categoryId: Scalars["ID"]
-  paidOnDate: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
-  amount: Scalars["Int"]
-  productName: Scalars["String"]
+  userId: Scalars["ID"]["input"]
+  categoryId: Scalars["ID"]["input"]
+  paidOnDate: Scalars["String"]["input"]
+  numberOfProduct: Scalars["Int"]["input"]
+  amount: Scalars["Int"]["input"]
+  productName: Scalars["String"]["input"]
 }>
 
 export type CreatePaymentMutation = {
@@ -467,8 +476,8 @@ export type CreatePaymentMutation = {
 }
 
 export type DeletePaymentMutationVariables = Exact<{
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
+  id: Scalars["ID"]["input"]
+  userId: Scalars["ID"]["input"]
 }>
 
 export type DeletePaymentMutation = {
@@ -477,11 +486,11 @@ export type DeletePaymentMutation = {
 }
 
 export type PaymentsQueryVariables = Exact<{
-  userId: Scalars["ID"]
-  categoryId?: InputMaybe<Scalars["ID"]>
-  productName?: InputMaybe<Scalars["String"]>
-  cursor?: InputMaybe<Scalars["String"]>
-  limit?: InputMaybe<Scalars["Int"]>
+  userId: Scalars["ID"]["input"]
+  categoryId?: InputMaybe<Scalars["ID"]["input"]>
+  productName?: InputMaybe<Scalars["String"]["input"]>
+  cursor?: InputMaybe<Scalars["String"]["input"]>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
 }>
 
 export type PaymentsQuery = {
@@ -510,10 +519,10 @@ export type PaymentsQuery = {
 }
 
 export type ProductsAutocompleteQueryVariables = Exact<{
-  userId: Scalars["ID"]
-  productName?: InputMaybe<Scalars["String"]>
-  cursor?: InputMaybe<Scalars["String"]>
-  limit?: InputMaybe<Scalars["Int"]>
+  userId: Scalars["ID"]["input"]
+  productName?: InputMaybe<Scalars["String"]["input"]>
+  cursor?: InputMaybe<Scalars["String"]["input"]>
+  limit?: InputMaybe<Scalars["Int"]["input"]>
 }>
 
 export type ProductsAutocompleteQuery = {
@@ -534,12 +543,12 @@ export type ProductsAutocompleteQuery = {
 }
 
 export type UpdatePaymentMutationVariables = Exact<{
-  id: Scalars["ID"]
-  userId: Scalars["ID"]
-  categoryId: Scalars["ID"]
-  paidOnDate: Scalars["String"]
-  numberOfProduct: Scalars["Int"]
-  amount: Scalars["Int"]
+  id: Scalars["ID"]["input"]
+  userId: Scalars["ID"]["input"]
+  categoryId: Scalars["ID"]["input"]
+  paidOnDate: Scalars["String"]["input"]
+  numberOfProduct: Scalars["Int"]["input"]
+  amount: Scalars["Int"]["input"]
 }>
 
 export type UpdatePaymentMutation = {
