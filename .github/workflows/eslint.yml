@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 18.x
       - name: Install dependencies
-        run: yarn install
+        run: npm ci
       - name: ESLint
         uses: reviewdog/action-eslint@v1
         with:
@@ -26,5 +26,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           eslint_flags: './**/*.{ts,tsx}'
-      - name: yarn lint
-        run: yarn lint
+      - name: lint
+        run: npm run lint
