@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "18.18.2"
+    "node": "18.19.0"
   },
   "type": "module",
   "module": "es6",
@@ -44,7 +44,7 @@
     "@graphql-codegen/typescript-graphql-request": "6.1.0",
     "@graphql-codegen/typescript-operations": "4.0.1",
     "@graphql-codegen/typescript-react-apollo": "4.1.0",
-    "@types/node": "18.18.13",
+    "@types/node": "18.19.3",
     "@types/react": "18.2.45",
     "@typescript-eslint/eslint-plugin": "6.16.0",
     "@typescript-eslint/parser": "6.16.0",
