@@ -1,8 +1,8 @@
 import React, { useCallback } from "react"
 import { List } from "@mui/material"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { LoadingCircular, ErrorMessage } from "~/ui/common/components"
-import { useLoginUser } from "~/ui/common/hooks"
+import { ErrorMessage, LoadingButton, LoadingCircular } from "~/ui/common/components"
+import { useLoginUser } from "~/ui/common/hooks";
 import { Category } from "../../types"
 import { CategoryItem } from "../CategoryItem"
 import { useCategories } from "./useCategories"
@@ -34,6 +34,7 @@ export function CategoryList({ onCategoryMenuClick }: CategoryListProps) {
   return (
     <>
       <List>
+        <LoadingButton />
         <InfiniteScroll
           dataLength={categories.length}
           hasMore={pageInfo?.hasNextPage ?? false}

@@ -9,6 +9,8 @@ export function usePayments(userId: string) {
   const pageInfo = data?.payments.pageInfo
   const payments = connectionToNodes(data?.payments)
 
+  // TODO: 追加読み込みを実装したら外す
+  // eslint-disable-next-line @typescript-eslint/require-await
   async function fetchMorePayments() {
     try {
       // TODO: 追加読み込み

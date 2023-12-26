@@ -11,8 +11,8 @@ import {
 } from "@mui/material"
 import { LoadingButton } from "~/ui/common/components"
 import { useLoginUser } from "~/ui/common/hooks"
-import { Category } from "../../types"
 import { useSnackbar } from "../../hooks/useSnackbar"
+import { Category } from "../../types"
 import { useDeleteCategory } from "./useDeleteCategory"
 import { useDeleteCategoryConfirmModal } from "./useDeleteCategoryConfirmModal"
 

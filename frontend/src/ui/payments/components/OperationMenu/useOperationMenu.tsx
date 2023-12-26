@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react"
 import { Payment } from "../../types"
-import { useUpdateFormModal } from "../UpdateFormModal"
 import { useDeleteConfirmModal } from "../DeleteConfirmModal"
+import { useUpdateFormModal } from "../UpdateFormModal"
 import { OperationMenu } from "./OperationMenu"
 
 export function useOperationMenu(payment: Payment) {
