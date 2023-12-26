@@ -1,6 +1,6 @@
 import React from "react"
 import { Box, Container, Divider, Grid, Typography } from "@mui/material"
-import { useSnackbar } from "../../hooks/useSnackbar"
+import { useSnackbar } from "~/ui/payments/hooks"
 import { CreateForm } from "../../components/CreateForm"
 
 export function NewPaymentPage() {
