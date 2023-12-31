@@ -3,7 +3,7 @@ module github.com/kosnu/habook-backend
 go 1.19
 
 require (
-	github.com/99designs/gqlgen v0.17.41
+	github.com/99designs/gqlgen v0.17.42
 	github.com/google/uuid v1.5.0
 	github.com/vektah/gqlparser/v2 v2.5.10
 	gorm.io/driver/mysql v1.5.2
